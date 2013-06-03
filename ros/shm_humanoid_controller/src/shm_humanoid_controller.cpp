@@ -587,7 +587,7 @@ int main (int argc, char **argv)
 	
 	YAML::Node doc;
 	GetYamlDoc("shm_humanoid_config.yml", doc);
-	
+	//GetYamlDoc("m3_config.yml", doc);
 	
 	int ndof;
 	
@@ -648,7 +648,7 @@ int main (int argc, char **argv)
 	ndof_total += ndof;
 
 	
-	//printf("ndof: %d\n", ndof_total);
+	printf("ndof: %d\n", ndof_total);
 	
 	
 	rt_allow_nonroot_hrt();

@@ -14,5 +14,5 @@ export CPATH="/home/meka/mekabot/m3meka/ros/shm_humanoid_controller/devel/includ
 export LD_LIBRARY_PATH="/home/meka/mekabot/m3meka/ros/shm_humanoid_controller/devel/lib:$LD_LIBRARY_PATH"
 export PATH="/home/meka/mekabot/m3meka/ros/shm_humanoid_controller/devel/bin:$PATH"
 export PKG_CONFIG_PATH="/home/meka/mekabot/m3meka/ros/shm_humanoid_controller/devel/lib/pkgconfig:$PKG_CONFIG_PATH"
-export PYTHONPATH="/home/meka/mekabot/m3meka/ros/shm_humanoid_controller/devel/lib/python2.7/dist-packages:$PYTHONPATH"
+export PYTHONPATH="/home/meka/mekabot/m3meka/ros/shm_humanoid_controller/devel/lib/python2.7/dist-packages:/opt/ros/groovy/lib/python2.7/dist-packages:/usr/local/lib/python2.7/dist-packages/m3"
 export ROS_PACKAGE_PATH="/home/meka/mekabot/m3meka/ros/shm_humanoid_controller:/opt/ros/groovy/share:/opt/ros/groovy/stacks"

@@ -2,10 +2,9 @@
 # generated from catkin/cmake/templates/env.sh.in
 
 if [ $# -eq 0 ] ; then
-  /bin/echo "Entering environment at '/home/meka/mekabot/m3meka/ros/shm_humanoid_controller/devel', type 'exit' to leave"
-  . "/home/meka/mekabot/m3meka/ros/shm_humanoid_controller/devel/setup.sh"
-  "$SHELL" -i
-  /bin/echo "Exiting environment at '/home/meka/mekabot/m3meka/ros/shm_humanoid_controller/devel'"
+  /bin/echo "Usage: env.sh COMMANDS"
+  /bin/echo "Calling env.sh without arguments is not supported anymore. Instead spawn a subshell and source a setup file manually."
+  exit 1
 else
   . "/home/meka/mekabot/m3meka/ros/shm_humanoid_controller/devel/setup.sh"
   exec "$@"
