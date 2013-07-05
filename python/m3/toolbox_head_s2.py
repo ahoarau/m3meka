@@ -86,7 +86,7 @@ class M3HeadToolboxS2:
 		T_kdl = self.bot.get_link_2_world_kdl('head',0)#PyKDL.Frame(rot,trans)
 		T_i = T_kdl.Inverse()
 		p_kdl = self.bot.list_to_kdl_vector(xw)
-		return nu.array(self.bot.kdl_to_list_vector(T_i*p_kdl),nu.Float)
+		return nu.array(self.bot.kdl_to_list_vector(T_i*p_kdl),nu.float)
 	
 	def image_2_world(self,eye,xi,r):
 		xe=self.image_2_eye(eye,xi,r)
@@ -248,9 +248,9 @@ def intersection_ray_sphere(p0,d,pc,r):
 	# d: direction of ray
 	# pc: center of sphere
 	# r: radius of sphere
-	p0=nu.array(p0,nu.Float)
-	d=nu.array(d,nu.Float)
-	pc=nu.array(pc,nu.Float)
+	p0=nu.array(p0,nu.float)
+	d=nu.array(d,nu.float)
+	pc=nu.array(pc,nu.float)
 	a=nu.dot(d,d)
 	b = 2*nu.dot(d,(p0-pc))
 	c = nu.dot((p0 - pc),(p0 - pc)) - r*r
