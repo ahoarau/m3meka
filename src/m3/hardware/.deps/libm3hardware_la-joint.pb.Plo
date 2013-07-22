@@ -61,7 +61,7 @@ libm3hardware_la-joint.pb.lo: joint.pb.cpp joint.pb.h \
  /usr/include/c++/4.6/i686-linux-gnu/./bits/atomic_word.h \
  /usr/include/c++/4.6/initializer_list \
  /usr/include/c++/4.6/bits/basic_string.tcc \
- /usr/include/google/protobuf/stubs/common.h /usr/include/assert.h \
+ /usr/local/include/google/protobuf/stubs/common.h /usr/include/assert.h \
  /usr/include/stdlib.h /usr/include/i386-linux-gnu/bits/waitflags.h \
  /usr/include/i386-linux-gnu/bits/waitstatus.h \
  /usr/include/i386-linux-gnu/sys/types.h \
@@ -73,8 +73,8 @@ libm3hardware_la-joint.pb.lo: joint.pb.cpp joint.pb.h \
  /usr/include/i386-linux-gnu/bits/stdlib.h /usr/include/c++/4.6/cstddef \
  /usr/include/string.h /usr/include/i386-linux-gnu/bits/string3.h \
  /usr/lib/gcc/i686-linux-gnu/4.6/include/stdint.h /usr/include/stdint.h \
- /usr/include/google/protobuf/generated_message_util.h \
- /usr/include/google/protobuf/repeated_field.h \
+ /usr/local/include/google/protobuf/generated_message_util.h \
+ /usr/local/include/google/protobuf/repeated_field.h \
  /usr/include/c++/4.6/iterator /usr/include/c++/4.6/ostream \
  /usr/include/c++/4.6/ios /usr/include/c++/4.6/bits/ios_base.h \
  /usr/include/c++/4.6/bits/locale_classes.h \
@@ -91,8 +91,8 @@ libm3hardware_la-joint.pb.lo: joint.pb.cpp joint.pb.h \
  /usr/include/c++/4.6/bits/ostream.tcc /usr/include/c++/4.6/istream \
  /usr/include/c++/4.6/bits/istream.tcc \
  /usr/include/c++/4.6/bits/stream_iterator.h \
- /usr/include/google/protobuf/message_lite.h \
- /usr/include/google/protobuf/io/coded_stream.h \
+ /usr/local/include/google/protobuf/message_lite.h \
+ /usr/local/include/google/protobuf/io/coded_stream.h \
  /usr/include/i386-linux-gnu/sys/param.h \
  /usr/lib/gcc/i686-linux-gnu/4.6/include-fixed/limits.h \
  /usr/lib/gcc/i686-linux-gnu/4.6/include-fixed/syslimits.h \
@@ -102,8 +102,8 @@ libm3hardware_la-joint.pb.lo: joint.pb.cpp joint.pb.h \
  /usr/include/i386-linux-gnu/bits/xopen_lim.h \
  /usr/include/i386-linux-gnu/bits/stdio_lim.h /usr/include/linux/param.h \
  /usr/include/i386-linux-gnu/asm/param.h /usr/include/asm-generic/param.h \
- /usr/include/google/protobuf/extension_set.h /usr/include/c++/4.6/vector \
- /usr/include/c++/4.6/bits/stl_construct.h \
+ /usr/local/include/google/protobuf/extension_set.h \
+ /usr/include/c++/4.6/vector /usr/include/c++/4.6/bits/stl_construct.h \
  /usr/include/c++/4.6/bits/stl_uninitialized.h \
  /usr/include/c++/4.6/bits/stl_vector.h \
  /usr/include/c++/4.6/bits/stl_bvector.h \
@@ -111,21 +111,21 @@ libm3hardware_la-joint.pb.lo: joint.pb.cpp joint.pb.h \
  /usr/include/c++/4.6/bits/stl_tree.h /usr/include/c++/4.6/bits/stl_map.h \
  /usr/include/c++/4.6/bits/stl_multimap.h /usr/include/c++/4.6/utility \
  /usr/include/c++/4.6/bits/stl_relops.h \
- /usr/include/google/protobuf/generated_message_reflection.h \
- /usr/include/google/protobuf/message.h \
- /usr/include/google/protobuf/unknown_field_set.h \
+ /usr/local/include/google/protobuf/generated_message_reflection.h \
+ /usr/local/include/google/protobuf/message.h \
+ /usr/local/include/google/protobuf/unknown_field_set.h \
  /usr/local/include/m3rt/base/component_base.pb.h smoothing_mode.pb.h \
  /usr/include/c++/4.6/algorithm /usr/include/c++/4.6/bits/stl_algo.h \
  /usr/include/c++/4.6/cstdlib /usr/include/c++/4.6/bits/algorithmfwd.h \
  /usr/include/c++/4.6/bits/stl_heap.h \
  /usr/include/c++/4.6/bits/stl_tempbuf.h \
- /usr/include/google/protobuf/stubs/once.h \
- /usr/include/google/protobuf/wire_format_lite_inl.h \
- /usr/include/google/protobuf/wire_format_lite.h \
- /usr/include/google/protobuf/descriptor.h \
- /usr/include/google/protobuf/reflection_ops.h \
- /usr/include/google/protobuf/wire_format.h \
- /usr/include/google/protobuf/descriptor.pb.h
+ /usr/local/include/google/protobuf/stubs/once.h \
+ /usr/local/include/google/protobuf/wire_format_lite_inl.h \
+ /usr/local/include/google/protobuf/wire_format_lite.h \
+ /usr/local/include/google/protobuf/descriptor.h \
+ /usr/local/include/google/protobuf/reflection_ops.h \
+ /usr/local/include/google/protobuf/wire_format.h \
+ /usr/local/include/google/protobuf/descriptor.pb.h
 
 joint.pb.h:
 
@@ -285,7 +285,7 @@ joint.pb.h:
 
 /usr/include/c++/4.6/bits/basic_string.tcc:
 
-/usr/include/google/protobuf/stubs/common.h:
+/usr/local/include/google/protobuf/stubs/common.h:
 
 /usr/include/assert.h:
 
@@ -321,9 +321,9 @@ joint.pb.h:
 
 /usr/include/stdint.h:
 
-/usr/include/google/protobuf/generated_message_util.h:
+/usr/local/include/google/protobuf/generated_message_util.h:
 
-/usr/include/google/protobuf/repeated_field.h:
+/usr/local/include/google/protobuf/repeated_field.h:
 
 /usr/include/c++/4.6/iterator:
 
@@ -367,9 +367,9 @@ joint.pb.h:
 
 /usr/include/c++/4.6/bits/stream_iterator.h:
 
-/usr/include/google/protobuf/message_lite.h:
+/usr/local/include/google/protobuf/message_lite.h:
 
-/usr/include/google/protobuf/io/coded_stream.h:
+/usr/local/include/google/protobuf/io/coded_stream.h:
 
 /usr/include/i386-linux-gnu/sys/param.h:
 
@@ -397,7 +397,7 @@ joint.pb.h:
 
 /usr/include/asm-generic/param.h:
 
-/usr/include/google/protobuf/extension_set.h:
+/usr/local/include/google/protobuf/extension_set.h:
 
 /usr/include/c++/4.6/vector:
 
@@ -423,11 +423,11 @@ joint.pb.h:
 
 /usr/include/c++/4.6/bits/stl_relops.h:
 
-/usr/include/google/protobuf/generated_message_reflection.h:
+/usr/local/include/google/protobuf/generated_message_reflection.h:
 
-/usr/include/google/protobuf/message.h:
+/usr/local/include/google/protobuf/message.h:
 
-/usr/include/google/protobuf/unknown_field_set.h:
+/usr/local/include/google/protobuf/unknown_field_set.h:
 
 /usr/local/include/m3rt/base/component_base.pb.h:
 
@@ -445,16 +445,16 @@ smoothing_mode.pb.h:
 
 /usr/include/c++/4.6/bits/stl_tempbuf.h:
 
-/usr/include/google/protobuf/stubs/once.h:
+/usr/local/include/google/protobuf/stubs/once.h:
 
-/usr/include/google/protobuf/wire_format_lite_inl.h:
+/usr/local/include/google/protobuf/wire_format_lite_inl.h:
 
-/usr/include/google/protobuf/wire_format_lite.h:
+/usr/local/include/google/protobuf/wire_format_lite.h:
 
-/usr/include/google/protobuf/descriptor.h:
+/usr/local/include/google/protobuf/descriptor.h:
 
-/usr/include/google/protobuf/reflection_ops.h:
+/usr/local/include/google/protobuf/reflection_ops.h:
 
-/usr/include/google/protobuf/wire_format.h:
+/usr/local/include/google/protobuf/wire_format.h:
 
-/usr/include/google/protobuf/descriptor.pb.h:
+/usr/local/include/google/protobuf/descriptor.pb.h:

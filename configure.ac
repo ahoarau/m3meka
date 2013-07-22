@@ -43,7 +43,7 @@ PKG_CHECK_MODULES([EIGEN2], [eigen2 >= 2.0.15])
 AC_SUBST(RTAI_DIR,[/usr/realtime])
 
 #TODO: have autoconf find correct ros dir
-AC_SUBST(ROS_DIR,[/opt/ros/cturtle/ros])
+AC_SUBST(ROS_DIR,[/opt/ros/groovy])
 
 AC_CONFIG_FILES([
 	Makefile

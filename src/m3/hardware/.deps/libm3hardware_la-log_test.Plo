@@ -1,6 +1,7 @@
 libm3hardware_la-log_test.lo: log_test.cpp log_test.h \
- ../../../src/m3/toolbox/log.h /usr/include/google/protobuf/message.h \
- /usr/include/c++/4.6/vector /usr/include/c++/4.6/bits/stl_algobase.h \
+ ../../../src/m3/toolbox/log.h \
+ /usr/local/include/google/protobuf/message.h /usr/include/c++/4.6/vector \
+ /usr/include/c++/4.6/bits/stl_algobase.h \
  /usr/include/c++/4.6/i686-linux-gnu/./bits/c++config.h \
  /usr/include/c++/4.6/i686-linux-gnu/./bits/os_defines.h \
  /usr/include/features.h /usr/include/i386-linux-gnu/bits/predefs.h \
@@ -66,8 +67,8 @@ libm3hardware_la-log_test.lo: log_test.cpp log_test.h \
  /usr/include/i386-linux-gnu/bits/unistd.h \
  /usr/include/c++/4.6/i686-linux-gnu/./bits/atomic_word.h \
  /usr/include/c++/4.6/bits/basic_string.tcc \
- /usr/include/google/protobuf/message_lite.h \
- /usr/include/google/protobuf/stubs/common.h /usr/include/assert.h \
+ /usr/local/include/google/protobuf/message_lite.h \
+ /usr/local/include/google/protobuf/stubs/common.h /usr/include/assert.h \
  /usr/include/stdlib.h /usr/include/i386-linux-gnu/bits/waitflags.h \
  /usr/include/i386-linux-gnu/bits/waitstatus.h \
  /usr/include/i386-linux-gnu/sys/types.h \
@@ -79,7 +80,7 @@ libm3hardware_la-log_test.lo: log_test.cpp log_test.h \
  /usr/include/i386-linux-gnu/bits/stdlib.h /usr/include/c++/4.6/cstddef \
  /usr/include/string.h /usr/include/i386-linux-gnu/bits/string3.h \
  /usr/lib/gcc/i686-linux-gnu/4.6/include/stdint.h /usr/include/stdint.h \
- /usr/include/google/protobuf/io/coded_stream.h \
+ /usr/local/include/google/protobuf/io/coded_stream.h \
  /usr/include/i386-linux-gnu/sys/param.h \
  /usr/lib/gcc/i686-linux-gnu/4.6/include-fixed/limits.h \
  /usr/lib/gcc/i686-linux-gnu/4.6/include-fixed/syslimits.h \
@@ -225,20 +226,20 @@ libm3hardware_la-log_test.lo: log_test.cpp log_test.h \
  /usr/local/include/kdl/frames_io.hpp \
  /usr/local/include/kdl/utilities/utility_io.h \
  /usr/include/c++/4.6/iomanip ../../../src/m3/toolbox/log.pb.h \
- /usr/include/google/protobuf/generated_message_util.h \
- /usr/include/google/protobuf/repeated_field.h \
+ /usr/local/include/google/protobuf/generated_message_util.h \
+ /usr/local/include/google/protobuf/repeated_field.h \
  /usr/include/c++/4.6/iterator \
  /usr/include/c++/4.6/bits/stream_iterator.h \
- /usr/include/google/protobuf/extension_set.h \
+ /usr/local/include/google/protobuf/extension_set.h \
  /usr/include/c++/4.6/utility /usr/include/c++/4.6/bits/stl_relops.h \
- /usr/include/google/protobuf/generated_message_reflection.h \
- /usr/include/google/protobuf/unknown_field_set.h \
+ /usr/local/include/google/protobuf/generated_message_reflection.h \
+ /usr/local/include/google/protobuf/unknown_field_set.h \
  /usr/local/include/m3rt/base/component_base.pb.h \
  /usr/local/include/m3rt/base/m3ec_def.h \
  /usr/local/include/m3rt/base/m3rt_def.h \
  /usr/local/include/m3rt/base/component.h \
  /usr/local/include/m3rt/base/component_base.pb.h \
- /usr/include/google/protobuf/descriptor.h \
+ /usr/local/include/google/protobuf/descriptor.h \
  /usr/local/include/m3rt/base/component_ec.h \
  ../../../src/m3/hardware/pwr.h ../../../src/m3/hardware/pwr.pb.h \
  ../../../src/m3/hardware/pwr_ec.pb.h ../../../src/m3/hardware/pwr_ec.h \
@@ -251,7 +252,7 @@ log_test.h:
 
 ../../../src/m3/toolbox/log.h:
 
-/usr/include/google/protobuf/message.h:
+/usr/local/include/google/protobuf/message.h:
 
 /usr/include/c++/4.6/vector:
 
@@ -421,9 +422,9 @@ log_test.h:
 
 /usr/include/c++/4.6/bits/basic_string.tcc:
 
-/usr/include/google/protobuf/message_lite.h:
+/usr/local/include/google/protobuf/message_lite.h:
 
-/usr/include/google/protobuf/stubs/common.h:
+/usr/local/include/google/protobuf/stubs/common.h:
 
 /usr/include/assert.h:
 
@@ -459,7 +460,7 @@ log_test.h:
 
 /usr/include/stdint.h:
 
-/usr/include/google/protobuf/io/coded_stream.h:
+/usr/local/include/google/protobuf/io/coded_stream.h:
 
 /usr/include/i386-linux-gnu/sys/param.h:
 
@@ -837,23 +838,23 @@ log_test.h:
 
 ../../../src/m3/toolbox/log.pb.h:
 
-/usr/include/google/protobuf/generated_message_util.h:
+/usr/local/include/google/protobuf/generated_message_util.h:
 
-/usr/include/google/protobuf/repeated_field.h:
+/usr/local/include/google/protobuf/repeated_field.h:
 
 /usr/include/c++/4.6/iterator:
 
 /usr/include/c++/4.6/bits/stream_iterator.h:
 
-/usr/include/google/protobuf/extension_set.h:
+/usr/local/include/google/protobuf/extension_set.h:
 
 /usr/include/c++/4.6/utility:
 
 /usr/include/c++/4.6/bits/stl_relops.h:
 
-/usr/include/google/protobuf/generated_message_reflection.h:
+/usr/local/include/google/protobuf/generated_message_reflection.h:
 
-/usr/include/google/protobuf/unknown_field_set.h:
+/usr/local/include/google/protobuf/unknown_field_set.h:
 
 /usr/local/include/m3rt/base/component_base.pb.h:
 
@@ -865,7 +866,7 @@ log_test.h:
 
 /usr/local/include/m3rt/base/component_base.pb.h:
 
-/usr/include/google/protobuf/descriptor.h:
+/usr/local/include/google/protobuf/descriptor.h:
 
 /usr/local/include/m3rt/base/component_ec.h:
 

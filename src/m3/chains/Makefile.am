@@ -85,8 +85,9 @@ proto_install:
 	cp *.proto $(includedir)/m3/chains
 	
 lib_LTLIBRARIES = libm3chains.la 
-libm3chains_la_LIBADD = -lprotobuf -lm3base -lorocos-kdl -lm3hardware -lm3toolbox -lyaml-cpp 
+libm3chains_la_LIBADD = -lprotobuf -lm3base -lm3hardware -lm3toolbox -lyaml-cpp 
 libm3chains_la_LDFLAGS = -version-info 1:1:0 -module \
+	-L/usr/local/lib \
 	-L$(ros_dir)/core/roscpp/lib \
 	-L$(ros_dir)/core/roslib/lib \
 	-L$(ros_dir)/core/rosconsole/lib \
@@ -107,7 +108,7 @@ libm3chains_la_CPPFLAGS =   -I../hardware/ -I../toolbox/ -I$(m3_dir) \
 	-I$(m3rt_dir) -I$(m3rtb_dir) -ffast-math -pipe -mhard-float \
 	-I$(m3tb_dir) \
 	$(EIGEN2_CFLAGS) \
-	-I$/usr/local/include
+	-I/usr/local/include
 
 	
 

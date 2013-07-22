@@ -22,15 +22,7 @@ AM_CPPFLAGS = -g
 #SUBDIRS =   src/m3rt/base  src/m3rt/rt_system src/m3/toolbox src/m3/hardware src/m3/inverse_kine src/m3/chains \
 #	src/m3/robots src/m3/robot_ctrl  python
 
-#ros/m3meka_msgs
-#src/m3rt/bootloader 
 
-#.PHONY: disableros
-
-#disableros:
-#    source disable_ros
-
-#all: disableros
 
 all-local:
 	bash disable_ros
@@ -59,7 +51,8 @@ endif
 
 dist_bin_SCRIPTS = scripts/m3rt_printer_run
 
-includedir =  /usr/local/include/m3meka_msgs
+includedir =  /usr/local/include/m3meka_msgs \
+		/usr/local/include
 
 include_HEADERS = ros/m3meka_msgs/msg_gen/cpp/include/m3meka_msgs/M3JointStatus.h \
 		ros/m3meka_msgs/msg_gen/cpp/include/m3meka_msgs/M3OmnibaseJoy.h \

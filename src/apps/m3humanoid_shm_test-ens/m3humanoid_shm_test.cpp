@@ -83,7 +83,7 @@ void StepHumanoidShm(int cntr)
 	cmd.right_arm.q_desired[i] = 0.0;
 	cmd.right_arm.tq_desired[i] = 40.0;
 	cmd.right_arm.slew_rate_q_desired[i] = 20.0;
-	cmd.right_arm.q_stiffness[i] = 0.0;	
+	cmd.right_arm.q_stiffness[i] = 1.0;	
       }
       
 

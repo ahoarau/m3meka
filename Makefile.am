@@ -51,7 +51,8 @@ endif
 
 dist_bin_SCRIPTS = scripts/m3rt_printer_run
 
-includedir =  /usr/local/include/m3meka_msgs
+includedir =  /usr/local/include/m3meka_msgs \
+	/usr/local/include
 
 include_HEADERS = ros/m3meka_msgs/msg_gen/cpp/include/m3meka_msgs/M3JointStatus.h \
 		ros/m3meka_msgs/msg_gen/cpp/include/m3meka_msgs/M3OmnibaseJoy.h \

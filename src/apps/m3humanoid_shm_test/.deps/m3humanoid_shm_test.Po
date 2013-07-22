@@ -127,10 +127,10 @@ m3humanoid_shm_test.o: m3humanoid_shm_test.cpp \
  /usr/include/c++/4.6/i686-linux-gnu/./bits/atomic_word.h \
  /usr/include/c++/4.6/initializer_list \
  /usr/include/c++/4.6/bits/basic_string.tcc \
- /usr/include/google/protobuf/stubs/common.h /usr/include/assert.h \
+ /usr/local/include/google/protobuf/stubs/common.h /usr/include/assert.h \
  /usr/include/c++/4.6/cstddef \
- /usr/include/google/protobuf/generated_message_util.h \
- /usr/include/google/protobuf/repeated_field.h \
+ /usr/local/include/google/protobuf/generated_message_util.h \
+ /usr/local/include/google/protobuf/repeated_field.h \
  /usr/include/c++/4.6/iterator /usr/include/c++/4.6/ostream \
  /usr/include/c++/4.6/ios /usr/include/c++/4.6/bits/ios_base.h \
  /usr/include/c++/4.6/bits/locale_classes.h \
@@ -147,8 +147,8 @@ m3humanoid_shm_test.o: m3humanoid_shm_test.cpp \
  /usr/include/c++/4.6/bits/ostream.tcc /usr/include/c++/4.6/istream \
  /usr/include/c++/4.6/bits/istream.tcc \
  /usr/include/c++/4.6/bits/stream_iterator.h \
- /usr/include/google/protobuf/message_lite.h \
- /usr/include/google/protobuf/io/coded_stream.h \
+ /usr/local/include/google/protobuf/message_lite.h \
+ /usr/local/include/google/protobuf/io/coded_stream.h \
  /usr/include/i386-linux-gnu/sys/param.h \
  /usr/lib/gcc/i686-linux-gnu/4.6/include-fixed/limits.h \
  /usr/lib/gcc/i686-linux-gnu/4.6/include-fixed/syslimits.h \
@@ -157,8 +157,8 @@ m3humanoid_shm_test.o: m3humanoid_shm_test.cpp \
  /usr/include/i386-linux-gnu/bits/posix2_lim.h \
  /usr/include/i386-linux-gnu/bits/xopen_lim.h /usr/include/linux/param.h \
  /usr/include/i386-linux-gnu/asm/param.h /usr/include/asm-generic/param.h \
- /usr/include/google/protobuf/extension_set.h /usr/include/c++/4.6/vector \
- /usr/include/c++/4.6/bits/stl_construct.h \
+ /usr/local/include/google/protobuf/extension_set.h \
+ /usr/include/c++/4.6/vector /usr/include/c++/4.6/bits/stl_construct.h \
  /usr/include/c++/4.6/bits/stl_uninitialized.h \
  /usr/include/c++/4.6/bits/stl_vector.h \
  /usr/include/c++/4.6/bits/stl_bvector.h \
@@ -166,9 +166,9 @@ m3humanoid_shm_test.o: m3humanoid_shm_test.cpp \
  /usr/include/c++/4.6/bits/stl_tree.h /usr/include/c++/4.6/bits/stl_map.h \
  /usr/include/c++/4.6/bits/stl_multimap.h /usr/include/c++/4.6/utility \
  /usr/include/c++/4.6/bits/stl_relops.h \
- /usr/include/google/protobuf/generated_message_reflection.h \
- /usr/include/google/protobuf/message.h \
- /usr/include/google/protobuf/unknown_field_set.h \
+ /usr/local/include/google/protobuf/generated_message_reflection.h \
+ /usr/local/include/google/protobuf/message.h \
+ /usr/local/include/google/protobuf/unknown_field_set.h \
  ../../../src/m3/hardware/smoothing_mode.pb.h
 
 /usr/realtime/include/rtai_sched.h:
@@ -509,15 +509,15 @@ m3humanoid_shm_test.o: m3humanoid_shm_test.cpp \
 
 /usr/include/c++/4.6/bits/basic_string.tcc:
 
-/usr/include/google/protobuf/stubs/common.h:
+/usr/local/include/google/protobuf/stubs/common.h:
 
 /usr/include/assert.h:
 
 /usr/include/c++/4.6/cstddef:
 
-/usr/include/google/protobuf/generated_message_util.h:
+/usr/local/include/google/protobuf/generated_message_util.h:
 
-/usr/include/google/protobuf/repeated_field.h:
+/usr/local/include/google/protobuf/repeated_field.h:
 
 /usr/include/c++/4.6/iterator:
 
@@ -561,9 +561,9 @@ m3humanoid_shm_test.o: m3humanoid_shm_test.cpp \
 
 /usr/include/c++/4.6/bits/stream_iterator.h:
 
-/usr/include/google/protobuf/message_lite.h:
+/usr/local/include/google/protobuf/message_lite.h:
 
-/usr/include/google/protobuf/io/coded_stream.h:
+/usr/local/include/google/protobuf/io/coded_stream.h:
 
 /usr/include/i386-linux-gnu/sys/param.h:
 
@@ -589,7 +589,7 @@ m3humanoid_shm_test.o: m3humanoid_shm_test.cpp \
 
 /usr/include/asm-generic/param.h:
 
-/usr/include/google/protobuf/extension_set.h:
+/usr/local/include/google/protobuf/extension_set.h:
 
 /usr/include/c++/4.6/vector:
 
@@ -615,10 +615,10 @@ m3humanoid_shm_test.o: m3humanoid_shm_test.cpp \
 
 /usr/include/c++/4.6/bits/stl_relops.h:
 
-/usr/include/google/protobuf/generated_message_reflection.h:
+/usr/local/include/google/protobuf/generated_message_reflection.h:
 
-/usr/include/google/protobuf/message.h:
+/usr/local/include/google/protobuf/message.h:
 
-/usr/include/google/protobuf/unknown_field_set.h:
+/usr/local/include/google/protobuf/unknown_field_set.h:
 
 ../../../src/m3/hardware/smoothing_mode.pb.h:

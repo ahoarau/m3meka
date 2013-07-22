@@ -194,7 +194,7 @@ PACKAGE_VERSION = 1.3
 PATH_SEPARATOR = :
 PKG_CONFIG = /usr/bin/pkg-config
 PKG_CONFIG_LIBDIR = 
-PKG_CONFIG_PATH = /opt/ros/groovy/lib/pkgconfig
+PKG_CONFIG_PATH = 
 PYTHON = /usr/bin/python
 PYTHON_CPPFLAGS = -I/usr/include/python2.7
 PYTHON_EXEC_PREFIX = ${exec_prefix}
@@ -205,14 +205,14 @@ PYTHON_PREFIX = ${prefix}
 PYTHON_SITE_PKG = /usr/lib/python2.7/site-packages
 PYTHON_VERSION = 2.7
 RANLIB = ranlib
-ROS_DIR = /opt/ros/cturtle/ros
+ROS_DIR = /opt/ros/groovy
 RTAI_DIR = /usr/realtime
 SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = strip
-SWIG = /opt/ros/groovy/bin/swig -c++
-SWIG_LIB = /opt/ros/groovy/share/swig/1.3.29
+SWIG = /usr/bin/swig -c++
+SWIG_LIB = /usr/share/swig2.0
 SWIG_PYTHON_CPPFLAGS = -I/usr/include/python2.7
 SWIG_PYTHON_OPT = -python
 VERSION = 1.3
@@ -295,8 +295,9 @@ libm3chainsinclude_HEADERS = \
 	dynamatics.pb.h
 
 lib_LTLIBRARIES = libm3chains.la 
-libm3chains_la_LIBADD = -lprotobuf -lm3base -lorocos-kdl -lm3hardware -lm3toolbox -lyaml-cpp 
+libm3chains_la_LIBADD = -lprotobuf -lm3base -lm3hardware -lm3toolbox -lyaml-cpp 
 libm3chains_la_LDFLAGS = -version-info 1:1:0 -module \
+	-L/usr/local/lib \
 	-L$(ros_dir)/core/roscpp/lib \
 	-L$(ros_dir)/core/roslib/lib \
 	-L$(ros_dir)/core/rosconsole/lib \
@@ -314,7 +315,7 @@ libm3chains_la_CPPFLAGS = -I../hardware/ -I../toolbox/ -I$(m3_dir) \
 	-I$(m3rt_dir) -I$(m3rtb_dir) -ffast-math -pipe -mhard-float \
 	-I$(m3tb_dir) \
 	$(EIGEN2_CFLAGS) \
-	-I$/usr/local/include
+	-I/usr/local/include
 
 libm3chains_la_SOURCES = \
 	joint_array_mode.pb.cpp\
