@@ -123,7 +123,8 @@ ETAGS = etags
 CTAGS = ctags
 DIST_SUBDIRS = src/m3/toolbox src/m3/hardware src/m3/chains \
 	src/m3/robots src/m3/robot_ctrl src/m3/inverse_kine python \
-	src/m3/shared_mem src/apps/m3humanoid_shm_test
+	src/m3/shared_mem src/apps/m3humanoid_shm_test \
+	src/apps/m3humanoid_shm_test-ens
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -227,7 +228,7 @@ PACKAGE_VERSION = 1.3
 PATH_SEPARATOR = :
 PKG_CONFIG = /usr/bin/pkg-config
 PKG_CONFIG_LIBDIR = 
-PKG_CONFIG_PATH = 
+PKG_CONFIG_PATH = /opt/ros/groovy/lib/pkgconfig
 PYTHON = /usr/bin/python
 PYTHON_CPPFLAGS = -I/usr/include/python2.7
 PYTHON_EXEC_PREFIX = ${exec_prefix}
@@ -244,8 +245,8 @@ SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = strip
-SWIG = /usr/bin/swig -c++
-SWIG_LIB = /usr/share/swig2.0
+SWIG = /opt/ros/groovy/bin/swig -c++
+SWIG_LIB = /opt/ros/groovy/share/swig/1.3.29
 SWIG_PYTHON_CPPFLAGS = -I/usr/include/python2.7
 SWIG_PYTHON_OPT = -python
 VERSION = 1.3
@@ -326,6 +327,7 @@ SUBDIRS = src/m3/toolbox \
 	src/m3/inverse_kine \
 	src/m3/shared_mem \
 	src/apps/m3humanoid_shm_test \
+	src/apps/m3humanoid_shm_test-ens \
 	python
 
 

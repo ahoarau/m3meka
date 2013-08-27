@@ -16,20 +16,45 @@
 # along with M3.  If not, see <http://www.gnu.org/licenses/>.
 
 rtai_inc = $(RTAI_DIR)/include
-#rtai_lib = $(RTAI_DIR)/lib
-
+m3rtb_dir = $(prefix)/include/
 m3_dir = $(top_srcdir)/src
 bin_PROGRAMS = m3humanoid_shm_test
 m3humanoid_shm_test_SOURCES = m3humanoid_shm_test.cpp
-m3humanoid_shm_test_LDADD = -lpthread
+m3humanoid_shm_test_LDADD = -lpthread -lprotobuf -lm3base -lorocos-kdl -lm3hardware -lm3chains -lm3robots -lm3toolbox -lyaml-cpp  -llxrt
+m3humanoid_shm_test_LDFLAGS = -version-info 1:1:0 -module \
+	-L$(ros_dir)/core/roscpp/lib \
+	-L$(ros_dir)/core/roslib/lib \
+	-L$(ros_dir)/core/rosconsole/lib \
+	-L$(ros_dir)/3rdparty/xmlrpcpp/lib \
+	-L$(top_srcdir)/src/m3/toolbox \
+	-L$(top_srcdir)/src/m3/hardware \
+	-L$(top_srcdir)/src/m3/chains \
+	-L$(top_srcdir)/src/m3/robots \
+	-L$(rtai_lib) \
+	-L$(ros_dir)/../stacks/ros_comm/utilities/cpp_common/lib \
+	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_traits/lib \
+	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_serialization/lib \
+	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp/lib \
+	-L$(ros_dir)/../stacks/ros_comm/tools/rosconsole/lib
 
 
-
-AM_CPPFLAGS = 			-I/usr/realtime/include \
-				-I$(m3_dir)\
-				-I$(rtai_inc) \
-				-D__IN_RTAI__ -ffast-math 
-
+m3humanoid_shm_test_CPPFLAGS =   -I../chains -I../robots -I../toolbox -I../hardware -I$(m3_dir) -I$(m3rt_dir) -I$(m3rtb_dir) $(EIGEN2_CFLAGS) -ffast-math -pipe -mhard-float \
+	-I$(ros_dir)/core/roscpp/include \
+	-I$(top_srcdir)/ros/m3meka_msgs/srv_gen/cpp/include \
+	-I$(top_srcdir)/ros/m3meka_msgs/msg_gen/cpp/include \
+	-I$(ros_dir)/core/roslib/include \
+	-I$(ros_dir)/core/rosconsole/include \
+	-I$(ros_dir)/3rdparty/xmlrpcpp/src \
+	-I$(rtai_inc) \
+	$(EIGEN2_CFLAGS) \
+	-D__IN_RTAI__ -ffast-math \
+	-I$(ros_dir)/../stacks/ros_comm/utilities/cpp_common/include \
+	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_traits/include \
+	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_serialization/include \
+	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp/include \
+	-I$(ros_dir)/../stacks/ros_comm/tools/rosconsole/include \
+	-I$(ros_dir)/../stacks/ros_comm/utilities/xmlrpcpp/src\
+	-I$(ros_dir)/../stacks/ros_comm/utilities/rostime/include
 
 
 

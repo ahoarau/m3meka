@@ -36,6 +36,7 @@ SUBDIRS =   src/m3/toolbox \
 	src/m3/inverse_kine \
 	src/m3/shared_mem \
 	src/apps/m3humanoid_shm_test \
+	src/apps/m3humanoid_shm_test-ens \
 	python
 else
 SUBDIRS =   src/m3/toolbox \
@@ -52,7 +53,7 @@ endif
 dist_bin_SCRIPTS = scripts/m3rt_printer_run
 
 includedir =  /usr/local/include/m3meka_msgs \
-		/usr/local/include
+	/usr/local/include
 
 include_HEADERS = ros/m3meka_msgs/msg_gen/cpp/include/m3meka_msgs/M3JointStatus.h \
 		ros/m3meka_msgs/msg_gen/cpp/include/m3meka_msgs/M3OmnibaseJoy.h \

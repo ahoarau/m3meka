@@ -327,49 +327,25 @@ void M3HumanoidShm::SetSdsFromStatus(unsigned char * data)
   
   if (bot)
   {
-	
-
     for (int i = 0; i < bot->GetNdof(RIGHT_ARM); i++)
     {          
       status_to_sds.right_arm.theta[i] = bot->GetThetaDeg(RIGHT_ARM,i);
       status_to_sds.right_arm.thetadot[i] = bot->GetThetaDotDeg(RIGHT_ARM,i);
-      status_to_sds.right_arm.thetadotdot[i] = bot->GetThetaDotDotDeg(RIGHT_ARM,i);
-      status_to_sds.right_arm.torque[i] = bot->GetTorque_mNm(RIGHT_ARM,i);
-      status_to_sds.right_arm.torquedot[i] = bot->GetTorqueDot_mNm(RIGHT_ARM,i);
-      status_to_sds.right_arm.gravity[i] = bot->GetGravity(RIGHT_ARM,i);                        
+      status_to_sds.right_arm.torque[i] = bot->GetTorque_mNm(RIGHT_ARM,i);      
     }
-
-	Eigen::Vector3d end_pos_rt = bot->GetEndPosition(RIGHT_ARM);
-    for (int i = 0; i < 3; i++)
-    {
-      status_to_sds.right_arm.end_effector_position[i] = end_pos_rt[i]);                        
-    }
-
-	Eigen::Matrix3d end_rot_rt = bot->GetEndRotation(RIGHT_ARM);
-    for (int i = 0; i < 9; i++)
-    {
-      status_to_sds.right_arm.end_effector_orientation[i] = end_rot_rt;                        
-    }
-
     
     for (int i = 0; i < bot->GetNdof(LEFT_ARM); i++)
     {          
       status_to_sds.left_arm.theta[i] = bot->GetThetaDeg(LEFT_ARM,i);
       status_to_sds.left_arm.thetadot[i] = bot->GetThetaDotDeg(LEFT_ARM,i);
-      status_to_sds.left_arm.thetadotdot[i] = bot->GetThetaDotDotDeg(LEFT_ARM,i);
       status_to_sds.left_arm.torque[i] = bot->GetTorque_mNm(LEFT_ARM,i);      
-	status_to_sds.left_arm.torquedot[i] = bot->GetTorqueDot_mNm(LEFT_ARM,i);
-      status_to_sds.left_arm.gravity[i] = bot->GetGravity(LEFT_ARM,i);                        
     }
     
     for (int i = 0; i < bot->GetNdof(TORSO); i++)
     {          
       status_to_sds.torso.theta[i] = bot->GetThetaDeg(TORSO,i);
       status_to_sds.torso.thetadot[i] = bot->GetThetaDotDeg(TORSO,i);
-	status_to_sds.torso.thetadotdot[i] = bot->GetThetaDotDotDeg(TORSO,i);
-      status_to_sds.torso.torque[i] = bot->GetTorque_mNm(TORSO,i);  
-	status_to_sds.torso.torquedot[i] = bot->GetTorqueDot_mNm(TORSO,i);
-      status_to_sds.torso.gravity[i] = bot->GetGravity(TORSO,i);                            
+      status_to_sds.torso.torque[i] = bot->GetTorque_mNm(TORSO,i);      
     }
     
     for (int i = 0; i < bot->GetNdof(HEAD); i++)

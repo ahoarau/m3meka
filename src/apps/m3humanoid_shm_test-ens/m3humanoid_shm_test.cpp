@@ -26,20 +26,25 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 //#include <m3rt/base/m3rt_def.h>
 #include <rtai_nam2num.h>
 #include <rtai_registry.h>
-#include "m3/robots/humanoid_shm_sds.h"
-
-
+#include "m3/robots/humanoid_shm.h"
+#include "m3/toolbox/toolbox.h"
+#include "m3rt/base/component_factory.h"
 #define RT_TASK_FREQUENCY_BOT_SHM 400
 #define RT_TIMER_TICKS_NS_BOT_SHM (1000000000 / RT_TASK_FREQUENCY_BOT_SHM)		//Period of rt-timer 
 #define BOT_SHM "TSHMM"
 #define BOT_CMD_SEM "TSHMC"
 #define BOT_STATUS_SEM "TSHMS"
 
+using namespace m3rt;
+using namespace m3;
+
+
 ////////////////////////////////////////////////////////////////////////////////////
 static int sys_thread_active = 0;
 static int sys_thread_end=0;
 static int end=0;
 static int hst;
+std::string shm_id;
 static M3HumanoidShmSdsCommand cmd;
 static M3HumanoidShmSdsStatus status;
 static int sds_status_size;
@@ -81,16 +86,16 @@ void StepHumanoidShm(int cntr)
 	//cmd.right_arm.ctrl_mode[i] = JOINT_ARRAY_MODE_TORQUE;
 	cmd.right_arm.ctrl_mode[i] = JOINT_ARRAY_MODE_THETA_GC;
 	cmd.right_arm.q_desired[i] = 0.0;
-	cmd.right_arm.tq_desired[i] = 40.0;
+	cmd.right_arm.tq_desired[i] = 0.0;
 	cmd.right_arm.slew_rate_q_desired[i] = 20.0;
-	cmd.right_arm.q_stiffness[i] = 1.0;	
+	cmd.right_arm.q_stiffness[i] = 0.85;	
       }
       
 
       if (cntr % RT_TASK_FREQUENCY_BOT_SHM == 0)
       {
 	printf("------------------------------\n");
-	printf("timestamp: %ld\n",GetTimestamp() );
+    printf("timestamp: %ld\n",(long int)GetTimestamp() );
 	 
 	/*printf("Fx: %f\n", status.right_loadx6.wrench[0]);
 	printf("Fy: %f\n", status.right_loadx6.wrench[1]);
@@ -200,9 +205,19 @@ static void* rt_system_thread(void * arg)
 	return 0;
 }
 
+bool ReadConfig(const char * filename)
+{
+  YAML::Node doc;
+  GetYamlDoc(filename, doc);
+  doc["shm_id"] >> shm_id;
+
+   return true;
+
+}
 ////////////////////////////////////////////////////////////////////////////////////
 int main (void)
 {	
+    ReadConfig("mr12/m3humanoid_shm12.yml");
 	RT_TASK *task;
 	M3Sds * sys;
 	int cntr=0;

@@ -123,7 +123,8 @@ ETAGS = etags
 CTAGS = ctags
 DIST_SUBDIRS = src/m3/toolbox src/m3/hardware src/m3/chains \
 	src/m3/robots src/m3/robot_ctrl src/m3/inverse_kine python \
-	src/m3/shared_mem src/apps/m3humanoid_shm_test
+	src/m3/shared_mem src/apps/m3humanoid_shm_test \
+	src/apps/m3humanoid_shm_test-ens
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -326,6 +327,7 @@ AM_CPPFLAGS = -g
 @RTAI_TRUE@	src/m3/inverse_kine \
 @RTAI_TRUE@	src/m3/shared_mem \
 @RTAI_TRUE@	src/apps/m3humanoid_shm_test \
+@RTAI_TRUE@	src/apps/m3humanoid_shm_test-ens \
 @RTAI_TRUE@	python
 
 
