@@ -6,5 +6,5 @@ build
 *.pyc
 *~
 *.kde*
-*.libs/
+.libs
 *.o
