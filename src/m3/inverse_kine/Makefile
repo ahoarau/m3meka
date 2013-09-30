@@ -844,9 +844,9 @@ ik_a2r2_left_from_ikfast.h:
 	openrave -d 0 --generateik robot $(m3_dir)/../ikfast_config/m3_a2r2_left.robot.xml\
 		ikfast /usr/local/share/openrave/openravepy/ikfast.py\
 		freeparam J2 manipulator 0\
-		output ik_a2r2_left_from_ikfast.cpp
+		output ik_a2r2_left_from_ikfast.h
 
-ikfast: ik_a1r1_right_from_ikfast.h ik_a1r1_left_from_ikfast.h ik_a2r1_right_from_ikfast.h ik_a2r1_left_from_ikfast.h ik_a2r2_right_from_ikfast.h ik_a2r2_left_from_ikfast.cpp
+ikfast: ik_a1r1_right_from_ikfast.h ik_a1r1_left_from_ikfast.h ik_a2r1_right_from_ikfast.h ik_a2r1_left_from_ikfast.h ik_a2r2_right_from_ikfast.h ik_a2r2_left_from_ikfast.h 
 
 ik_a1r1_right_wrap.cpp : ik_a1r1_right.i ik_a1r1_right_from_ikfast.h
 	$(SWIG) $(SWIG_PYTHON_OPT) -I$(m3_dir) -o $@ $<
@@ -860,10 +860,10 @@ ik_a2r1_right_wrap.cpp : ik_a2r1_right.i ik_a2r1_right_from_ikfast.h
 ik_a2r1_left_wrap.cpp : ik_a2r1_left.i ik_a2r1_left_from_ikfast.h
 	$(SWIG) $(SWIG_PYTHON_OPT) -I$(m3_dir)  -o $@ $<
 
-ik_a2r2_right_wrap.cpp : ik_a2r2_right.i ik_a2r2_right_from_ikfast.cpp
+ik_a2r2_right_wrap.cpp : ik_a2r2_right.i ik_a2r2_right_from_ikfast.h
 	$(SWIG) $(SWIG_PYTHON_OPT) -I$(m3_dir) -o $@ $<
 
-ik_a2r2_left_wrap.cpp : ik_a2r2_left.i ik_a2r2_left_from_ikfast.cpp
+ik_a2r2_left_wrap.cpp : ik_a2r2_left.i ik_a2r2_left_from_ikfast.h
 	$(SWIG) $(SWIG_PYTHON_OPT) -I$(m3_dir)  -o $@ $<
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
