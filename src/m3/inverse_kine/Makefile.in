@@ -34,6 +34,7 @@
 
 #//////////////////////////////////////////////////////////////////
 
+
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -54,8 +55,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 subdir = src/m3/inverse_kine
-DIST_COMMON = $(pkgpython_PYTHON) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in
+DIST_COMMON = $(libm3robotsinclude_HEADERS) $(pkgpython_PYTHON) \
+	$(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ac_pkg_swig.m4 \
 	$(top_srcdir)/m4/ac_python_devel.m4 \
@@ -96,7 +97,8 @@ am__uninstall_files_from_dir = { \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
 am__installdirs = "$(DESTDIR)$(pkgpyexecdir)" \
-	"$(DESTDIR)$(pkgpythondir)"
+	"$(DESTDIR)$(pkgpythondir)" \
+	"$(DESTDIR)$(libm3robotsincludedir)"
 LTLIBRARIES = $(pkgpyexec_LTLIBRARIES)
 _ik_a1r1_left_la_LIBADD =
 am__ik_a1r1_left_la_OBJECTS = _ik_a1r1_left_la-ik_a1r1_left_wrap.lo
@@ -159,6 +161,7 @@ DIST_SOURCES = $(_ik_a1r1_left_la_SOURCES) \
 	$(_ik_a2r2_right_la_SOURCES)
 am__py_compile = PYTHON=$(PYTHON) $(SHELL) $(py_compile)
 py_compile = $(top_srcdir)/config/py-compile
+HEADERS = $(libm3robotsinclude_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -306,6 +309,10 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 m3_dir = $(top_srcdir)/src
 openrave_dir = openrave
+libm3robotsincludedir = $(includedir)/m3/inverse_kine
+libm3robotsinclude_HEADERS = \
+	*_ikfast.h
+
 EXTRA_DIST = \
 	ik_a1r1_right_for_swig.h\
 	ik_a1r1_left_for_swig.h\
@@ -564,6 +571,24 @@ uninstall-pkgpythonPYTHON:
 	  $(am__uninstall_files_from_dir) || st=$$?; \
 	done; \
 	exit $$st
+install-libm3robotsincludeHEADERS: $(libm3robotsinclude_HEADERS)
+	@$(NORMAL_INSTALL)
+	test -z "$(libm3robotsincludedir)" || $(MKDIR_P) "$(DESTDIR)$(libm3robotsincludedir)"
+	@list='$(libm3robotsinclude_HEADERS)'; test -n "$(libm3robotsincludedir)" || list=; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(libm3robotsincludedir)'"; \
+	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(libm3robotsincludedir)" || exit $$?; \
+	done
+
+uninstall-libm3robotsincludeHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(libm3robotsinclude_HEADERS)'; test -n "$(libm3robotsincludedir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(libm3robotsincludedir)'; $(am__uninstall_files_from_dir)
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -649,9 +674,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES)
+all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(pkgpyexecdir)" "$(DESTDIR)$(pkgpythondir)"; do \
+	for dir in "$(DESTDIR)$(pkgpyexecdir)" "$(DESTDIR)$(pkgpythondir)" "$(DESTDIR)$(libm3robotsincludedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -707,7 +732,8 @@ info: info-am
 
 info-am:
 
-install-data-am: install-pkgpythonPYTHON
+install-data-am: install-libm3robotsincludeHEADERS \
+	install-pkgpythonPYTHON
 
 install-dvi: install-dvi-am
 
@@ -753,7 +779,8 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-pkgpyexecLTLIBRARIES uninstall-pkgpythonPYTHON
+uninstall-am: uninstall-libm3robotsincludeHEADERS \
+	uninstall-pkgpyexecLTLIBRARIES uninstall-pkgpythonPYTHON
 
 .MAKE: install-am install-strip
 
@@ -763,14 +790,16 @@ uninstall-am: uninstall-pkgpyexecLTLIBRARIES uninstall-pkgpythonPYTHON
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am install-dvi \
 	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am install-man \
-	install-pdf install-pdf-am install-pkgpyexecLTLIBRARIES \
+	install-html-am install-info install-info-am \
+	install-libm3robotsincludeHEADERS install-man install-pdf \
+	install-pdf-am install-pkgpyexecLTLIBRARIES \
 	install-pkgpythonPYTHON install-ps install-ps-am install-strip \
 	installcheck installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-pkgpyexecLTLIBRARIES \
-	uninstall-pkgpythonPYTHON
+	tags uninstall uninstall-am \
+	uninstall-libm3robotsincludeHEADERS \
+	uninstall-pkgpyexecLTLIBRARIES uninstall-pkgpythonPYTHON
 
 
 #clean-local:
@@ -815,9 +844,9 @@ ik_a2r2_left_from_ikfast.h:
 	openrave -d 0 --generateik robot $(m3_dir)/../ikfast_config/m3_a2r2_left.robot.xml\
 		ikfast /usr/local/share/openrave/openravepy/ikfast.py\
 		freeparam J2 manipulator 0\
-		output ik_a2r2_left_from_ikfast.h
+		output ik_a2r2_left_from_ikfast.cpp
 
-ikfast: ik_a1r1_right_from_ikfast.h ik_a1r1_left_from_ikfast.h ik_a2r1_right_from_ikfast.h ik_a2r1_left_from_ikfast.h ik_a2r2_right_from_ikfast.h ik_a2r2_left_from_ikfast.h 
+ikfast: ik_a1r1_right_from_ikfast.h ik_a1r1_left_from_ikfast.h ik_a2r1_right_from_ikfast.h ik_a2r1_left_from_ikfast.h ik_a2r2_right_from_ikfast.h ik_a2r2_left_from_ikfast.cpp
 
 ik_a1r1_right_wrap.cpp : ik_a1r1_right.i ik_a1r1_right_from_ikfast.h
 	$(SWIG) $(SWIG_PYTHON_OPT) -I$(m3_dir) -o $@ $<
@@ -831,10 +860,10 @@ ik_a2r1_right_wrap.cpp : ik_a2r1_right.i ik_a2r1_right_from_ikfast.h
 ik_a2r1_left_wrap.cpp : ik_a2r1_left.i ik_a2r1_left_from_ikfast.h
 	$(SWIG) $(SWIG_PYTHON_OPT) -I$(m3_dir)  -o $@ $<
 
-ik_a2r2_right_wrap.cpp : ik_a2r2_right.i ik_a2r2_right_from_ikfast.h
+ik_a2r2_right_wrap.cpp : ik_a2r2_right.i ik_a2r2_right_from_ikfast.cpp
 	$(SWIG) $(SWIG_PYTHON_OPT) -I$(m3_dir) -o $@ $<
 
-ik_a2r2_left_wrap.cpp : ik_a2r2_left.i ik_a2r2_left_from_ikfast.h
+ik_a2r2_left_wrap.cpp : ik_a2r2_left.i ik_a2r2_left_from_ikfast.cpp
 	$(SWIG) $(SWIG_PYTHON_OPT) -I$(m3_dir)  -o $@ $<
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

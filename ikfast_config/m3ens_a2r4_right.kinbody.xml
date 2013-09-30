@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<Robot name="m3_right_arm_down">
+<!-- just the kinematic body of the 7 DOF version of the Whole Arm Manipulator,
+     real robots are defined in other files and have attached hands.
+ -->
 <KinBody name="M3">
-  <Body name="link0" type="dynamic">
+ <Body name="link0" type="dynamic">
     <Translation>0 0 0</Translation>
     <Geom type="box">	    
 	    <Extents>0.01 0.01 0.01</Extents>
     </Geom>
     <mass type="custom">
-      <total>10</total>
+      <total>10.</total>
     </mass>
   </Body>
 
@@ -20,21 +22,25 @@
 	    <Extents>0.01 0.01 0.01</Extents>
     </Geom>
     <mass type="custom">
-      <total>1.</total>      
+      <total>1.</total>
     </mass>
   </Body>
+
 
   <Joint name="J0" type="hinge">
     <Body>link0</Body>
     <Body>link1</Body>
     <offsetfrom>link1</offsetfrom>
-    <axis>0 0 -1</axis>
-    <lostop>-180</lostop>
-    <histop>180</histop>
+    <axis>0 0 1</axis>
+    <!--limitsdeg>-80 200</limitsdeg-->
+    <limitsdeg>-180 180</limitsdeg>
     <weight>2</weight>
     <maxvel>1.</maxvel>
-    <resolution>1</resolution>
+    <rotorinertia>0 0 0.000466939</rotorinertia>
+    <maxtorque>11.6</maxtorque>
+    <resolution>.25</resolution>
   </Joint>
+
   <Body name="link2" type="dynamic">
     <offsetfrom>link1</offsetfrom>
     <Translation>0  0  0</Translation>
@@ -46,16 +52,19 @@
       <total>4.8487</total>
     </mass>
   </Body>
+
   <Joint name="J1" type="hinge">
     <Body>link1</Body>
     <Body>link2</Body>
     <offsetfrom>link2</offsetfrom>
-    <axis>0 0 -1</axis>
-    <lostop>-180</lostop>
-    <histop>180</histop>
+    <axis>0 0 1</axis>
+    <!--limitsdeg>-23 150</limitsdeg-->
+    <limitsdeg>-180 180</limitsdeg>
     <weight>2</weight>
     <maxvel>1.0</maxvel>
-    <resolution>1</resolution>
+    <rotorinertia>0 0 0.000466939</rotorinertia>
+    <maxtorque>11.6</maxtorque>
+    <resolution>.25</resolution>
   </Joint>
   <Body name="link3" type="dynamic">
     <offsetfrom>link2</offsetfrom>
@@ -72,12 +81,13 @@
     <Body>link2</Body>
     <Body>link3</Body>
     <offsetfrom>link3</offsetfrom>
-    <axis>0 0 -1</axis>
-    <lostop>-180</lostop>
-    <histop>180</histop>
+    <axis>0 0 1</axis>
+    <!--limitsdeg>-85 85</limitsdeg-->
+    <limitsdeg>-180 180</limitsdeg>
     <weight>2</weight>
     <maxvel>1.</maxvel>
-    <resolution>1</resolution>
+    <rotorinertia>0 0 0.000466939</rotorinertia>
+    <resolution>.25</resolution>
   </Joint>
   <Body name="link4" type="dynamic">
     <offsetfrom>link3</offsetfrom>
@@ -94,12 +104,13 @@
     <Body>link3</Body>
     <Body>link4</Body>
     <offsetfrom>link4</offsetfrom>
-    <axis>0 0 -1</axis>
-    <lostop>-180</lostop>
-    <histop>180</histop>
+    <axis>0 0 1</axis>
+    <!--limitsdeg>-0 132</limitsdeg-->
+    <limitsdeg>-180 180</limitsdeg>
     <weight>2</weight>
     <maxvel>1.</maxvel>
-    <resolution>1</resolution>
+    <rotorinertia>0 0 0.000466939</rotorinertia>
+    <resolution>.25</resolution>
   </Joint>
   <Body name="link5" type="dynamic">
     <offsetfrom>link4</offsetfrom>
@@ -116,12 +127,14 @@
     <Body>link4</Body>
     <Body>link5</Body>
     <offsetfrom>link5</offsetfrom>
-    <axis>0 0 -1</axis>
-    <lostop>-180</lostop>
-    <histop>180</histop>
+    <axis>0 0 1</axis>
+    <!--limitsdeg>-19 199</limitsdeg-->
+    <limitsdeg>-180 180</limitsdeg>
     <weight>1</weight>
     <maxvel>1.</maxvel>
-    <resolution>2</resolution>
+    <rotorinertia>0 0 0.000466939</rotorinertia>
+    <maxtorque>11.6</maxtorque>
+    <resolution>.25</resolution>
   </Joint>
 
   <Body name="link6" type="dynamic">
@@ -140,12 +153,14 @@
     <Body>link5</Body>
     <Body>link6</Body>
     <offsetfrom>link6</offsetfrom>
-    <axis>0 0 -1</axis>
-    <lostop>-180</lostop>
-    <histop>180</histop>
+    <axis>0 0 1</axis>
+    <!--limitsdeg>-58 58</limitsdeg-->
+    <limitsdeg>-180 180</limitsdeg>
     <weight>1</weight>
     <maxvel>1</maxvel>
-    <resolution>2</resolution>
+    <rotorinertia>0 0 0.000466939</rotorinertia>
+    <maxtorque>11.6</maxtorque>
+    <resolution>.25</resolution>
   </Joint>
   <Body name="link7" type="dynamic">
     <offsetfrom>link6</offsetfrom>
@@ -163,28 +178,17 @@
     <Body>link6</Body>
     <Body>link7</Body>
     <offsetfrom>link7</offsetfrom>
-    <axis>0 0 -1</axis>
-    <lostop>-180</lostop>
-    <histop>180</histop>
+    <axis>0 0 1</axis>
+    <!--limitsdeg>-60 60</limitsdeg-->
+    <limitsdeg>-180 180</limitsdeg>
     <weight>1</weight>
     <maxvel>1.</maxvel>
-    <resolution>2</resolution>
+    <resolution>.25</resolution>
+    <rotorinertia>0 0 0.000466939</rotorinertia>
+    <maxtorque>11.6</maxtorque>
   </Joint>
-  
-
 
   <adjacent>link1 link3</adjacent>
   <adjacent>link4 link6</adjacent>
   <adjacent>link4 link7</adjacent>
 </KinBody>
-<Manipulator>
-	<effector>link7</effector>
-	<base>link0</base>
-	<armjoints>J0 J1 J2 J3 J4 J5 J6</armjoints>	
-	<closed>-25</closed>
-	<opened>20</opened>
-	<Translation>0 0 0</Translation>
-	<iksolver>m3ikfast</iksolver>
-	<joints></joints>
-  </Manipulator>
-</Robot>

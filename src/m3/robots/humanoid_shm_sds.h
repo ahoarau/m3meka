@@ -34,6 +34,9 @@ typedef struct
   SMOOTHING_MODE	smoothing_mode[MAX_NDOF];
   mReal			tq_desired[MAX_NDOF];
   mReal			q_desired[MAX_NDOF];
+  mReal			qdot_desired[MAX_NDOF]; // ENS
+  mReal			pose_xyzrpy_desired[6]; // ENS
+  mReal			pose_xyzrpyw_desired[7]; // ENS
   mReal			slew_rate_q_desired[MAX_NDOF];
   mReal			q_stiffness[MAX_NDOF];
   mReal			extra_payload_com[3];
@@ -43,7 +46,11 @@ typedef struct
 
 typedef struct
 {    
-    mReal			theta[MAX_NDOF];			
+    mReal			theta[MAX_NDOF];
+    mReal			end_rpy[3];	// ENS
+    mReal			end_quat[4];// ENS
+    mReal			end_rot[9];
+    mReal			end_pos[3];		
     mReal			thetadot[MAX_NDOF];			
     mReal			torque[MAX_NDOF];
     mReal			jacobian[6][MAX_NDOF];

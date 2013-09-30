@@ -162,31 +162,26 @@ libm3chains_la-hand_ua.lo: hand_ua.cpp ../../../src/m3/chains/hand_ua.h \
  /usr/include/i386-linux-gnu/bits/mathinline.h \
  /usr/include/i386-linux-gnu/bits/math-finite.h \
  /usr/include/c++/4.6/cstdlib /usr/include/c++/4.6/climits \
- /opt/ros/groovy/include/kdl/chain.hpp \
- /opt/ros/groovy/include/kdl/segment.hpp \
- /opt/ros/groovy/include/kdl/frames.hpp \
- /opt/ros/groovy/include/kdl/utilities/kdl-config.h \
- /opt/ros/groovy/include/kdl/utilities/utility.h \
- /opt/ros/groovy/include/kdl/utilities/kdl-config.h \
- /usr/include/c++/4.6/cmath /opt/ros/groovy/include/kdl/frames.inl \
- /opt/ros/groovy/include/kdl/rigidbodyinertia.hpp \
- /opt/ros/groovy/include/kdl/rotationalinertia.hpp \
- /opt/ros/groovy/include/kdl/joint.hpp \
- /opt/ros/groovy/include/kdl/segment.hpp \
- /opt/ros/groovy/include/kdl/rotationalinertia.hpp \
- /opt/ros/groovy/include/kdl/chainfksolvervel_recursive.hpp \
- /opt/ros/groovy/include/kdl/chainfksolver.hpp \
- /opt/ros/groovy/include/kdl/chain.hpp \
- /opt/ros/groovy/include/kdl/framevel.hpp \
- /opt/ros/groovy/include/kdl/utilities/rall1d.h \
- /opt/ros/groovy/include/kdl/utilities/utility.h \
- /opt/ros/groovy/include/kdl/utilities/traits.h \
- /opt/ros/groovy/include/kdl/framevel.inl \
- /opt/ros/groovy/include/kdl/frameacc.hpp \
- /opt/ros/groovy/include/kdl/utilities/rall2d.h \
- /opt/ros/groovy/include/kdl/frameacc.inl \
- /opt/ros/groovy/include/kdl/jntarray.hpp \
- /opt/ros/groovy/include/kdl/jacobian.hpp /usr/include/eigen2/Eigen/Core \
+ /usr/local/include/kdl/chain.hpp /usr/local/include/kdl/segment.hpp \
+ /usr/local/include/kdl/frames.hpp \
+ /usr/local/include/kdl/utilities/kdl-config.h \
+ /usr/local/include/kdl/utilities/utility.h \
+ /usr/local/include/kdl/utilities/kdl-config.h /usr/include/c++/4.6/cmath \
+ /usr/local/include/kdl/frames.inl \
+ /usr/local/include/kdl/rigidbodyinertia.hpp \
+ /usr/local/include/kdl/rotationalinertia.hpp \
+ /usr/local/include/kdl/joint.hpp /usr/local/include/kdl/segment.hpp \
+ /usr/local/include/kdl/rotationalinertia.hpp \
+ /usr/local/include/kdl/chainfksolvervel_recursive.hpp \
+ /usr/local/include/kdl/chainfksolver.hpp \
+ /usr/local/include/kdl/chain.hpp /usr/local/include/kdl/framevel.hpp \
+ /usr/local/include/kdl/utilities/rall1d.h \
+ /usr/local/include/kdl/utilities/utility.h \
+ /usr/local/include/kdl/utilities/traits.h \
+ /usr/local/include/kdl/framevel.inl /usr/local/include/kdl/frameacc.hpp \
+ /usr/local/include/kdl/utilities/rall2d.h \
+ /usr/local/include/kdl/frameacc.inl /usr/local/include/kdl/jntarray.hpp \
+ /usr/local/include/kdl/jacobian.hpp /usr/include/eigen2/Eigen/Core \
  /usr/include/eigen2/Eigen/src/Core/util/DisableMSVCWarnings.h \
  /usr/include/c++/4.6/complex /usr/include/c++/4.6/functional \
  /usr/include/c++/4.6/cstring \
@@ -233,20 +228,19 @@ libm3chains_la-hand_ua.lo: hand_ua.cpp ../../../src/m3/chains/hand_ua.h \
  /usr/include/eigen2/Eigen/src/Core/Part.h \
  /usr/include/eigen2/Eigen/src/Core/CacheFriendlyProduct.h \
  /usr/include/eigen2/Eigen/src/Core/util/EnableMSVCWarnings.h \
- /opt/ros/groovy/include/kdl/jntarrayvel.hpp \
- /opt/ros/groovy/include/kdl/jntarrayacc.hpp \
- /opt/ros/groovy/include/kdl/chainfksolverpos_recursive.hpp \
- /opt/ros/groovy/include/kdl/frames.hpp \
- /opt/ros/groovy/include/kdl/framevel.hpp \
- /opt/ros/groovy/include/kdl/jacobian.hpp \
- /opt/ros/groovy/include/kdl/chainjnttojacsolver.hpp \
- /opt/ros/groovy/include/kdl/rigidbodyinertia.hpp \
- /opt/ros/groovy/include/kdl/jntarray.hpp \
- /opt/ros/groovy/include/kdl/jntarrayvel.hpp \
- /opt/ros/groovy/include/kdl/chainidsolver_recursive_newton_euler.hpp \
- /opt/ros/groovy/include/kdl/chainidsolver.hpp \
- /opt/ros/groovy/include/kdl/frames_io.hpp \
- /opt/ros/groovy/include/kdl/utilities/utility_io.h \
+ /usr/local/include/kdl/jntarrayvel.hpp \
+ /usr/local/include/kdl/jntarrayacc.hpp \
+ /usr/local/include/kdl/chainfksolverpos_recursive.hpp \
+ /usr/local/include/kdl/frames.hpp /usr/local/include/kdl/framevel.hpp \
+ /usr/local/include/kdl/jacobian.hpp \
+ /usr/local/include/kdl/chainjnttojacsolver.hpp \
+ /usr/local/include/kdl/rigidbodyinertia.hpp \
+ /usr/local/include/kdl/jntarray.hpp \
+ /usr/local/include/kdl/jntarrayvel.hpp \
+ /usr/local/include/kdl/chainidsolver_recursive_newton_euler.hpp \
+ /usr/local/include/kdl/chainidsolver.hpp \
+ /usr/local/include/kdl/frames_io.hpp \
+ /usr/local/include/kdl/utilities/utility_io.h \
  /usr/include/c++/4.6/iomanip ../../../src/m3/hardware/joint.h \
  ../../../src/m3/hardware/joint.pb.h \
  ../../../src/m3/hardware/actuator_ec.pb.h \
@@ -793,57 +787,57 @@ libm3chains_la-hand_ua.lo: hand_ua.cpp ../../../src/m3/chains/hand_ua.h \
 
 /usr/include/c++/4.6/climits:
 
-/opt/ros/groovy/include/kdl/chain.hpp:
+/usr/local/include/kdl/chain.hpp:
 
-/opt/ros/groovy/include/kdl/segment.hpp:
+/usr/local/include/kdl/segment.hpp:
 
-/opt/ros/groovy/include/kdl/frames.hpp:
+/usr/local/include/kdl/frames.hpp:
 
-/opt/ros/groovy/include/kdl/utilities/kdl-config.h:
+/usr/local/include/kdl/utilities/kdl-config.h:
 
-/opt/ros/groovy/include/kdl/utilities/utility.h:
+/usr/local/include/kdl/utilities/utility.h:
 
-/opt/ros/groovy/include/kdl/utilities/kdl-config.h:
+/usr/local/include/kdl/utilities/kdl-config.h:
 
 /usr/include/c++/4.6/cmath:
 
-/opt/ros/groovy/include/kdl/frames.inl:
+/usr/local/include/kdl/frames.inl:
 
-/opt/ros/groovy/include/kdl/rigidbodyinertia.hpp:
+/usr/local/include/kdl/rigidbodyinertia.hpp:
 
-/opt/ros/groovy/include/kdl/rotationalinertia.hpp:
+/usr/local/include/kdl/rotationalinertia.hpp:
 
-/opt/ros/groovy/include/kdl/joint.hpp:
+/usr/local/include/kdl/joint.hpp:
 
-/opt/ros/groovy/include/kdl/segment.hpp:
+/usr/local/include/kdl/segment.hpp:
 
-/opt/ros/groovy/include/kdl/rotationalinertia.hpp:
+/usr/local/include/kdl/rotationalinertia.hpp:
 
-/opt/ros/groovy/include/kdl/chainfksolvervel_recursive.hpp:
+/usr/local/include/kdl/chainfksolvervel_recursive.hpp:
 
-/opt/ros/groovy/include/kdl/chainfksolver.hpp:
+/usr/local/include/kdl/chainfksolver.hpp:
 
-/opt/ros/groovy/include/kdl/chain.hpp:
+/usr/local/include/kdl/chain.hpp:
 
-/opt/ros/groovy/include/kdl/framevel.hpp:
+/usr/local/include/kdl/framevel.hpp:
 
-/opt/ros/groovy/include/kdl/utilities/rall1d.h:
+/usr/local/include/kdl/utilities/rall1d.h:
 
-/opt/ros/groovy/include/kdl/utilities/utility.h:
+/usr/local/include/kdl/utilities/utility.h:
 
-/opt/ros/groovy/include/kdl/utilities/traits.h:
+/usr/local/include/kdl/utilities/traits.h:
 
-/opt/ros/groovy/include/kdl/framevel.inl:
+/usr/local/include/kdl/framevel.inl:
 
-/opt/ros/groovy/include/kdl/frameacc.hpp:
+/usr/local/include/kdl/frameacc.hpp:
 
-/opt/ros/groovy/include/kdl/utilities/rall2d.h:
+/usr/local/include/kdl/utilities/rall2d.h:
 
-/opt/ros/groovy/include/kdl/frameacc.inl:
+/usr/local/include/kdl/frameacc.inl:
 
-/opt/ros/groovy/include/kdl/jntarray.hpp:
+/usr/local/include/kdl/jntarray.hpp:
 
-/opt/ros/groovy/include/kdl/jacobian.hpp:
+/usr/local/include/kdl/jacobian.hpp:
 
 /usr/include/eigen2/Eigen/Core:
 
@@ -941,33 +935,33 @@ libm3chains_la-hand_ua.lo: hand_ua.cpp ../../../src/m3/chains/hand_ua.h \
 
 /usr/include/eigen2/Eigen/src/Core/util/EnableMSVCWarnings.h:
 
-/opt/ros/groovy/include/kdl/jntarrayvel.hpp:
+/usr/local/include/kdl/jntarrayvel.hpp:
 
-/opt/ros/groovy/include/kdl/jntarrayacc.hpp:
+/usr/local/include/kdl/jntarrayacc.hpp:
 
-/opt/ros/groovy/include/kdl/chainfksolverpos_recursive.hpp:
+/usr/local/include/kdl/chainfksolverpos_recursive.hpp:
 
-/opt/ros/groovy/include/kdl/frames.hpp:
+/usr/local/include/kdl/frames.hpp:
 
-/opt/ros/groovy/include/kdl/framevel.hpp:
+/usr/local/include/kdl/framevel.hpp:
 
-/opt/ros/groovy/include/kdl/jacobian.hpp:
+/usr/local/include/kdl/jacobian.hpp:
 
-/opt/ros/groovy/include/kdl/chainjnttojacsolver.hpp:
+/usr/local/include/kdl/chainjnttojacsolver.hpp:
 
-/opt/ros/groovy/include/kdl/rigidbodyinertia.hpp:
+/usr/local/include/kdl/rigidbodyinertia.hpp:
 
-/opt/ros/groovy/include/kdl/jntarray.hpp:
+/usr/local/include/kdl/jntarray.hpp:
 
-/opt/ros/groovy/include/kdl/jntarrayvel.hpp:
+/usr/local/include/kdl/jntarrayvel.hpp:
 
-/opt/ros/groovy/include/kdl/chainidsolver_recursive_newton_euler.hpp:
+/usr/local/include/kdl/chainidsolver_recursive_newton_euler.hpp:
 
-/opt/ros/groovy/include/kdl/chainidsolver.hpp:
+/usr/local/include/kdl/chainidsolver.hpp:
 
-/opt/ros/groovy/include/kdl/frames_io.hpp:
+/usr/local/include/kdl/frames_io.hpp:
 
-/opt/ros/groovy/include/kdl/utilities/utility_io.h:
+/usr/local/include/kdl/utilities/utility_io.h:
 
 /usr/include/c++/4.6/iomanip:
 

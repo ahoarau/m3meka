@@ -22,6 +22,9 @@
 m3_dir = $(top_srcdir)/src
 openrave_dir = openrave
 
+libm3robotsincludedir = $(includedir)/m3/inverse_kine
+libm3robotsinclude_HEADERS = \
+	*_ikfast.h
 
 EXTRA_DIST = \
 	ik_a1r1_right_for_swig.h\
@@ -30,7 +33,11 @@ EXTRA_DIST = \
 	ik_a2r1_left_for_swig.h\
 	ik_a2r2_right_for_swig.h\
 	ik_a2r2_left_for_swig.h
-	
+
+
+
+
+
 #clean-local:
 #	rm -f ik_a1r1_right_wrap.cpp ik_a1r1_right.py ik_a1r1_left_wrap.cpp ik_a1r1_left.py \
 #		ik_a1r1_right_from_ikfast.h ik_a1r1_left_from_ikfast.h \
@@ -73,9 +80,9 @@ ik_a2r2_left_from_ikfast.h:
 	openrave -d 0 --generateik robot $(m3_dir)/../ikfast_config/m3_a2r2_left.robot.xml\
 		ikfast /usr/local/share/openrave/openravepy/ikfast.py\
 		freeparam J2 manipulator 0\
-		output ik_a2r2_left_from_ikfast.h
+		output ik_a2r2_left_from_ikfast.cpp
 		
-ikfast: ik_a1r1_right_from_ikfast.h ik_a1r1_left_from_ikfast.h ik_a2r1_right_from_ikfast.h ik_a2r1_left_from_ikfast.h ik_a2r2_right_from_ikfast.h ik_a2r2_left_from_ikfast.h 
+ikfast: ik_a1r1_right_from_ikfast.h ik_a1r1_left_from_ikfast.h ik_a2r1_right_from_ikfast.h ik_a2r1_left_from_ikfast.h ik_a2r2_right_from_ikfast.h ik_a2r2_left_from_ikfast.cpp
 
 pkgpython_PYTHON = ik_a1r1_right.py ik_a1r1_left.py ik_a2r1_right.py ik_a2r1_left.py ik_a2r2_right.py ik_a2r2_left.py
 pkgpyexec_LTLIBRARIES = _ik_a1r1_right.la _ik_a1r1_left.la _ik_a2r1_right.la _ik_a2r1_left.la _ik_a2r2_right.la _ik_a2r2_left.la
@@ -147,7 +154,7 @@ _ik_a2r2_right_la_CPPFLAGS = \
 	
 _ik_a2r2_right_la_LDFLAGS = -module -version-info 1:1:0
 
-ik_a2r2_right_wrap.cpp : ik_a2r2_right.i ik_a2r2_right_from_ikfast.h
+ik_a2r2_right_wrap.cpp : ik_a2r2_right.i ik_a2r2_right_from_ikfast.cpp
 	$(SWIG) $(SWIG_PYTHON_OPT) -I$(m3_dir) -o $@ $<
 
 
@@ -161,6 +168,6 @@ _ik_a2r2_left_la_CPPFLAGS = \
 	
 _ik_a2r2_left_la_LDFLAGS = -module -version-info 1:1:0
 
-ik_a2r2_left_wrap.cpp : ik_a2r2_left.i ik_a2r2_left_from_ikfast.h
+ik_a2r2_left_wrap.cpp : ik_a2r2_left.i ik_a2r2_left_from_ikfast.cpp
 	$(SWIG) $(SWIG_PYTHON_OPT) -I$(m3_dir)  -o $@ $<
 	

@@ -15740,7 +15740,7 @@ RTAI_DIR=/usr/realtime
 ROS_DIR=/opt/ros/groovy
 
 
-ac_config_files="$ac_config_files Makefile python/Makefile src/apps/m3rt_printer/Makefile src/apps/m3humanoid_shm_test/Makefile src/apps/m3humanoid_shm_test-ens/Makefile src/apps/m3rt_torque_shm/Makefile src/apps/m3rt_timestats/Makefile src/m3/toolbox/Makefile src/m3/hardware/Makefile src/m3/inverse_kine/Makefile src/m3/robots/Makefile src/m3/chains/Makefile src/m3/shared_mem/Makefile src/m3/robot_ctrl/Makefile src/m3/vehicles/Makefile"
+ac_config_files="$ac_config_files Makefile python/Makefile src/apps/m3rt_printer/Makefile src/apps/m3humanoid_shm_test/Makefile src/apps/m3rt_torque_shm/Makefile src/apps/m3rt_timestats/Makefile src/m3/toolbox/Makefile src/m3/hardware/Makefile src/m3/inverse_kine/Makefile src/m3/robots/Makefile src/m3/chains/Makefile src/m3/shared_mem/Makefile src/m3/robot_ctrl/Makefile src/m3/vehicles/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -16861,7 +16861,6 @@ do
     "python/Makefile") CONFIG_FILES="$CONFIG_FILES python/Makefile" ;;
     "src/apps/m3rt_printer/Makefile") CONFIG_FILES="$CONFIG_FILES src/apps/m3rt_printer/Makefile" ;;
     "src/apps/m3humanoid_shm_test/Makefile") CONFIG_FILES="$CONFIG_FILES src/apps/m3humanoid_shm_test/Makefile" ;;
-    "src/apps/m3humanoid_shm_test-ens/Makefile") CONFIG_FILES="$CONFIG_FILES src/apps/m3humanoid_shm_test-ens/Makefile" ;;
     "src/apps/m3rt_torque_shm/Makefile") CONFIG_FILES="$CONFIG_FILES src/apps/m3rt_torque_shm/Makefile" ;;
     "src/apps/m3rt_timestats/Makefile") CONFIG_FILES="$CONFIG_FILES src/apps/m3rt_timestats/Makefile" ;;
     "src/m3/toolbox/Makefile") CONFIG_FILES="$CONFIG_FILES src/m3/toolbox/Makefile" ;;
