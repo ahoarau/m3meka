@@ -602,7 +602,7 @@ void M3Humanoid::StepStatus()
 			      //end_wrench.torque(1) = -load_wrench->torque(0)/1000.0;
 			      //end_wrench.force(2) = load_wrench->force(2)/1000.0;
 			      //end_wrench.torque(2) = load_wrench->torque(2)/1000.0;
-			      /end_wrench.force(0) = 0;
+			      end_wrench.force(0) = 0;
 			      end_wrench.torque(0) = 0;
 			      end_wrench.force(1) = 0;
 			      end_wrench.torque(1) = 0;

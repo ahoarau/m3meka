@@ -49,11 +49,12 @@ typedef struct
     mReal			theta[MAX_NDOF];
     mReal			end_rpy[3];	// ENS
     mReal			end_quat[4];// ENS
-    mReal			end_rot[9];
+    mReal			end_rot[3][3];
     mReal			end_pos[3];		
     mReal			thetadot[MAX_NDOF];			
     mReal			torque[MAX_NDOF];
     mReal			jacobian[6][MAX_NDOF];
+    mReal			gravity[MAX_NDOF];
 }M3JntArrayShmSdsStatus;
 
 typedef struct
