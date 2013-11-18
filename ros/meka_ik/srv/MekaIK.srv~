@@ -1,6 +1,0 @@
-string arm_name
-float32[3] end_position
-float32[3] end_rpy
----
-bool success
-float32[7] theta_solution
