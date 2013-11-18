@@ -38,7 +38,28 @@ libm3robotsinclude_HEADERS = \
 	humanoid_shm.pb.h \
 	humanoid_shm_sds.h \
 	humanoid_shm.h
-
+	
+libm3robots_la_CPPFLAGS =   -I../chains -I../toolbox -I../hardware -I$(m3_dir) -I$(m3tb_dir) \
+	-I$(m3rt_dir) -I$(m3rtb_dir) -I$(eigen_dir) -ffast-math -pipe -mhard-float \
+	$(EIGEN2_CFLAGS)\
+	-I$(ros_dir)/core/roscpp/include \
+	-I$(top_srcdir)/ros/m3meka_msgs/srv_gen/cpp/include \
+	-I$(top_srcdir)/ros/m3meka_msgs/msg_gen/cpp/include \
+	-I$(ros_dir)/core/roslib/include \
+	-I$(ros_dir)/core/rosconsole/include \
+	-I$(ros_dir)/3rdparty/xmlrpcpp/src \
+	-I$(ros_dir)/../stacks/ros_comm/utilities/cpp_common/include \
+	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_traits/include \
+	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_serialization/include \
+	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp/include \
+	-I$(ros_dir)/../stacks/ros_comm/tools/rosconsole/include \
+	-I$(ros_dir)/../stacks/ros_comm/utilities/xmlrpcpp/src \
+	-I$(ros_dir)/../stacks/ros_comm/utilities/rostime/include \
+	-I/opt/ros/cturtle/stacks/common_msgs/sensor_msgs/msg_gen/cpp/include \
+	-I/opt/ros/cturtle/ros/core/roslib/msg_gen/cpp/include \
+	-I$(rtai_inc) \
+	-D__RTAI__
+	
 clean-local:
 	rm -f *.pb.*
 	
@@ -60,9 +81,9 @@ haptic_demo.pb.cpp: haptic_demo.proto
 humanoid_shm.pb.h: humanoid_shm.pb.cpp
 
 humanoid_shm.pb.cpp: humanoid_shm.proto
-	protoc -I$(prefix)/include/m3rt/base -I../toolbox -I../hardware -I../chains -I./ --cpp_out=./ humanoid_shm.proto
+	protoc -I$(prefix)/include/m3rt/base -I../toolbox -I../hardware -I../chains $(EIGEN2_CFLAGS) -I./ --cpp_out=./ humanoid_shm.proto
 	mv humanoid_shm.pb.cc humanoid_shm.pb.cpp
-	protoc -I$(prefix)/include/m3rt/base -I../toolbox -I../hardware -I../chains -I./ --python_out=$(top_srcdir)/python/m3 humanoid_shm.proto
+	protoc -I$(prefix)/include/m3rt/base -I../toolbox -I../hardware  $(EIGEN2_CFLAGS) -I../chains -I./ --python_out=$(top_srcdir)/python/m3 humanoid_shm.proto
 
 proto: humanoid.pb.cpp humanoid_shm.pb.cpp  haptic_demo.pb.cpp
 
@@ -90,26 +111,7 @@ libm3robots_la_LDFLAGS = -version-info 1:1:0 -module \
 	-L$(rtai_lib)
 
 
-libm3robots_la_CPPFLAGS =   -I../chains -I../toolbox -I../hardware -I$(m3_dir) -I$(m3tb_dir) \
-	-I$(m3rt_dir) -I$(m3rtb_dir) -I$(eigen_dir) -ffast-math -pipe -mhard-float \
-	$(EIGEN2_CFLAGS)\
-	-I$(ros_dir)/core/roscpp/include \
-	-I$(top_srcdir)/ros/m3meka_msgs/srv_gen/cpp/include \
-	-I$(top_srcdir)/ros/m3meka_msgs/msg_gen/cpp/include \
-	-I$(ros_dir)/core/roslib/include \
-	-I$(ros_dir)/core/rosconsole/include \
-	-I$(ros_dir)/3rdparty/xmlrpcpp/src \
-	-I$(ros_dir)/../stacks/ros_comm/utilities/cpp_common/include \
-	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_traits/include \
-	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_serialization/include \
-	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp/include \
-	-I$(ros_dir)/../stacks/ros_comm/tools/rosconsole/include \
-	-I$(ros_dir)/../stacks/ros_comm/utilities/xmlrpcpp/src \
-	-I$(ros_dir)/../stacks/ros_comm/utilities/rostime/include \
-	-I/opt/ros/cturtle/stacks/common_msgs/sensor_msgs/msg_gen/cpp/include \
-	-I/opt/ros/cturtle/ros/core/roslib/msg_gen/cpp/include \
-	-I$(rtai_inc) \
-	-D__RTAI__
+
 
 libm3robots_la_SOURCES = \
 	humanoid.pb.cpp\

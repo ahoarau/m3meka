@@ -211,6 +211,28 @@ def get_robot_name():
                                 return c
         return ''
         return ''
+def get_right_hand_name():
+    path=get_m3_config_path()
+    filename= path+'m3_config.yml'
+    f=file(filename,'r')
+    config= yaml.safe_load(f.read())
+    right_hand_name = ''
+    try:
+        right_hand_name = config['right_hand']
+    except Exception,e:
+        print 'Caught exception while trying to get right hand name : ',e
+    return right_hand_name
+def get_left_hand_name():
+    path=get_m3_config_path()
+    filename= path+'m3_config.yml'
+    f=file(filename,'r')
+    config= yaml.safe_load(f.read())
+    left_hand_name = ''
+    try:
+        left_hand_name = config['left_hand']
+    except Exception,e:
+        print 'Caught exception while trying to get left hand name : ',e
+    return left_hand_name
 
 """
 * Animation file reader for files provided by Andrea Thomaz

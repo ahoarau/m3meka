@@ -24,7 +24,7 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #include <m3rt/base/m3ec_def.h>
 #include "m3/chains/joint_array_mode.pb.h"
 #include "m3/hardware/smoothing_mode.pb.h"
-
+//#include "m3/robots/humanoid.h" // pour passer tout l'humanoid dans la SHM a tester	
 #define MAX_NDOF 12  // per limb
 
 
@@ -65,6 +65,7 @@ typedef struct
 typedef struct
 {
   int64_t	timestamp;
+  //m3::M3Humanoid  bot; /// a Tester
   M3JntArrayShmSdsStatus head;    
   M3JntArrayShmSdsStatus torso;    
   M3JntArrayShmSdsStatus right_arm;    

@@ -8,3 +8,9 @@ build
 *.kde*
 .libs
 *.o
+*.pb.h
+*.lo
+*.pb.cpp
+*.la
+.deps
+.libs

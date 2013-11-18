@@ -289,24 +289,6 @@ libm3robotsinclude_HEADERS = \
 	humanoid_shm_sds.h \
 	humanoid_shm.h
 
-lib_LTLIBRARIES = libm3robots.la 
-libm3robots_la_LIBADD = -lprotobuf -lm3base -lorocos-kdl -lm3hardware -lm3chains -lm3toolbox -lyaml-cpp  -llxrt
-libm3robots_la_LDFLAGS = -version-info 1:1:0 -module \
-	-L$(ros_dir)/core/roscpp/lib \
-	-L$(ros_dir)/core/roslib/lib \
-	-L$(ros_dir)/core/rosconsole/lib \
-	-L$(ros_dir)/3rdparty/xmlrpcpp/lib \
-	-L$(top_srcdir)/src/m3/toolbox \
-	-L$(top_srcdir)/src/m3/hardware \
-	-L$(top_srcdir)/src/m3/chains \
-	-L$(ros_dir)/../stacks/ros_comm/utilities/cpp_common/lib \
-	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_traits/lib \
-	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_serialization/lib \
-	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp/lib \
-	-L$(ros_dir)/../stacks/ros_comm/tools/rosconsole/lib \
-	-L$(ros_dir)/../stacks/ros_comm/utilities/xmlrpcpp/lib \
-	-L$(rtai_lib)
-
 libm3robots_la_CPPFLAGS = -I../chains -I../toolbox -I../hardware -I$(m3_dir) -I$(m3tb_dir) \
 	-I$(m3rt_dir) -I$(m3rtb_dir) -I$(eigen_dir) -ffast-math -pipe -mhard-float \
 	$(EIGEN2_CFLAGS)\
@@ -327,6 +309,24 @@ libm3robots_la_CPPFLAGS = -I../chains -I../toolbox -I../hardware -I$(m3_dir) -I$
 	-I/opt/ros/cturtle/ros/core/roslib/msg_gen/cpp/include \
 	-I$(rtai_inc) \
 	-D__RTAI__
+
+lib_LTLIBRARIES = libm3robots.la 
+libm3robots_la_LIBADD = -lprotobuf -lm3base -lorocos-kdl -lm3hardware -lm3chains -lm3toolbox -lyaml-cpp  -llxrt
+libm3robots_la_LDFLAGS = -version-info 1:1:0 -module \
+	-L$(ros_dir)/core/roscpp/lib \
+	-L$(ros_dir)/core/roslib/lib \
+	-L$(ros_dir)/core/rosconsole/lib \
+	-L$(ros_dir)/3rdparty/xmlrpcpp/lib \
+	-L$(top_srcdir)/src/m3/toolbox \
+	-L$(top_srcdir)/src/m3/hardware \
+	-L$(top_srcdir)/src/m3/chains \
+	-L$(ros_dir)/../stacks/ros_comm/utilities/cpp_common/lib \
+	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_traits/lib \
+	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_serialization/lib \
+	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp/lib \
+	-L$(ros_dir)/../stacks/ros_comm/tools/rosconsole/lib \
+	-L$(ros_dir)/../stacks/ros_comm/utilities/xmlrpcpp/lib \
+	-L$(rtai_lib)
 
 libm3robots_la_SOURCES = \
 	humanoid.pb.cpp\
@@ -752,9 +752,9 @@ haptic_demo.pb.cpp: haptic_demo.proto
 humanoid_shm.pb.h: humanoid_shm.pb.cpp
 
 humanoid_shm.pb.cpp: humanoid_shm.proto
-	protoc -I$(prefix)/include/m3rt/base -I../toolbox -I../hardware -I../chains -I./ --cpp_out=./ humanoid_shm.proto
+	protoc -I$(prefix)/include/m3rt/base -I../toolbox -I../hardware -I../chains $(EIGEN2_CFLAGS) -I./ --cpp_out=./ humanoid_shm.proto
 	mv humanoid_shm.pb.cc humanoid_shm.pb.cpp
-	protoc -I$(prefix)/include/m3rt/base -I../toolbox -I../hardware -I../chains -I./ --python_out=$(top_srcdir)/python/m3 humanoid_shm.proto
+	protoc -I$(prefix)/include/m3rt/base -I../toolbox -I../hardware  $(EIGEN2_CFLAGS) -I../chains -I./ --python_out=$(top_srcdir)/python/m3 humanoid_shm.proto
 
 proto: humanoid.pb.cpp humanoid_shm.pb.cpp  haptic_demo.pb.cpp
 

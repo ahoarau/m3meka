@@ -82,13 +82,14 @@ m3humanoid_shm_test.o: m3humanoid_shm_test.cpp \
  /usr/include/i386-linux-gnu/bits/syscall.h /usr/include/pthread.h \
  /usr/include/i386-linux-gnu/bits/setjmp.h \
  /usr/realtime/include/rtai_sem.h /usr/realtime/include/rtai_registry.h \
- ../../../src/m3/robots/humanoid_shm_sds.h \
+ /usr/local/include/m3/robots/humanoid_shm_sds.h \
  /usr/local/include/m3rt/base/m3rt_def.h \
  /usr/local/include/m3rt/base/m3ec_def.h \
  /usr/local/include/m3rt/base/m3rt_def.h \
  /usr/lib/gcc/i686-linux-gnu/4.6/include/stdint.h /usr/include/stdint.h \
  /usr/include/i386-linux-gnu/bits/wchar.h \
- ../../../src/m3/chains/joint_array_mode.pb.h /usr/include/c++/4.6/string \
+ /usr/local/include/m3/chains/joint_array_mode.pb.h \
+ /usr/include/c++/4.6/string \
  /usr/include/c++/4.6/i686-linux-gnu/./bits/c++config.h \
  /usr/include/c++/4.6/i686-linux-gnu/./bits/os_defines.h \
  /usr/include/c++/4.6/i686-linux-gnu/./bits/cpu_defines.h \
@@ -169,7 +170,7 @@ m3humanoid_shm_test.o: m3humanoid_shm_test.cpp \
  /usr/local/include/google/protobuf/generated_message_reflection.h \
  /usr/local/include/google/protobuf/message.h \
  /usr/local/include/google/protobuf/unknown_field_set.h \
- ../../../src/m3/hardware/smoothing_mode.pb.h
+ /usr/local/include/m3/hardware/smoothing_mode.pb.h
 
 /usr/realtime/include/rtai_sched.h:
 
@@ -399,7 +400,7 @@ m3humanoid_shm_test.o: m3humanoid_shm_test.cpp \
 
 /usr/realtime/include/rtai_registry.h:
 
-../../../src/m3/robots/humanoid_shm_sds.h:
+/usr/local/include/m3/robots/humanoid_shm_sds.h:
 
 /usr/local/include/m3rt/base/m3rt_def.h:
 
@@ -413,7 +414,7 @@ m3humanoid_shm_test.o: m3humanoid_shm_test.cpp \
 
 /usr/include/i386-linux-gnu/bits/wchar.h:
 
-../../../src/m3/chains/joint_array_mode.pb.h:
+/usr/local/include/m3/chains/joint_array_mode.pb.h:
 
 /usr/include/c++/4.6/string:
 
@@ -621,4 +622,4 @@ m3humanoid_shm_test.o: m3humanoid_shm_test.cpp \
 
 /usr/local/include/google/protobuf/unknown_field_set.h:
 
-../../../src/m3/hardware/smoothing_mode.pb.h:
+/usr/local/include/m3/hardware/smoothing_mode.pb.h:

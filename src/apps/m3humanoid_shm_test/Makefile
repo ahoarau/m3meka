@@ -68,9 +68,13 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_m3humanoid_shm_test_OBJECTS = m3humanoid_shm_test.$(OBJEXT)
+am_m3humanoid_shm_test_OBJECTS =  \
+	m3humanoid_shm_test-m3humanoid_shm_test.$(OBJEXT)
 m3humanoid_shm_test_OBJECTS = $(am_m3humanoid_shm_test_OBJECTS)
 m3humanoid_shm_test_DEPENDENCIES =
+m3humanoid_shm_test_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(m3humanoid_shm_test_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
 am__depfiles_maybe = depfiles
@@ -232,14 +236,32 @@ top_build_prefix = ../../../
 top_builddir = ../../..
 top_srcdir = ../../..
 rtai_inc = $(RTAI_DIR)/include
-#rtai_lib = $(RTAI_DIR)/lib
-m3_dir = $(top_srcdir)/src
+rtai_lib = $(RTAI_DIR)/lib
+m3rt_dir = $(prefix)/include/m3rt
+m3rtb_dir = $(prefix)/include/m3rt/base
+m3_dir = $(top_srcdir)/src/m3
 m3humanoid_shm_test_SOURCES = m3humanoid_shm_test.cpp
-m3humanoid_shm_test_LDADD = -lpthread
-AM_CPPFLAGS = -I/usr/realtime/include \
-				-I$(m3_dir)\
-				-I$(rtai_inc) \
-				-D__IN_RTAI__ -ffast-math 
+m3humanoid_shm_test_LDADD = -lprotobuf -lm3base -lorocos-kdl -lm3hardware -lm3chains -lm3robots -lm3toolbox -lyaml-cpp  -llxrt -ldl
+m3humanoid_shm_test_LDFLAGS = -version-info 1:1:0 -module \
+	-L$(ros_dir)/core/roscpp/lib \
+	-L$(ros_dir)/core/roslib/lib \
+	-L$(ros_dir)/core/rosconsole/lib \
+	-L$(ros_dir)/3rdparty/xmlrpcpp/lib \
+	-L$(top_srcdir)/src/m3/toolbox \
+	-L$(top_srcdir)/src/m3/hardware \
+	-L$(top_srcdir)/src/m3/chains \
+	-L$(ros_dir)/../stacks/ros_comm/utilities/cpp_common/lib \
+	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_traits/lib \
+	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_serialization/lib \
+	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp/lib \
+	-L$(ros_dir)/../stacks/ros_comm/tools/rosconsole/lib \
+	-L$(ros_dir)/../stacks/ros_comm/utilities/xmlrpcpp/lib \
+	-L$(rtai_lib)
+
+m3humanoid_shm_test_CPPFLAGS = -I$(m3_dir)/chains -I$(m3_dir)/toolbox -I$(m3_dir)/hardware -I$(m3_dir) -I$(m3tb_dir) \
+	-I$(m3rt_dir) -I$(m3rtb_dir) -I$(eigen_dir) -ffast-math -pipe -mhard-float \
+	$(EIGEN2_CFLAGS)\
+	-I/usr/realtime/include
 
 all: all-am
 
@@ -320,7 +342,7 @@ clean-binPROGRAMS:
 	rm -f $$list
 m3humanoid_shm_test$(EXEEXT): $(m3humanoid_shm_test_OBJECTS) $(m3humanoid_shm_test_DEPENDENCIES) $(EXTRA_m3humanoid_shm_test_DEPENDENCIES) 
 	@rm -f m3humanoid_shm_test$(EXEEXT)
-	$(CXXLINK) $(m3humanoid_shm_test_OBJECTS) $(m3humanoid_shm_test_LDADD) $(LIBS)
+	$(m3humanoid_shm_test_LINK) $(m3humanoid_shm_test_OBJECTS) $(m3humanoid_shm_test_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -328,7 +350,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/m3humanoid_shm_test.Po
+include ./$(DEPDIR)/m3humanoid_shm_test-m3humanoid_shm_test.Po
 
 .cpp.o:
 	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -350,6 +372,20 @@ include ./$(DEPDIR)/m3humanoid_shm_test.Po
 #	source='$<' object='$@' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(LTCXXCOMPILE) -c -o $@ $<
+
+m3humanoid_shm_test-m3humanoid_shm_test.o: m3humanoid_shm_test.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(m3humanoid_shm_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT m3humanoid_shm_test-m3humanoid_shm_test.o -MD -MP -MF $(DEPDIR)/m3humanoid_shm_test-m3humanoid_shm_test.Tpo -c -o m3humanoid_shm_test-m3humanoid_shm_test.o `test -f 'm3humanoid_shm_test.cpp' || echo '$(srcdir)/'`m3humanoid_shm_test.cpp
+	$(am__mv) $(DEPDIR)/m3humanoid_shm_test-m3humanoid_shm_test.Tpo $(DEPDIR)/m3humanoid_shm_test-m3humanoid_shm_test.Po
+#	source='m3humanoid_shm_test.cpp' object='m3humanoid_shm_test-m3humanoid_shm_test.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(m3humanoid_shm_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o m3humanoid_shm_test-m3humanoid_shm_test.o `test -f 'm3humanoid_shm_test.cpp' || echo '$(srcdir)/'`m3humanoid_shm_test.cpp
+
+m3humanoid_shm_test-m3humanoid_shm_test.obj: m3humanoid_shm_test.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(m3humanoid_shm_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT m3humanoid_shm_test-m3humanoid_shm_test.obj -MD -MP -MF $(DEPDIR)/m3humanoid_shm_test-m3humanoid_shm_test.Tpo -c -o m3humanoid_shm_test-m3humanoid_shm_test.obj `if test -f 'm3humanoid_shm_test.cpp'; then $(CYGPATH_W) 'm3humanoid_shm_test.cpp'; else $(CYGPATH_W) '$(srcdir)/m3humanoid_shm_test.cpp'; fi`
+	$(am__mv) $(DEPDIR)/m3humanoid_shm_test-m3humanoid_shm_test.Tpo $(DEPDIR)/m3humanoid_shm_test-m3humanoid_shm_test.Po
+#	source='m3humanoid_shm_test.cpp' object='m3humanoid_shm_test-m3humanoid_shm_test.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(m3humanoid_shm_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o m3humanoid_shm_test-m3humanoid_shm_test.obj `if test -f 'm3humanoid_shm_test.cpp'; then $(CYGPATH_W) 'm3humanoid_shm_test.cpp'; else $(CYGPATH_W) '$(srcdir)/m3humanoid_shm_test.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -562,6 +598,28 @@ uninstall-am: uninstall-binPROGRAMS
 	pdf pdf-am ps ps-am tags uninstall uninstall-am \
 	uninstall-binPROGRAMS
 
+	-I$(ros_dir)/core/roscpp/include \
+	-I$(top_srcdir)/ros/m3meka_msgs/srv_gen/cpp/include \
+	-I$(top_srcdir)/ros/m3meka_msgs/msg_gen/cpp/include \
+	-I$(ros_dir)/core/roslib/include \
+	-I$(ros_dir)/core/rosconsole/include \
+	-I$(ros_dir)/3rdparty/xmlrpcpp/src \
+	-I$(ros_dir)/../stacks/ros_comm/utilities/cpp_common/include \
+	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_traits/include \
+	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_serialization/include \
+	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp/include \
+	-I$(ros_dir)/../stacks/ros_comm/tools/rosconsole/include \
+	-I$(ros_dir)/../stacks/ros_comm/utilities/xmlrpcpp/src \
+	-I$(ros_dir)/../stacks/ros_comm/utilities/rostime/include \
+	-I/opt/ros/cturtle/stacks/common_msgs/sensor_msgs/msg_gen/cpp/include \
+	-I/opt/ros/cturtle/ros/core/roslib/msg_gen/cpp/include \
+	-I$(rtai_inc) \
+	-D__RTAI__ 
+# AM_CPPFLAGS = 			-I/usr/realtime/include \
+# 				$(EIGEN2_CFLAGS)
+# 				-I$(m3_dir)\
+# 				-I$(rtai_inc) \
+# 				-D__IN_RTAI__ -ffast-math 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

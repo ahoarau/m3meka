@@ -306,6 +306,7 @@ void M3HumanoidShm::SetSdsFromStatus ( unsigned char * data ) {
     status_to_sds.timestamp = GetBaseStatus()->timestamp();
 
     if ( bot ) {
+	    //memcpy(&status_to_sds.bot,bot,sizeof(M3Humanoid));
         for ( int i = 0; i < bot->GetNdof ( RIGHT_ARM ); i++ ) {
             status_to_sds.right_arm.theta[i] = bot->GetThetaDeg ( RIGHT_ARM,i );
             status_to_sds.right_arm.thetadot[i] = bot->GetThetaDotDeg ( RIGHT_ARM,i );

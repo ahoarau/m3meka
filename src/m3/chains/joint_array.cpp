@@ -210,7 +210,11 @@ void M3JointArray::StepCommand()
 					break;				
 				case JOINT_ARRAY_MODE_TORQUE_GRAV_MODEL:
 					joints[i]->SetDesiredControlMode(JOINT_MODE_TORQUE_GRAV_MODEL);
-					break;					
+					break;
+				// Antoine Hoarau's velocity control 
+				case JOINT_ARRAY_MODE_THETADOT:
+					joints[i]->SetDesiredControlMode(JOINT_MODE_THETADOT);
+					break;	
 
 				case JOINT_ARRAY_MODE_SPLINED_TRAJ_GC:
 				{
