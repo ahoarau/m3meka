@@ -1999,7 +1999,7 @@ class M3Humanoid(M3Robot):
 	>>> index = [3, 4]
 	>>> bot.set_theta_rad('right_arm', q_b, index)	
 	"""
-	self.set_theta_deg(chain, deg2rad(nu.array(v,float)), ind)
+	self.set_theta_deg(chain, rad2deg(nu.array(v,float)), ind)
 		
     def set_theta_deg(self, chain, v, ind=None):
 	"""
