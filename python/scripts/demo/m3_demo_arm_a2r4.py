@@ -76,9 +76,7 @@ class M3Proc:
 		hand_names=self.proxy.get_available_components('m3hand')
 		hand_name=''
 		if len(hand_names)>1:
-			hand_name=m3t.user_select_components_interactive(hand_names,single=True)
-		if len(hand_names)==1:
-			hand_name=hand_names[0]
+			hand_name=m3t.user_select_components_interactive(hand_names,single=True)[0]
 		if len(hand_name):
 			self.hand=m3.hand.M3Hand(hand_name)
 			self.proxy.publish_command(self.hand)
