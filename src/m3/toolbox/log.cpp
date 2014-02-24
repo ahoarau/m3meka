@@ -23,7 +23,7 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #include <sys/stat.h>
 #include <sys/types.h>
 #include "m3rt/base/component_factory.h"
-
+#include <unistd.h> 
 #ifdef __RTAI__
 #include <rtai.h>
 #include <rtai_shm.h>
