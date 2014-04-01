@@ -18,9 +18,9 @@ Makefile
 *.Plo
 Makefile
 *_pb2.py
-makefile.in
+Makefile.in
 autom4te.cache/
 config.status
 libtool
 configure
-
+config.h
