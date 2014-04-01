@@ -25,7 +25,8 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #include <kdl/frames.hpp>
 #include <Eigen/Core>
 
-USING_PART_OF_NAMESPACE_EIGEN
+using namespace Eigen;
+
 
 namespace m3
 {

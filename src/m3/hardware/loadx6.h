@@ -29,12 +29,12 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #include <google/protobuf/message.h>
 #include "m3/toolbox/toolbox.h"
 
-USING_PART_OF_NAMESPACE_EIGEN
+
 
 namespace m3
 {
 	using namespace std;
-	
+	using namespace Eigen;
 	
 class M3LoadX6 : public m3rt::M3Component
 {

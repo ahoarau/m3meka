@@ -1538,10 +1538,10 @@ void M3Humanoid::TestAPI()
     M3_INFO("ep %i: %f\n",i,ep[i]);
   Eigen::Matrix3d er = GetEndRotation(RIGHT_ARM);
   for (int i = 0; i++; i<9)
-    M3_INFO("er %i: %f\n",i,er[i]);
+    M3_INFO("er %i: %f\n",i,er(i));
   Eigen::MatrixXd j = GetJacobian(RIGHT_ARM);
   for (int i = 0; i++; i<(6*7))
-    M3_INFO("j %i: %f\n",i,j[i]);
+    M3_INFO("j %i: %f\n",i,j(i));
   M3_INFO("g: %f\n",GetGravity(RIGHT_ARM, 0));
   M3_INFO("p: %f\n",GetPwm(RIGHT_ARM, 0));
   SetTorque_mNm(RIGHT_ARM,0,30);

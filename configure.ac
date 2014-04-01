@@ -1,5 +1,5 @@
 AC_PREREQ(2.59)
-AC_INIT([m3],[1.3],[info@mekabot.com])
+AC_INIT([m3],[1.5],[info@mekabot.com])
 AC_CONFIG_AUX_DIR([config])
 AM_INIT_AUTOMAKE([-Wall -Werror dist-bzip2])
 AC_CONFIG_HEADERS([config.h])
@@ -35,7 +35,7 @@ AM_CONDITIONAL([RTAI], [test x$rtai = xtrue])
 #------------------------------------------------------------------------------
 # Eigen
 #------------------------------------------------------------------------------
-PKG_CHECK_MODULES([EIGEN2], [eigen2 >= 2.0.15])
+PKG_CHECK_MODULES([EIGEN3], [eigen3 >= 3.0])
 
 #------------------------------------------------------------------------------
 
@@ -43,7 +43,7 @@ PKG_CHECK_MODULES([EIGEN2], [eigen2 >= 2.0.15])
 AC_SUBST(RTAI_DIR,[/usr/realtime])
 
 #TODO: have autoconf find correct ros dir
-AC_SUBST(ROS_DIR,[/opt/ros/groovy])
+AC_SUBST(ROS_DIR,[/opt/ros/hydro])
 
 AC_CONFIG_FILES([
 	Makefile

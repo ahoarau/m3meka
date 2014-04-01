@@ -11,7 +11,7 @@
 namespace m3
 {
 	using namespace std;
-	
+	using namespace Eigen;
 	
 	void M3SensorFilter::Step(mReal qraw, mReal qdotraw)	
 	{
@@ -145,10 +145,11 @@ namespace m3
 	}
 		M=MM;
 		cout<<M;*/
-		M = w*M;		
+		M = w*M;
 		qr.compute(M);
-		Q = qr.matrixQ();
-		R = qr.matrixR();
+		//std::cout<<"M:"<<M<<" qr:"<<qr.matrixQR()<<std::cout;
+		//Q = qr.matrixQ();
+		//R = qr.matrixR();
 		x = VectorXf::Zero(n+1);	
 	}
 	
@@ -162,7 +163,10 @@ namespace m3
 		
 		qy[0] = new_qy;
 		wy = w*qy;
-		x = R.marked<Eigen::UpperTriangular>().solveTriangular((Q.transpose()*wy));
+		// Eigen3 support
+		x = qr.solve(wy);
+		//std::cout<<"wy:"<<wy<<" x:"<<x<<std::endl;
+		//x = R.marked<Eigen::UpperTriangular>().solveTriangular((Q.transpose()*wy));
 		
 		y_smooth = x[0];	
 		ydot_smooth = -x[1];

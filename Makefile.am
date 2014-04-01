@@ -35,7 +35,6 @@ SUBDIRS =   src/m3/toolbox \
 	src/m3/robot_ctrl \
 	src/m3/inverse_kine \
 	src/m3/shared_mem \
-	src/apps/m3humanoid_shm_test \
 	python
 else
 SUBDIRS =   src/m3/toolbox \
@@ -136,7 +135,7 @@ vehicles_install:
 m3_install:
 	$(MAKE) -C src/m3/hardware install
 	$(MAKE) -C src/m3/chains install
-	$(MAKE) -C src/m3/invers_kine install
+	$(MAKE) -C src/m3/inverse_kine install
 	$(MAKE) -C src/m3/robots install
 	$(MAKE) -C src/m3/robot_ctrl install
 		

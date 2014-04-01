@@ -12,5 +12,6 @@ build
 *.lo
 *.pb.cpp
 *.la
-.deps
-.libs
+.deps/
+.libs/
+Makefile

@@ -26,9 +26,9 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #include <math.h>
 #include <Eigen/Eigen>
 #include <Eigen/Core>
+#include <Eigen/QR>
 #include "inttypes.h"
 
-USING_PART_OF_NAMESPACE_EIGEN
 
 namespace m3
 {
@@ -77,9 +77,10 @@ namespace m3
 			mReal ydotdot_smooth;
 			MatrixXf w;		
 			MatrixXf M,MM;
-			QR<MatrixXf> qr;
-			MatrixXf Q;
-			MatrixXf R;
+			// Eigen3 port
+			HouseholderQR<MatrixXf> qr;
+			//MatrixXf Q;
+			//MatrixXf R;
 			VectorXf x;
 	};
 	

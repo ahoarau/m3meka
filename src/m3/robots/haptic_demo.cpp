@@ -191,7 +191,7 @@ void M3HapticDemo::StepCommand()
 		    bot->SetStiffness(LEFT_ARM,i,0.0);
 		    //bot->SetModeThetaGc(LEFT_ARM,i);
 		    bot->SetSlewRateProportional(LEFT_ARM,i, 1.0);
-		    bot->SetTorque_mNm(LEFT_ARM,i,tq[i]);
+		    bot->SetTorque_mNm(LEFT_ARM,i,tq(i));
 		    //bot->SetTorque_mNm(LEFT_ARM,i,0);
 		  }
 		  /*if (tmp_cnt%100==0)
