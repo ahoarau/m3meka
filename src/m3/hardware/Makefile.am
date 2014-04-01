@@ -23,12 +23,17 @@ m3_dir = $(top_srcdir)/src
 m3rt_dir = $(prefix)/include/m3rt
 m3rtb_dir = $(prefix)/include/m3rt/base
 
-#rtai_inc = /usr/realtime/include 
-#ros_dir = /opt/ros/cturtle/ros
 rtai_inc = $(RTAI_DIR)/include
 rtai_lib = $(RTAI_DIR)/lib
 ros_dir = $(ROS_DIR)
 
+if RTAI
+RTLIB=-llxrt
+RTDIR=-D__RTAI__
+else
+RTLIB=
+RTDIR=
+endif
 libm3hardwareincludedir = $(includedir)/m3/hardware
 libm3hardwareinclude_HEADERS = \
 	m3ec_pdo_v0_def.h\
@@ -258,39 +263,16 @@ proto_install:
 	cp *.proto $(includedir)/m3/hardware 
 	
 #///////////////////////////////////////////////////////////////////////////////////////////////////
-lib_LTLIBRARIES = libm3hardware.la 
-libm3hardware_la_LIBADD = -lprotobuf -lm3toolbox -lorocos-kdl -lyaml-cpp -lm3base  $(EIGEN2_LIBS) -llxrt
 
-libm3hardware_la_LDFLAGS = -version-info 1:1:0 -module -L$(rtai_lib)  \
-	-L$(ros_dir)/core/roscpp/lib \
-	-L$(ros_dir)/core/roslib/lib \
-	-L$(ros_dir)/core/rosconsole/lib \
-	-L$(ros_dir)/3rdparty/xmlrpcpp/lib\
-	-L$(top_srcdir)/src/m3/toolbox \
-	-L$(ros_dir)/../stacks/ros_comm/utilities/cpp_common/lib \
-	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_traits/lib \
-	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_serialization/lib \
-	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp/lib \
-	-L$(ros_dir)/../stacks/ros_comm/tools/rosconsole/lib \
-	-L$(ros_dir)/../stacks/ros_comm/utilities/xmlrpcpp/lib
+
+lib_LTLIBRARIES = libm3hardware.la 
+libm3hardware_la_LIBADD = -lprotobuf -lm3toolbox -lorocos-kdl -lyaml-cpp -lm3base $(RTLIB)
+
+libm3hardware_la_LDFLAGS = -version-info 1:1:0 -module -L$(rtai_lib)
 
 
 libm3hardware_la_CPPFLAGS =  -I$(rtai_inc) -I$(m3_dir) -I$(m3rt_dir) -I$(m3rtb_dir) -ffast-math -pipe \
-	$(EIGEN2_CFLAGS) \
-	-I$(ros_dir)/core/roscpp/include \
-	-I$(top_srcdir)/ros/m3meka_msgs/srv_gen/cpp/include \
-	-I$(top_srcdir)/ros/m3meka_msgs/msg_gen/cpp/include \
-	-I$(ros_dir)/core/roslib/include \
-	-I$(ros_dir)/core/rosconsole/include \
-	-I$(ros_dir)/3rdparty/xmlrpcpp/src \
-	-I$(ros_dir)/../stacks/ros_comm/utilities/cpp_common/include \
-	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_traits/include \
-	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_serialization/include \
-	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp/include \
-	-I$(ros_dir)/../stacks/ros_comm/tools/rosconsole/include \
-	-I$(ros_dir)/../stacks/ros_comm/utilities/xmlrpcpp/src\
-	-I$(ros_dir)/../stacks/ros_comm/utilities/rostime/include\
-	-D__RTAI__
+	$(EIGEN3_CFLAGS) $(RTDIR) -I$(rtai_inc)
 
 
 

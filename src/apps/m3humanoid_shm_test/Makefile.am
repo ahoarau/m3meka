@@ -42,7 +42,7 @@ m3humanoid_shm_test_LDFLAGS = -version-info 1:1:0 -module \
 	-L$(rtai_lib)
 m3humanoid_shm_test_CPPFLAGS =   -I$(m3_dir)/chains -I$(m3_dir)/toolbox -I$(m3_dir)/hardware -I$(m3_dir) -I$(m3tb_dir) \
 	-I$(m3rt_dir) -I$(m3rtb_dir) -I$(eigen_dir) -ffast-math -pipe -mhard-float \
-	$(EIGEN2_CFLAGS)\
+	$(EIGEN3_CFLAGS)\
 	-I/usr/realtime/include
 	-I$(ros_dir)/core/roscpp/include \
 	-I$(top_srcdir)/ros/m3meka_msgs/srv_gen/cpp/include \
@@ -62,7 +62,7 @@ m3humanoid_shm_test_CPPFLAGS =   -I$(m3_dir)/chains -I$(m3_dir)/toolbox -I$(m3_d
 	-I$(rtai_inc) \
 	-D__RTAI__ 
 # AM_CPPFLAGS = 			-I/usr/realtime/include \
-# 				$(EIGEN2_CFLAGS)
+# 				$(EIGEN3_CFLAGS)
 # 				-I$(m3_dir)\
 # 				-I$(rtai_inc) \
 # 				-D__IN_RTAI__ -ffast-math 

@@ -26,7 +26,13 @@ ros_dir = /opt/ros/cturtle/ros
 rtai_inc = $(RTAI_DIR)/include
 rtai_lib = $(RTAI_DIR)/lib
 
-
+if RTAI
+RTLIB=-llxrt
+RTDIR=-D__RTAI__
+else
+RTLIB=
+RTDIR=
+endif
 
 libm3vehiclesincludedir = $(includedir)/m3/vehicles
 libm3vehiclesinclude_HEADERS = \
@@ -62,38 +68,14 @@ proto_install:
 	
 lib_LTLIBRARIES = libm3vehicles.la 
 libm3vehicles_la_LIBADD = -lprotobuf -lm3base -lorocos-kdl -lm3hardware -lm3chains -lm3toolbox \
-	-lyaml-cpp -lholomni_pcv
-libm3vehicles_la_LDFLAGS = -version-info 1:1:0 -module \
-	-L$(ros_dir)/core/roscpp/lib \
-	-L$(ros_dir)/core/roslib/lib \
-	-L$(ros_dir)/core/rosconsole/lib \
-	-L$(ros_dir)/3rdparty/xmlrpcpp/lib \
-	-L$(ros_dir)/../stacks/ros_comm/utilities/cpp_common/lib \
-	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_traits/lib \
-	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_serialization/lib \
-	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp/lib \
-	-L$(ros_dir)/../stacks/ros_comm/tools/rosconsole/lib \
-	-L$(ros_dir)/../stacks/ros_comm/utilities/xmlrpcpp/lib \
-	-L$(rtai_lib)
+	-lyaml-cpp -lholomni_pcv $(RTLIB)
+	
+libm3vehicles_la_LDFLAGS = -version-info 1:1:0 -module
 
 libm3vehicles_la_CPPFLAGS =   -I../chains -I../toolbox -I../hardware -I$(m3_dir) -I$(m3rt_dir) -I$(m3rtb_dir) -ffast-math -pipe -mhard-float \
-	$(EIGEN2_CFLAGS) \
-	-I$(ros_dir)/core/roscpp/include \
-	-I$(top_srcdir)/ros/m3meka_msgs/srv_gen/cpp/include \
-	-I$(top_srcdir)/ros/m3meka_msgs/msg_gen/cpp/include \
-	-I$(ros_dir)/core/roslib/include \
-	-I$(ros_dir)/core/rosconsole/include \
-	-I$(ros_dir)/3rdparty/xmlrpcpp/src \
+	$(EIGEN3_CFLAGS) \
 	-I$(includedir)/holomni_pcv \
-	-I$(ros_dir)/../stacks/ros_comm/utilities/cpp_common/include \
-	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_traits/include \
-	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_serialization/include \
-	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp/include \
-	-I$(ros_dir)/../stacks/ros_comm/tools/rosconsole/include \
-	-I$(ros_dir)/../stacks/ros_comm/utilities/xmlrpcpp/src\
-	-I$(ros_dir)/../stacks/ros_comm/utilities/rostime/include\
-	-I$(rtai_inc) \
-	-D__RTAI__
+	$(RTDIR)
 
 
 

@@ -29,7 +29,7 @@ AC_ARG_ENABLE([virtual-only],
   no)  rtai=true ;;
   *) AC_MSG_ERROR([bad value ${enableval} for --enable-virtual-only]) ;;
 esac],[rtai=true])
-AM_CONDITIONAL([RTAI], [test x$rtai = xtrue])
+AM_CONDITIONAL(RTAI, [test x$rtai = xtrue])
 
 
 #------------------------------------------------------------------------------
@@ -43,7 +43,15 @@ PKG_CHECK_MODULES([EIGEN3], [eigen3 >= 3.0])
 AC_SUBST(RTAI_DIR,[/usr/realtime])
 
 #TODO: have autoconf find correct ros dir
-AC_SUBST(ROS_DIR,[/opt/ros/hydro])
+#AC_SUBST(ROS_DIR,[/opt/ros/hydro])
+
+
+if test "$rtai" = true; then
+AC_MSG_RESULT([checking for RTAI...YES])
+else
+AC_MSG_RESULT([checking for RTAI...NO])
+fi
+
 
 AC_CONFIG_FILES([
 	Makefile

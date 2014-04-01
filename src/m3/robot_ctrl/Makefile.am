@@ -50,37 +50,15 @@ proto_install:
 lib_LTLIBRARIES = libm3robot_ctrl.la 
 libm3robot_ctrl_la_LIBADD = -lprotobuf -lm3base -lorocos-kdl -lm3hardware -lm3chains -lm3robots -lm3toolbox -lyaml-cpp 
 libm3robot_ctrl_la_LDFLAGS = -version-info 1:1:0 -module \
-	-L$(ros_dir)/core/roscpp/lib \
-	-L$(ros_dir)/core/roslib/lib \
-	-L$(ros_dir)/core/rosconsole/lib \
-	-L$(ros_dir)/3rdparty/xmlrpcpp/lib \
 	-L$(top_srcdir)/src/m3/toolbox \
 	-L$(top_srcdir)/src/m3/hardware \
 	-L$(top_srcdir)/src/m3/chains \
-	-L$(top_srcdir)/src/m3/robots \
-	-L$(ros_dir)/../stacks/ros_comm/utilities/cpp_common/lib \
-	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_traits/lib \
-	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_serialization/lib \
-	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp/lib \
-	-L$(ros_dir)/../stacks/ros_comm/tools/rosconsole/lib \
-	-L$(ros_dir)/../stacks/ros_comm/utilities/xmlrpcpp/lib
+	-L$(top_srcdir)/src/m3/robots
 
 libm3robot_ctrl_la_CPPFLAGS =   -I../chains -I../robots -I../toolbox -I../hardware -I$(m3tb_dir) \
-	-I$(m3_dir) -I$(m3rt_dir) -I$(m3rtb_dir) -ffast-math -pipe  -mhard-float\
-	-I$(ros_dir)/core/roscpp/include \
-	-I$(top_srcdir)/ros/m3meka_msgs/srv_gen/cpp/include \
-	-I$(top_srcdir)/ros/m3meka_msgs/msg_gen/cpp/include \
-	-I$(ros_dir)/core/roslib/include \
-	$(EIGEN2_CFLAGS) \
-	-I$(ros_dir)/core/rosconsole/include \
-	-I$(ros_dir)/3rdparty/xmlrpcpp/src\
-	-I$(ros_dir)/../stacks/ros_comm/utilities/cpp_common/include \
-	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_traits/include \
-	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_serialization/include \
-	-I$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp/include \
-	-I$(ros_dir)/../stacks/ros_comm/tools/rosconsole/include \
-	-I$(ros_dir)/../stacks/ros_comm/utilities/xmlrpcpp/src\
-	-I$(ros_dir)/../stacks/ros_comm/utilities/rostime/include
+	-I$(m3_dir) -I$(m3rt_dir) -I$(m3rtb_dir) -ffast-math -pipe  -mhard-float \
+	$(EIGEN3_CFLAGS)
+	
 libm3robot_ctrl_la_SOURCES = \
 	head_s2csp_ctrl.pb.cpp\
 	head_s2csp_ctrl.cpp\

@@ -87,19 +87,9 @@ proto_install:
 lib_LTLIBRARIES = libm3chains.la 
 libm3chains_la_LIBADD = -lprotobuf -lm3base -lm3hardware -lm3toolbox -lyaml-cpp 
 libm3chains_la_LDFLAGS = -version-info 1:1:0 -module \
-	-L/usr/local/lib \
-	-L$(ros_dir)/core/roscpp/lib \
-	-L$(ros_dir)/core/roslib/lib \
-	-L$(ros_dir)/core/rosconsole/lib \
-	-L$(ros_dir)/3rdparty/xmlrpcpp/lib \
 	-L$(top_srcdir)/src/m3/toolbox \
 	-L$(top_srcdir)/src/m3/hardware \
-	-L$(ros_dir)/../stacks/ros_comm/utilities/cpp_common/lib \
-	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_traits/lib \
-	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp_serialization/lib \
-	-L$(ros_dir)/../stacks/ros_comm/clients/cpp/roscpp/lib \
-	-L$(ros_dir)/../stacks/ros_comm/tools/rosconsole/lib \
-	-L$(ros_dir)/../stacks/ros_comm/utilities/xmlrpcpp/lib
+	-L/usr/local/lib
 	
 
 
@@ -107,7 +97,7 @@ libm3chains_la_LDFLAGS = -version-info 1:1:0 -module \
 libm3chains_la_CPPFLAGS =   -I../hardware/ -I../toolbox/ -I$(m3_dir) \
 	-I$(m3rt_dir) -I$(m3rtb_dir) -ffast-math -pipe -mhard-float \
 	-I$(m3tb_dir) \
-	$(EIGEN2_CFLAGS) \
+	$(EIGEN3_CFLAGS) \
 	-I/usr/local/include
 
 	
