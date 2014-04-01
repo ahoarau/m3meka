@@ -15,3 +15,12 @@ build
 .deps/
 .libs/
 Makefile
+*.Plo
+Makefile
+*_pb2.py
+makefile.in
+autom4te.cache/
+config.status
+libtool
+configure
+
