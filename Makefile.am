@@ -35,6 +35,7 @@ SUBDIRS =   src/m3/toolbox \
 	src/m3/robot_ctrl \
 	src/m3/inverse_kine \
 	src/m3/shared_mem \
+	src/m3/vehicles \
 	python
 else
 SUBDIRS =   src/m3/toolbox \
@@ -43,6 +44,7 @@ SUBDIRS =   src/m3/toolbox \
 	src/m3/robots\
 	src/m3/robot_ctrl \
 	src/m3/inverse_kine \
+	src/m3/vehicles \
 	python
 endif
 	
