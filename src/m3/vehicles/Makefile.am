@@ -22,7 +22,6 @@
 m3_dir = $(top_srcdir)/src
 m3rt_dir = $(prefix)/include/m3rt
 m3rtb_dir = $(prefix)/include/m3rt/base
-ros_dir = /opt/ros/cturtle/ros
 rtai_inc = $(RTAI_DIR)/include
 rtai_lib = $(RTAI_DIR)/lib
 
@@ -70,11 +69,13 @@ lib_LTLIBRARIES = libm3vehicles.la
 libm3vehicles_la_LIBADD = -lprotobuf -lm3base -lorocos-kdl -lm3hardware -lm3chains -lm3toolbox \
 	-lyaml-cpp -lholomni_pcv $(RTLIB)
 	
-libm3vehicles_la_LDFLAGS = -version-info 1:1:0 -module
+libm3vehicles_la_LDFLAGS = -version-info 1:1:0 -module -L$(rtai_lib) -L/usr/local/lib
 
 libm3vehicles_la_CPPFLAGS =   -I../chains -I../toolbox -I../hardware -I$(m3_dir) -I$(m3rt_dir) -I$(m3rtb_dir) -ffast-math -pipe -mhard-float \
 	$(EIGEN3_CFLAGS) \
+	-I$(rtai_inc)
 	-I$(includedir)/holomni_pcv \
+	-I$(includedir)/holomni_pcv/matrix \
 	$(RTDIR)
 
 
