@@ -18,16 +18,27 @@
  * from Redwood Robotics Incorporated.
  */
  
-#include <rtai_sched.h>
+
 #include <stdio.h>
 #include <signal.h>
-#include <rtai_shm.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include <rtai.h>
 #include <rtai_sem.h>
+#include <rtai_sched.h>
+#include <rtai_nam2num.h>
+#include <rtai_shm.h>
+#include <rtai_malloc.h>
+#ifdef __cplusplus
+}
+#endif
+
+
+
 #include <m3rt/base/m3ec_def.h>
 #include <m3rt/base/m3rt_def.h>
-#include <rtai_nam2num.h>
-#include <rtai_registry.h>
 #include "m3/robots/humanoid_shm_sds.h"
 #include "m3/hardware/joint_mode_ros.pb.h"
 #include "m3/robots/chain_name.h"
@@ -494,7 +505,7 @@ static void* rt_system_thread(void * arg)
 {	
 	SEM * status_sem;
 	SEM * command_sem;
-	RT_TASK *task;
+    RT_TASK * task;
 	int cntr=0;
 	M3Sds * sds = (M3Sds *)arg;
 	printf("Starting real-time thread\n");
@@ -507,25 +518,26 @@ static void* rt_system_thread(void * arg)
 	
 	memset(&cmd, 0, sds_cmd_size);
 	
-	task = rt_task_init_schmod(nam2num("HSHMP"), 0, 0, 0, SCHED_FIFO, 0xF);
+
 	rt_allow_nonroot_hrt();
-	if (task==NULL)
-	{
-		printf("Failed to create RT-TASK TSHMP\n");
-		return 0;
-	}
+    task = rt_task_init_schmod(nam2num("HSHMP"), 0, 0, 0, SCHED_FIFO, 0xF);
+    if (task==NULL)
+    {
+        printf("Failed to create RT-TASK TSHMP\n");
+        return 0;
+    }
 	status_sem=(SEM*)rt_get_adr(nam2num(MEKA_ODOM_STATUS_SEM));
 	command_sem=(SEM*)rt_get_adr(nam2num(MEKA_ODOM_CMD_SEM));
 	if (!status_sem)
 	{
 		printf("Unable to find the %s semaphore.\n",MEKA_ODOM_STATUS_SEM);
-		rt_task_delete(task);
+        //rt_task_delete(task);
 		return 0;
 	}
 	if (!command_sem)
 	{
-		printf("Unable to find the %s semaphore.\n",MEKA_ODOM_CMD_SEM);
-		rt_task_delete(task);
+        printf("Unable to find the %s semaphore.\n",MEKA_ODOM_CMD_SEM);
+        //	rt_task_delete(task);
 		return 0;
 	}
 	
@@ -571,7 +583,7 @@ static void* rt_system_thread(void * arg)
 	}	
 	printf("Exiting RealTime Thread...\n",0);
 	rt_make_soft_real_time();
-	rt_task_delete(task);
+
 	sys_thread_active=0;
 	return 0;
 }
@@ -581,7 +593,7 @@ static void* rt_system_thread(void * arg)
 ////////////////////////////////////////////////////////////////////////////////////
 int main (int argc, char **argv)
 {	
-	RT_TASK *task;
+    //RT_TASK *task;
 	M3Sds * sys;
 	int cntr=0;
 	
@@ -671,7 +683,7 @@ int main (int argc, char **argv)
 
 	signal(SIGINT, endme);
 
-	if (sys = (M3Sds*)rt_shm_alloc(nam2num(MEKA_ODOM_SHM),sizeof(M3Sds),USE_VMALLOC))
+    if (sys = (M3Sds*)rt_shm_alloc(nam2num(MEKA_ODOM_SHM),sizeof(M3Sds),USE_VMALLOC))
 		printf("Found shared memory starting shm_humanoid_controller.");
 	else
 	{
@@ -686,11 +698,17 @@ int main (int argc, char **argv)
 		printf("Cannot init the RTAI task %s\n","TSHM");
 		return 0;
 	}*/
+
 	hst=rt_thread_create((void*)rt_system_thread, sys, 10000);
+
+
+
+
+
 	usleep(100000); //Let start up
 	if (!sys_thread_active)
 	{
-		rt_task_delete(task);
+        //rt_task_delete(task);
 		rt_shm_free(nam2num(MEKA_ODOM_SHM));
 		printf("Startup of thread failed.\n",0);
 		return 0;
