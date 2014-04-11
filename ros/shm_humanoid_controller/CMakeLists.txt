@@ -139,6 +139,11 @@ target_link_libraries(gravity_right_arm ${LIBS})
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(shm_generic_node shm_generic_generate_messages_cpp)
+add_dependencies(shm_humanoid_controller m3ctrl_msgs_gencpp)
+add_dependencies(move_humanoid m3ctrl_msgs_gencpp)
+add_dependencies(move_gripper m3ctrl_msgs_gencpp)
+add_dependencies(pose_right_arm m3ctrl_msgs_gencpp)
+add_dependencies(gravity_right_arm m3ctrl_msgs_gencpp)
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(shm_generic_node
