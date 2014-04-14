@@ -24,3 +24,4 @@ config.status
 libtool
 configure
 config.h
+*.txt.user

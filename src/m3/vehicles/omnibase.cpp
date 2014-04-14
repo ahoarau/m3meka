@@ -288,9 +288,10 @@ void M3Omnibase::StepOffCtrl()
 
 void M3Omnibase::StepCommand()
 {    
-    if (IsStateSafeOp() || IsStateError())
+    if (IsStateSafeOp() || IsStateError()){
+      //printf("ERROR\n");
         return;
-    
+    }
     for (int i=0;i<motor_array->GetNumDof()/2;i++)
     {
 	if ((bool)param.enable_breakbeam(i))
@@ -301,6 +302,7 @@ void M3Omnibase::StepCommand()
     
     switch (command.ctrl_mode())
     {    
+      //printf("ctrlmode:%f\n",command.ctrl_mode());
     case OMNIBASE_CTRL_CASTER:
         for (int i=0;i<motor_array->GetNumDof()/2;i++)
 	{

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package>
-  <name>shm_humanoid_controller</name>
+  <name>shm_omnibase_controller</name>
   <version>1.0.0</version>
   <description>
-    This is a catkinization of the shm_humanoid_controller for the Meka Robot.
+    This is a catkinization of the shm_omnibase_controller for the Meka Robot.
   </description>
   <maintainer email="hoarau.robotics@gmail.com">Antoine Hoarau</maintainer>
   <license>BSD</license>
@@ -16,7 +16,6 @@
 
   <build_depend>rostest</build_depend>
   <build_depend>std_msgs</build_depend>
-  <build_depend>m3ctrl_msgs</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>nav_msgs</build_depend>
@@ -27,7 +26,6 @@
   <run_depend>rospy</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>std_msgs</run_depend>
-  <run_depend>m3ctrl_msgs</run_depend>
   <run_depend>nav_msgs</run_depend>
   <run_depend>tf</run_depend>
 </package>
