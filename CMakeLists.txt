@@ -26,40 +26,11 @@ endif(USE_C++11)
 #find_package(Boost COMPONENTS filesystem system REQUIRED)
 #find_package(Eigen3 REQUIRED)
 #find_package(Protobuf REQUIRED)
-
-set(M3_SOURCE_DIR "${PROJECT_SOURCE_DIR}/src/m3")
-
-
-
-MACRO(SUBDIRLIST result curdir)
-  FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
-  SET(dirlist "")
-  FOREACH(child ${children})
-    IF(IS_DIRECTORY ${curdir}/${child})
-        LIST(APPEND dirlist ${child})
-    ENDIF()
-  ENDFOREACH()
-  SET(${result} ${dirlist})
-ENDMACRO()
-
-
-
-
-
-SUBDIRLIST(SUBDIRS ${M3_SOURCE_DIR})
-FOREACH(subdir ${SUBDIRS})
-        message("-- adding dir : ${M3_SOURCE_DIR}/${subdir}")
-ENDFOREACH()
-
-FOREACH(subdir ${SUBDIRS})
-    ADD_SUBDIRECTORY(${M3_SOURCE_DIR}/${subdir})
-ENDFOREACH()
 ############set(M3RT_RT_SYSTEM_SOURCE_DIR "${M3RT_SOURCE_DIR}/rt_system")
 #add_subdirectory(src/m3rt/ethercat)
 #add_subdirectory(python)
-#add_subdirectory(src/m3rt/base)
-#add_subdirectory(src/m3rt/rt_system)
 
+add_subdirectory(src/m3)
     
 
 #add_subdirectory(python)
