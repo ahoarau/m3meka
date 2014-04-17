@@ -4,9 +4,9 @@
 #  M3RT_INCLUDE_DIRS - The M3RT include directories
 #  M3RT_LIBRARIES - The libraries needed to use M3RT
 #  M3RT_DEFINITIONS - Compiler switches required for using M3RT
-if(M3RT_INCLUDE_DIR)
-SET(M3RT_FOUND TRUE)
-else(M3RT_INCLUDE_DIR)
+#####if(M3RT_INCLUDE_DIR)
+#####SET(M3RT_FOUND TRUE)
+#####else(M3RT_INCLUDE_DIR)
 #find_package(PkgConfig)
 #pkg_check_modules(M3RT_BASE QUIET m3base)
 
@@ -30,4 +30,4 @@ find_package_handle_standard_args(M3RT  DEFAULT_MSG
 message("-- M3rt include dir: ${M3RT_INCLUDE_DIRS}")
 message("-- M3rt base library: ${M3RT_LIBRARIES}")
 mark_as_advanced(M3RT_INCLUDE_DIR M3RT_LIBRARIES )
-endif(M3RT_INCLUDE_DIR)
+######endif(M3RT_INCLUDE_DIR)

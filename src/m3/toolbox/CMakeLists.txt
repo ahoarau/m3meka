@@ -9,19 +9,16 @@ set(LIBNAME "m3toolbox")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-find_package(RTAI REQUIRED)
+#find_package(RTAI REQUIRED)
 #find_package(M3 COMPONENTS HARDWARE ROBOTS CHAINS TOOLBOX SHARED_MEM REQUIRED)
 find_package(M3rt REQUIRED)
-find_package(Boost COMPONENTS filesystem system REQUIRED)
+#find_package(Boost COMPONENTS filesystem system REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(Protobuf REQUIRED)
+SET(M3_INCLUDE_DIR 
+	${CMAKE_CURRENT_SOURCE_DIR}/../..
+)
 
-SET(M3_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../toolbox
-                ${CMAKE_CURRENT_SOURCE_DIR}/../hardware
-                ${CMAKE_CURRENT_SOURCE_DIR}/../toolbox
-                ${CMAKE_CURRENT_SOURCE_DIR}/../robots
-                ${CMAKE_CURRENT_SOURCE_DIR}/../shared_mem
-                ${CMAKE_CURRENT_SOURCE_DIR}/../chains)
 
 include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${M3_INCLUDE_DIR})
 
@@ -34,7 +31,7 @@ PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${CMAKE_CURRENT_SOURCE_DIR} ${Pr
 # End Protobuf stuff
 
 
-SET(LIBS ${RTAI_LIBRARIES} ${M3RT_LIBRARIES} pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES})
+SET(LIBS ${RTAI_LIBRARIES} ${M3RT_LIBRARIES} pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES})
 
 
 #FILE(GLOB SRCFILES *.cxx)

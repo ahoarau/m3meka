@@ -160,8 +160,9 @@ void M3Dynamatics::StepStatus()
 			qdot_id(i+3) = 0.;
 
 	}	
-	SetPayload();	
-	idsolver->SetGrav(grav);
+    // HACK : Try to use end_wrench
+    SetPayload();
+    //idsolver->SetGrav(grav);
 	
 	f_ext[kdlchain.getNrOfSegments()-1] = end_wrench;	
 	
@@ -220,6 +221,7 @@ void M3Dynamatics::StepStatus()
 // not exceed the size of the previous allocation and not reallocate any memory.
 void M3Dynamatics::SetPayload()
 {
+    /*
 	if (param.payload_inertia_size()==6)
 	{		
 		//param.payload_inertia defined as Ixx, Ixy, Ixz, Iyy, Iyz, Izz
@@ -266,7 +268,7 @@ void M3Dynamatics::SetPayload()
 		end_eff->setInertia(toTip.Inverse()*RigidBodyInertia(m+z_m, ecom, rot_inertia + z_I));
 	}
 		
-	idsolver->chain = kdlchain;
+    idsolver->chain = kdlchain;*/
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
