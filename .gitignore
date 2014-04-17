@@ -25,3 +25,5 @@ libtool
 configure
 config.h
 *.txt.user
+*.pb.cc
+*.pb.h
