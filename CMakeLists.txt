@@ -33,7 +33,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 add_subdirectory(src/m3)
     
 
-#add_subdirectory(python)
+add_subdirectory(python)
 
 
 ########### install files ###############
