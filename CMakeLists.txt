@@ -16,7 +16,7 @@ if(USE_C++11)
 	message("-- Using c++11")
 endif(USE_C++11)
 #set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb")
-#set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 #configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
