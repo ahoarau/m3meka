@@ -27,9 +27,9 @@
 #include <m3rt/base/component.h>
 #include "../toolbox/toolbox.h"
 #include "../toolbox/dfilter.h"
-#include "ctrl_simple.pb.h"
+#include "m3/hardware/ctrl_simple.pb.h"
 #include "actuator.h"
-#include "actuator.pb.h"
+#include "m3/hardware/actuator.pb.h"
 
 namespace m3
 {

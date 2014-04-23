@@ -21,8 +21,8 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #define M3JOINT_ZLIFT_SHM_H
 
 #include <m3rt/base/component_shm.h>
-#include "joint_zlift_shm.pb.h"
-#include "joint_zlift_shm_sds.h"
+#include "m3/hardware/joint_zlift_shm.pb.h"
+#include "m3/hardware/joint_zlift_shm_sds.h"
 #include "m3/hardware/joint_zlift.h"
 
 

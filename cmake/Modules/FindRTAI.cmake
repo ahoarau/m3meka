@@ -14,9 +14,6 @@
 ################################################################################
 
 include(LibFindMacros)
-if(RTAI_INCLUDE_DIR)
-set(RTAI_FOUND TRUE)
-else(RTAI_INCLUDE_DIR)
 if(UNIX)
   SET(RTAI_SEARCH_PATH
     /usr
@@ -62,4 +59,3 @@ if( LINUX_SOURCE_DIR )
 endif()
 
 libfind_process(RTAI)
-endif(RTAI_INCLUDE_DIR)

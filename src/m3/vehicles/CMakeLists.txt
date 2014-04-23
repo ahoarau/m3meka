@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.8)
-project(m3vehicles)
+project(vehicles)
 set(LIBNAME "m3vehicles")
 
 
@@ -13,7 +13,7 @@ find_package(RTAI REQUIRED)
 #find_package(M3 COMPONENTS HARDWARE ROBOTS CHAINS TOOLBOX SHARED_MEM REQUIRED)
 find_package(Holomni REQUIRED)
 find_package(M3rt REQUIRED)
-find_package(Boost COMPONENTS filesystem system REQUIRED)
+find_package(Boost REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(Protobuf REQUIRED)
 SET(M3_INCLUDE_DIR 
@@ -23,32 +23,40 @@ SET(M3_INCLUDE_DIR
 	${CMAKE_CURRENT_SOURCE_DIR}/../hardware
 )
 
-
-include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${M3_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${M3_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${HOLOMNI_INCLUDE_DIRS})
 
 
 # Start Protobuf stuff
 file(GLOB ProtoFiles "${CMAKE_CURRENT_SOURCE_DIR}/*.proto")
 SET(PROTOBUF_IMPORT_DIRS ${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})
 PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${CMAKE_CURRENT_SOURCE_DIR} ${ProtoFiles})
-# End Protobuf stuff
+set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
+                            GENERATED TRUE)# End Protobuf stuff
 
 
-SET(LIBS ${RTAI_LIBRARIES} ${M3RT_LIBRARIES} pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3chains m3toolbox m3hardware)
+SET(LIBS ${RTAI_LIBRARIES} ${M3RT_LIBRARIES} pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3chains m3toolbox m3hardware ${HOLOMNI_LIBRARIES})
 
 
-#FILE(GLOB SRCFILES *.cxx)
-SET(SRCFILES
-factory_proxy.cpp
-omnibase.cpp
-omnibase_shm.cpp
-vehicle.cpp
+file(GLOB ALL_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} [^.]*.cpp)
+file(GLOB ALL_HDRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} [^.]*.h)
+
+list(APPEND ALL_SRCS ${ProtoSources})
+
+#file(GLOB ProtoFiles RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.proto )
+list(APPEND ALL_HDRS
+${ProtoHeaders}
+${ProtoFiles}
 )
 
-SET(${LIBNAME}_SRCS
-${SRCFILES}
-${ProtoSources}
-${ProtoHeaders})
+message("ALL SRC in ${PROJECT_NAME}:${ALL_SRCS}")
 
-add_library(${LIBNAME} SHARED ${${LIBNAME}_SRCS})
+
+## Building
+add_library(${LIBNAME} SHARED ${ALL_SRCS})
 target_link_libraries(${LIBNAME} ${LIBS})
+add_dependencies(${LIBNAME} m3toolbox m3hardware m3chains holomni)
+set_target_properties(${LIBNAME} PROPERTIES COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}/src")
+
+## Installing
+install(TARGETS ${LIBNAME} DESTINATION lib)
+install(FILES ${ALL_HDRS} DESTINATION include/m3/${PROJECT_NAME})

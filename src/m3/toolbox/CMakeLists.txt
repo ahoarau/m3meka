@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.8)
-project(m3toolbox)
+project(toolbox)
 set(LIBNAME "m3toolbox")
 
 
@@ -26,33 +26,42 @@ include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DI
 # Start Protobuf stuff
 file(GLOB ProtoFiles "${CMAKE_CURRENT_SOURCE_DIR}/*.proto")
 SET(PROTOBUF_IMPORT_DIRS ${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})
-message("PROTOBUF_IMPORT_DIRS:${PROTOBUF_IMPORT_DIRS}")
-PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${CMAKE_CURRENT_SOURCE_DIR} ${ProtoFiles})
-# End Protobuf stuff
 
+PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${CMAKE_CURRENT_SOURCE_DIR} ${ProtoFiles})
+set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
+                            GENERATED TRUE)
+                            message("ProtoFiles:${ProtoFiles} 
+		ProtoSources: ${ProtoSources} 
+		ProtoHeaders: ${ProtoHeaders}")
+# End Protobuf stuff
+message("Cmake binary dir:${CMAKE_BINARY_DIR}")
 
 SET(LIBS ${RTAI_LIBRARIES} ${M3RT_LIBRARIES} pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES})
 
 
-#FILE(GLOB SRCFILES *.cxx)
-SET(SRCFILES
-dfilter.cpp
-factory_proxy.cpp
-log.cpp
-monitor.cpp
-serial_pdo.cpp
-serial_port.cpp
-toolbox.cpp
-trajectory.cpp
+file(GLOB ALL_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} [^.]*.cpp)
+file(GLOB ALL_HDRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} [^.]*.h)
+
+
+list(APPEND ALL_SRCS ${ProtoSources})
+
+#file(GLOB ProtoFiles RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.proto )
+list(APPEND ALL_HDRS
+${ProtoHeaders}
+${ProtoFiles}
 )
-SET(${LIBNAME}_SRCS
-${SRCFILES}
-${ProtoSources}
-${ProtoHeaders})
 
-add_library(${LIBNAME} SHARED ${${LIBNAME}_SRCS})
+message("ALL SRC in ${PROJECT_NAME}:${ALL_SRCS}")
+
+
+## Building
+add_library(${LIBNAME} SHARED ${ALL_SRCS})
 target_link_libraries(${LIBNAME} ${LIBS})
+set_target_properties(${LIBNAME} PROPERTIES COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}/src")
 
+## Installing
+install(TARGETS ${LIBNAME} DESTINATION lib)
+install(FILES ${ALL_HDRS} DESTINATION include/m3/${PROJECT_NAME})
 
 
 
