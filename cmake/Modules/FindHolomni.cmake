@@ -9,7 +9,7 @@ find_package(PkgConfig)
 pkg_check_modules(HOLOMNI QUIET libholomni_pcv)
 set(HOLOMNI_DEFINITIONS ${HOLOMNI_CFLAGS_OTHER})
 
-find_path(HOLOMNI_INCLUDE_DIR libxml/xpath.h
+find_path(HOLOMNI_INCLUDE_DIR holomni_pcv/Caster.h
           HINTS ${HOLOMNI_INCLUDEDIR} ${HOLOMNI_INCLUDE_DIRS}
           PATH_SUFFIXES HOLOMNI )
 
