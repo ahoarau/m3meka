@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.8)
+cmake_minimum_required(VERSION 2.8)
 project(robot_ctrl)
 set(LIBNAME "m3robot_ctrl")
 
@@ -31,7 +31,9 @@ file(GLOB ProtoFiles "${CMAKE_CURRENT_SOURCE_DIR}/*.proto")
 SET(PROTOBUF_IMPORT_DIRS ${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})
 PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${CMAKE_CURRENT_SOURCE_DIR} ${ProtoFiles})
 set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
-                            GENERATED TRUE)# End Protobuf stuff
+                            GENERATED TRUE)
+add_custom_target(${LIBNAME}_protobuf_tmp ${ProtoSources}) # Force the re-generation
+# End Protobuf stuff
 
 
 SET(LIBS ${RTAI_LIBRARIES} ${M3RT_LIBRARIES} pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARY} ${M3_LIBRARIES} m3robots m3chains m3hardware m3toolbox)

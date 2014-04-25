@@ -33,6 +33,7 @@ set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
                             message("ProtoFiles:${ProtoFiles} 
 		ProtoSources: ${ProtoSources} 
 		ProtoHeaders: ${ProtoHeaders}")
+add_custom_target(${LIBNAME}_protobuf_tmp ${ProtoSources}) # Force the re-generation
 # End Protobuf stuff
 message("Cmake binary dir:${CMAKE_BINARY_DIR}")
 

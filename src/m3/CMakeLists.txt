@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.5)
+cmake_minimum_required(VERSION 2.8)
 project(m3)
 
 #set(CMAKE_CXX_FLAGS "-Wall -std=c++0x")
