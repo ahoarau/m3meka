@@ -54,8 +54,7 @@ def get_omnibase_pwr_component_name(name):
         except (IOError, EOFError):
                 print 'Config file not present:',get_component_config_filename(name),'for',name
                 return
-        jnt_array_name=config['joint_array_component']
-        return get_chain_pwr_component_name(jnt_array_name)
+        return config['pwr_component']
 
 def get_chain_pwr_component_name(name):		
         names=get_chain_joint_names(name)

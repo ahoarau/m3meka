@@ -81,12 +81,13 @@ class M3Proc:
 			self.proxy.stop()
 			exit()
 		self.omni=m3o.M3OmniBase(base_name[0])
-		
+		print 'Base name ='+base_name[0]
 		self.proxy.publish_param(self.omni) 
 		self.proxy.subscribe_status(self.omni)
 		self.proxy.publish_command(self.omni)
 		
 		pwr_name=[m3t.get_omnibase_pwr_component_name(base_name[0])]
+		print "pwr_name :",pwr_name
 		self.pwr=m3f.create_component(pwr_name[0])
 		
 		self.proxy.subscribe_status(self.pwr)
