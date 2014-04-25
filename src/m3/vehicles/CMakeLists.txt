@@ -32,7 +32,7 @@ SET(PROTOBUF_IMPORT_DIRS ${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})
 PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${CMAKE_CURRENT_SOURCE_DIR} ${ProtoFiles})
 set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
                             GENERATED TRUE)
-add_custom_target(${LIBNAME}_protobuf_tmp ${ProtoSources}) # Force the re-generation
+add_custom_target(${LIBNAME}_protobuf_tmp ALL DEPENDS ${ProtoSources}) # Force the re-generation
 # End Protobuf stuff
 
 

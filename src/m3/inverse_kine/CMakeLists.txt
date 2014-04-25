@@ -32,8 +32,8 @@ SWIG_ADD_MODULE(${swig_module_tmp} python ${swig_bridge_file_tmp} )
 SWIG_LINK_LIBRARIES(${swig_module_tmp} ${PYTHON_LIBRARIES})
 #set_target_properties(_m3rt_system PROPERTIES LINKER_LANGUAGE CXX)
 
-#add_custom_target(${swig_target_tmp} ${f})
-message("OUTFILE:${outfiles}")
+add_custom_target(${swig_target_tmp}  ALL DEPENDS ${f})
+
 
 
 list(APPEND ALL_MODULES ${SWIG_MODULE_${swig_module_tmp}_REAL_NAME})

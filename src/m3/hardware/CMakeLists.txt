@@ -32,7 +32,7 @@ PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${CMAKE_CURRENT_SOURCE_DIR} ${Pr
 set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
                             GENERATED TRUE)
 
-add_custom_target(${LIBNAME}_protobuf_tmp ${ProtoSources}) # Force the re-generation
+add_custom_target(${LIBNAME}_protobuf_tmp  ALL DEPENDS ${ProtoSources}) # Force the re-generation
 # End Protobuf stuff
 
 SET(LIBS ${RTAI_LIBRARIES} ${M3RT_LIBRARIES} pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} m3toolbox orocos-kdl)
