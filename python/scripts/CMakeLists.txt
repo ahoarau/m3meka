@@ -3,7 +3,6 @@
 
 
 file(GLOB M3RTSCRIPTS
-"m3rt/*.py"
 "demo/*.py"
 "dev/*.py"
 "ros_dev/*.py"

@@ -69,8 +69,8 @@ void M3ActuatorVirtual::StepStatus()
 	
 	if (IsStateError())
 		return;
-	status.set_torque(command.tq_desired());
-	status.set_torquedot(torquedot_df.Step(GetTorque()));
+    ; // A.H test : torque and not torquedot (I don't care about torquedot)
+    status.set_torque(torquedot_df.Step(command.tq_desired()));
 	status.set_flags(ACTUATOR_EC_FLAG_QEI_CALIBRATED);
 
 
@@ -82,8 +82,8 @@ void M3ActuatorVirtual::StepStatus()
 
 			angle_df.Step(t->GetThetaDesJointDeg(),0); //Note: should be GetThetaDesSensorDeg, not working. this OK so long as all angle sensors are collocated 1:1
 			status.set_theta(angle_df.GetTheta());
-			//status.set_theta(160);
-			status.set_thetadot(angle_df.GetThetaDot());
+            //status.set_theta(160);
+            status.set_thetadot(angle_df.GetThetaDot());
 			status.set_thetadotdot(angle_df.GetThetaDotDot());
 		}
 		else
