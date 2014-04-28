@@ -27,3 +27,10 @@ config.h
 *.txt.user
 *.pb.cc
 *.pb.h
+aclocal.m4
+config.h.in
+config/
+m4/
+.project
+.pydevproject
+.settings/
