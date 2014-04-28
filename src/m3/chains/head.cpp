@@ -33,7 +33,7 @@ bool M3Head::ReadConfig(const char * filename)
 
 	YAML::Node doc;
 	GetYamlDoc(filename, doc);
-	
+
 	vector<mReal> left_trans;
 	vector<mReal> right_trans;
 	vector<mReal> left_rot;
@@ -62,6 +62,8 @@ bool M3Head::ReadConfig(const char * filename)
 	}
 	left_eye_offset = Frame(le_rot, le_vec);
 	right_eye_offset = Frame(re_rot, re_vec);
+
+    return true;
 }
 
 }
