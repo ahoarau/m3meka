@@ -11,6 +11,7 @@ AC_CONFIG_MACRO_DIR([m4])
 #------------------------------------------------------------------------------
 
 AC_PROG_CXX
+AM_PROG_AR
 AC_PROG_LIBTOOL
 AM_PROG_CC_C_O
 AM_PATH_PYTHON(2.3)
