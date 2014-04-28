@@ -79,15 +79,15 @@ void M3ActuatorVirtual::StepStatus()
 		M3Transmission * t=joint->GetTransmission();
 		if (t!=NULL)
 		{
-			tq_sense.Step(-t->GetTorqueDesJoint()*1000.0/torque_shift);
+			tq_sense.Step(this->GetDesiredTorque()-t->GetTorqueDesJoint()*1000.0/torque_shift);
 			status.set_torque(tq_sense.GetTorque_mNm());
 			status.set_torquedot(torquedot_df.Step(status.torque()));
 			// A.H test : torque and not torquedot (I don't care about torquedot)
 			//status.set_torque(torquedot_df.Step(tq_jt));
-			if(pnt_cnt%200 ==0){
+			//if(pnt_cnt%200 ==0){
 			
-			 printf("des=%f;curr=%f;t=%f;s=%f \n",-t->GetTorqueDesJoint()*1000.0/torque_shift,t->GetTorqueJoint(),t->GetTorqueSensor(),t->GetTorqueDesActuator());
-			}
+			 //printf("des=%f;curr=%f;t=%f;s=%f \n",-t->GetTorqueDesJoint()*1000.0/torque_shift,t->GetTorqueJoint(),t->GetTorqueSensor(),t->GetTorqueDesActuator());
+			//}
 			angle_df.Step(t->GetThetaDesJointDeg(),0); //Note: should be GetThetaDesSensorDeg, not working. this OK so long as all angle sensors are collocated 1:1
 			status.set_theta(angle_df.GetTheta());
 			//status.set_theta(160);
