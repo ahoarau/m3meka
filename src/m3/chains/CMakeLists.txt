@@ -33,7 +33,7 @@ set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
                             GENERATED TRUE)
 add_custom_target(${LIBNAME}_protobuf_tmp  ALL DEPENDS ${ProtoSources}) # Force the re-generation
 ## Python protobufs
-find_package(PythonLibs REQUIRED)
+find_package(PythonLibs 2.7 REQUIRED)
 find_package(PythonInterp REQUIRED) 
 ## Generate and copy the python protobuf
 SET(PROTOBUF_IMPORT_DIRS ${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})

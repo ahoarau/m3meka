@@ -31,7 +31,7 @@ set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
                             GENERATED TRUE)
 add_custom_target(${LIBNAME}_protobuf_tmp  ALL DEPENDS ${ProtoSources}) # Force the re-generation
 ## Python protobufs
-find_package(PythonLibs REQUIRED)
+find_package(PythonLibs 2.7 REQUIRED)
 find_package(PythonInterp REQUIRED) 
 ## Generate and copy the python protobuf
 PROTOBUF_GENERATE_PYTHON(PySources ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles}) 
