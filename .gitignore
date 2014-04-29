@@ -25,3 +25,10 @@ libtool
 configure
 config.h
 *.txt.user
+INSTALL
+aclocal.m4
+config.h.in
+config/
+m4/
+stamp-h1
+
