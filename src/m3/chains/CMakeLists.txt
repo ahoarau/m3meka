@@ -8,7 +8,7 @@ set(LIBNAME "m3chains")
 #set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
-#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(RTAI REQUIRED)
 #find_package(M3 COMPONENTS HARDWARE ROBOTS CHAINS TOOLBOX SHARED_MEM REQUIRED)
 find_package(M3rt REQUIRED)
@@ -45,18 +45,41 @@ add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # 
 SET(LIBS ${RTAI_LIBRARIES} ${M3RT_LIBRARIES} pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3hardware m3toolbox)
 
 
-file(GLOB ALL_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} [^.]*.cpp)
-file(GLOB ALL_HDRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} [^.]*.h)
+set( ALL_SRCS 
+arm.cpp
+dynamatics.cpp
+factory_proxy.cpp
+gripper.cpp
+hand.cpp
+hand_ua.cpp
+head.cpp
+joint_array.cpp
+joint_chain.cpp
+torso.cpp
+)
+set( ALL_HDRS 
+arm.h
+dynamatics.h
+dynamatics.pb.h
+gripper.h
+hand.h
+hand_ua.h
+hand_ua.pb.h
+head.h
+joint_array.h
+joint_array_mode.pb.h
+joint_array.pb.h
+joint_chain.h
+torso.h
+)
 
 list(APPEND ALL_SRCS ${ProtoSources})
 
-#file(GLOB ProtoFiles RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.proto )
 list(APPEND ALL_HDRS
 ${ProtoHeaders}
 ${ProtoFiles}
 )
 
-message("ALL SRC in ${PROJECT_NAME}:${ALL_SRCS}")
 
 
 ## Building

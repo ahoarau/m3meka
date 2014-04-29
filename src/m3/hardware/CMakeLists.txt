@@ -5,7 +5,7 @@ set(LIBNAME "m3hardware")
 
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
-##set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(RTAI REQUIRED)
 #find_package(M3 COMPONENTS HARDWARE ROBOTS CHAINS TOOLBOX SHARED_MEM REQUIRED)
 find_package(M3rt REQUIRED)
@@ -41,9 +41,79 @@ add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # 
 SET(LIBS ${RTAI_LIBRARIES} ${M3RT_LIBRARIES} pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} m3toolbox orocos-kdl)
 
 
-file(GLOB ALL_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} [^.]*.cpp)
-file(GLOB ALL_HDRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} [^.]*.h)
+set( ALL_SRCS 
+actuator.cpp
+actuator_ec.cpp
+actuator_virtual.cpp
+async_io.cpp
+ctrl_simple.cpp
+factory_proxy.cpp
+joint.cpp
+joint_slave.cpp
+joint_zlift.cpp
+joint_zlift_shm.cpp
+led_matrix_ec.cpp
+led_matrix_ec_shm.cpp
+ledx2_ec.cpp
+ledx2xn_ec.cpp
+ledx2xn_ec_shm.cpp
+loadx1.cpp
+loadx1_ec.cpp
+loadx6.cpp
+loadx6_ec.cpp
+loadx6_virtual.cpp
+log_test.cpp
+motor.cpp
+pwr.cpp
+pwr_ec.cpp
+pwr_virtual.cpp
+robot_monitor.cpp
+sensor.cpp
+tactile_pps22_ec.cpp
+transmission.cpp
 
+)
+set( ALL_HDRS 
+actuator_ec.h
+actuator.h
+actuator_virtual.h
+async_io.h
+ctrl_simple.h
+joint.h
+joint_slave.h
+joint_zlift.h
+joint_zlift_shm.h
+joint_zlift_shm_sds.h
+led_matrix_ec.h
+led_matrix_ec_shm.h
+led_matrix_ec_shm_sds.h
+ledx2_ec.h
+ledx2xn_ec.h
+ledx2xn_ec_shm.h
+ledx2xn_ec_shm_sds.h
+loadx1_ec.h
+loadx1.h
+loadx6_ec.h
+loadx6.h
+loadx6_virtual.h
+log_test.h
+m3ec_def.h
+m3ec_pdo_v0_def.h
+m3ec_pdo_v1_def.h
+m3ec_pdo_v2_def.h
+m3ec_pdo_v3_def.h
+m3ec_pdo_v4_def.h
+m3meka_ec_def.h
+motor.h
+pwr_ec.h
+pwr.h
+pwr_virtual.h
+robot_monitor.h
+sensor.h
+tactile_pps22_ec.h
+transmission.h
+
+)
 list(APPEND ALL_SRCS ${ProtoSources})
 
 list(APPEND ALL_HDRS

@@ -8,7 +8,7 @@ set(LIBNAME "m3robots")
 #set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
-#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(RTAI REQUIRED)
 #find_package(M3 COMPONENTS HARDWARE ROBOTS CHAINS TOOLBOX SHARED_MEM REQUIRED)
 find_package(M3rt REQUIRED)
@@ -46,9 +46,23 @@ add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # 
 SET(LIBS ${RTAI_LIBRARIES} ${M3RT_LIBRARIES} pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3chains m3toolbox m3hardware orocos-kdl)
 
 
-#FILE(GLOB SRCFILES *.cxx)
-file(GLOB ALL_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} [^.]*.cpp)
-file(GLOB ALL_HDRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} [^.]*.h)
+set( ALL_SRCS 
+factory_proxy.cpp
+haptic_demo.cpp
+humanoid.cpp
+humanoid_shm.cpp
+robot.cpp
+
+)
+set( ALL_HDRS 
+chain_name.h
+haptic_demo.h
+humanoid.h
+humanoid_shm.h
+humanoid_shm_sds.h
+robot.h
+
+)
 
 list(APPEND ALL_SRCS ${ProtoSources})
 
