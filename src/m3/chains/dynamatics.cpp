@@ -160,7 +160,6 @@ void M3Dynamatics::StepStatus()
 			qdot_id(i+3) = 0.;
 
 	}	
-    // HACK : Try to use end_wrench
 	SetPayload();
 	//idsolver->SetGrav(grav); // Useless in new KDL
 	
@@ -241,7 +240,7 @@ void M3Dynamatics::SetPayload()
 	}
 	if (param.payload_com_size()==3)
 	{
-		for (int i; i<3; i++)
+		for (int i=0; i<3; i++)
 			payload_com(i)=param.payload_com(i);		
 	}
 	else
@@ -250,23 +249,30 @@ void M3Dynamatics::SetPayload()
 		M3_ERR("Bug: Bad field size in M3Dynamatics::payload_com...%d instead of 3 \n", param.payload_com_size());
 		PrettyPrint();
 	}
+	if(kdlchain.getNrOfSegments()-1<0)
+	{
+		M3_ERR("Number of segments for the chain is wrong: %d \n", kdlchain.getNrOfSegments());
+		PrettyPrint();
+		return;
+	}
 	ToTipSeg = kdlchain.getSegment(kdlchain.getNrOfSegments()-1); // A.H : Get the last segment
 	
-	Frame toTip = ToTipSeg.getFrameToTip();
+ 	toTip = ToTipSeg.getFrameToTip();
 	
 	// REPLACED Segment * end_eff = kdlchain.getMutableSegment(kdlchain.getNrOfSegments()-1);
+	
 	mReal m = GetPayloadMass();
-	Vector com = toTip*GetPayloadCom(); // tranforming from wrist to last joint's frame where we defined it's COM...
-	RotationalInertia rot_inertia = (toTip*RigidBodyInertia(0.,Vector(0.,0.,0.),GetPayloadInertia())).getRotationalInertia();
-						
+	com = toTip*GetPayloadCom(); // tranforming from wrist to last joint's frame where we defined it's COM...
+	rb_inertia = (toTip*RigidBodyInertia(0.,Vector(0.,0.,0.),GetPayloadInertia()));
+	rot_inertia = rb_inertia.getRotationalInertia();			
 	if (m+z_m>0.001)
 	{
-		Vector ecom = (m*com+z_com*z_m)/(m+z_m);		
+		ecom = (m*com+z_com*z_m)/(m+z_m);		
 		ToTipSeg.setInertia(toTip.Inverse()*RigidBodyInertia(m+z_m, ecom, rot_inertia + z_I));
 	}
 	else
 	{
-		Vector ecom = (com+z_com);		
+		ecom = (com+z_com);		
 		ToTipSeg.setInertia(toTip.Inverse()*RigidBodyInertia(m+z_m, ecom, rot_inertia + z_I));
 	}
 		

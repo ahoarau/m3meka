@@ -114,8 +114,13 @@ class M3Dynamatics : public m3rt::M3Component
 		RotationalInertia payload_I;
 		bool use_velocities;
 		bool use_accelerations;
-		// A.H
+		// A.H : pre allocate in setpayload()
 		Segment ToTipSeg;
+		RigidBodyInertia rb_inertia;
+		RotationalInertia rot_inertia;
+		Vector com;
+		Vector ecom;
+		Frame toTip;
 	protected:
 		bool ReadConfig(const char * filename);
 		void Startup();
