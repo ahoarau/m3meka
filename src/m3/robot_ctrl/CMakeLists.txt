@@ -39,7 +39,7 @@ add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # 
 # End Protobuf stuff
 
 
-SET(LIBS ${RTAI_LIBRARIES} ${M3RT_LIBRARIES} pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARY} ${M3_LIBRARIES} m3robots m3chains m3hardware m3toolbox)
+SET(LIBS ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARY} ${M3_LIBRARIES} m3robots m3chains m3hardware m3toolbox)
 
 
 set( ALL_SRCS 
