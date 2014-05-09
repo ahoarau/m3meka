@@ -29,7 +29,7 @@ using namespace KDL;
 
 bool M3Dynamatics::LinkDependentComponents()
 {	
-	m3chain = (M3JointChain*)factory->GetComponent(chain_name);
+	m3chain = dynamic_cast<M3JointChain*>(factory->GetComponent(chain_name));
 	
 	if (m3chain!=NULL)
 		return true;
@@ -102,7 +102,10 @@ void M3Dynamatics::Startup()
 			kdlchain.addSegment(Segment(Joint(Joint::RotZ), frame, frame.Inverse()*RigidBodyInertia(m[i-1],vcog, ri)));
 		}
 	}
-	
+	if(kdlchain.getNrOfSegments()!=m3chain->GetNumDof())
+	{
+	  M3_ERR("kdlchain not created properly (ndof:%d,m3chainndof:%d)\n",kdlchain.getNrOfSegments(),m3chain->GetNumDof());
+	}
 	//Store no-load payload for last link
 	Frame toTip = kdlchain.getSegment(kdlchain.getNrOfSegments()-1).getFrameToTip();
 	RigidBodyInertia z_I_rigid = toTip*kdlchain.getSegment(kdlchain.getNrOfSegments()-1).getInertia();
@@ -115,9 +118,10 @@ void M3Dynamatics::Startup()
 	idsolver = new ChainIdSolver_RNE(kdlchain, grav);
 	f_ext = std::vector<Wrench>(kdlchain.getNrOfSegments());
 	jjsolver = new ChainJntToJacSolver(kdlchain); 
-
+	
 	SetPayload();
 	SetStateSafeOp();
+	std::cout<<"kdlchain("<<m3chain->GetName()<<") njts:"<<kdlchain.getNrOfJoints()<<" nseg;"<<kdlchain.getNrOfSegments()<<std::endl;
 }
 
 
@@ -133,9 +137,11 @@ void M3Dynamatics::StepCommand()
 }
 
 void M3Dynamatics::StepStatus()
-{	
+{	return;
 	if (IsStateError())
 		return;
+	tmp_cnt++;
+	
 	// ToDo: find out why copy operator= causes lockups in hard RT	
 	for (int i=0; i<3; i++)
 	{
@@ -143,7 +149,7 @@ void M3Dynamatics::StepStatus()
 		q.qdot(i) = 0.;
 		qdotdot_id(i) = 0.;
 		qdot_id(i) = 0.;
-	}	
+	}
 	for (int i=0; i<ndof; i++)
 	{
 		q.q(i+3) = m3chain->GetThetaRad(i);
@@ -164,7 +170,10 @@ void M3Dynamatics::StepStatus()
 	//idsolver->SetGrav(grav); // Useless in new KDL
 	
 	f_ext[kdlchain.getNrOfSegments()-1] = end_wrench;	
-	
+	if(tmp_cnt % 50 ==0)
+	{
+	  printf("\nf_ext:%f,%f,%f,%f,%f,%f\n",end_wrench.force.x(),end_wrench.force.y(),end_wrench.force.z(),end_wrench.torque.x(),end_wrench.torque.y(),end_wrench.torque.z());
+	}
 	int result = idsolver->CartToJnt(q.q, qdot_id, qdotdot_id, f_ext, G);
 	
 	for (int i=0; i<G.rows(); i++)
@@ -172,6 +181,10 @@ void M3Dynamatics::StepStatus()
 	if (result==-1)
 		M3_ERR("ID solver returned error %d for M3Kinestatics component %s\n", result, GetName().c_str());
 	jjsolver->JntToJac(q.q, J);
+	printf("chain :[%s];q:[%dx%d]\n",m3chain->GetName().c_str(),q.q.rows(),q.qdot.columns());
+	for(size_t i=0;i<ndof+3;i++)
+	  printf("%f;",q.q(i));
+	printf("\n");
 	fksolver_vel->JntToCart(q, end_2_base_framevel);
 	//fksolver_pos->JntToCart(q.q,T80);
 	end_twist = Twist(end_2_base_framevel.p.v, end_2_base_framevel.M.w);
@@ -179,7 +192,6 @@ void M3Dynamatics::StepStatus()
 	end_rot = end_2_base_framevel.M.R;
 	base_wrench.force = grav*GetMass();
 	base_wrench.torque = Vector(G(0),G(1),G(2))/1000.;
-	
 	for (int i=0; i<ndof; i++){
 		status.set_g(i, G(i+3));
 	}
@@ -275,7 +287,6 @@ void M3Dynamatics::SetPayload()
 		ecom = (com+z_com);		
 		ToTipSeg.setInertia(toTip.Inverse()*RigidBodyInertia(m+z_m, ecom, rot_inertia + z_I));
 	}
-		
 	// Should not be needed anymore as we modify the segment directly idsolver->chain = kdlchain;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

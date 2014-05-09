@@ -67,7 +67,7 @@ public:
 		return val/(int)buf.size();
 	}
 	
-	void Resize(int n){
+	void Resize(size_t n){
 		if (buf.size()!=n)
 		{
 			idx=0;
@@ -77,7 +77,7 @@ public:
 	}
 private:
 	vector<mReal> buf;
-	int idx;
+	size_t idx;
 	mReal val;
 };
 
@@ -98,7 +98,7 @@ class M3TimeAvg
 		}
 		void Reset(mReal v)
 		{
-			for (int i=0;i<buf.size();i++)
+			for (size_t i=0;i<buf.size();i++)
 				buf[i]=v;
 			val=v*(mReal)buf.size();
 		}
@@ -122,7 +122,7 @@ class M3TimeAvg
 		}
 	private:
 		vector<mReal> buf;
-		int idx;
+		size_t idx;
 		mReal val;
 		int ds;
 		int cntr;

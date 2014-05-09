@@ -38,7 +38,7 @@ class M3JointChain;
 class M3Dynamatics : public m3rt::M3Component
 {
 	public:
-		M3Dynamatics() : M3Component(DYNAMATICS_PRIORITY), fksolver_vel(NULL), idsolver(NULL), jjsolver(NULL) 
+		M3Dynamatics() : M3Component(DYNAMATICS_PRIORITY), m3chain(NULL),fksolver_vel(NULL), idsolver(NULL), jjsolver(NULL) ,tmp_cnt(0)
 		{
 			RegisterVersion("default",DEFAULT);	//RBL
 			RegisterVersion("iss",ISS);		//ISS. Safe as DEFAULT
@@ -121,6 +121,7 @@ class M3Dynamatics : public m3rt::M3Component
 		Vector com;
 		Vector ecom;
 		Frame toTip;
+		int tmp_cnt;
 	protected:
 		bool ReadConfig(const char * filename);
 		void Startup();
@@ -133,7 +134,6 @@ class M3Dynamatics : public m3rt::M3Component
 		M3DynamaticsCommand command;
 		M3DynamaticsParam param;
 		void SetPayload();
-		int tmp_cnt;
 };
 
 }
