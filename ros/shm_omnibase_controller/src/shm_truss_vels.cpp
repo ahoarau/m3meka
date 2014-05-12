@@ -18,17 +18,26 @@
  * from Redwood Robotics Incorporated.
  */
  
-#include <rtai_sched.h>
+
 #include <stdio.h>
 #include <signal.h>
-#include <rtai_shm.h>
-#include <rtai.h>
-#include <rtai_sem.h>
 #include <m3rt/base/m3ec_def.h>
 #include <m3rt/base/m3rt_def.h>
-#include <rtai_nam2num.h>
-#include <rtai_registry.h>
 #include "m3/vehicles/omnibase_shm_sds.h"
+
+// Rtai
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include <rtai.h>
+#include <rtai_sem.h>
+#include <rtai_sched.h>
+#include <rtai_nam2num.h>
+#include <rtai_shm.h>
+#include <rtai_malloc.h>
+#ifdef __cplusplus
+}
+#endif
 
 // Needed for ROS
 #include <ros/ros.h>
@@ -226,7 +235,7 @@ static void* rt_system_thread(void * arg)
 ////////////////////////////////////////////////////////////////////////////////////
 int main (int argc, char **argv)
 {	
-	RT_TASK *task;
+    //RT_TASK *task;
 	M3Sds * sys;
 	int cntr=0;
 	
@@ -272,7 +281,7 @@ int main (int argc, char **argv)
 	usleep(100000); //Let start up
 	if (!sys_thread_active)
 	{
-		rt_task_delete(task);
+        //rt_task_delete(task);
 		rt_shm_free(nam2num(MEKA_ODOM_SHM));
 		printf("Startup of thread failed.\n",0);
 		return 0;

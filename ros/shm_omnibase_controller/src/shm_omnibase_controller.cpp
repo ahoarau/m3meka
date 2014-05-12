@@ -18,17 +18,28 @@
  * from Redwood Robotics Incorporated.
  */
  
-#include <rtai_sched.h>
 #include <stdio.h>
 #include <signal.h>
-#include <rtai_shm.h>
-#include <rtai.h>
-#include <rtai_sem.h>
 #include <m3rt/base/m3ec_def.h>
 #include <m3rt/base/m3rt_def.h>
-#include <rtai_nam2num.h>
-#include <rtai_registry.h>
 #include "m3/vehicles/omnibase_shm_sds.h"
+
+// Rtai
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include <rtai.h>
+#include <rtai_sem.h>
+#include <rtai_sched.h>
+#include <rtai_nam2num.h>
+#include <rtai_shm.h>
+#include <rtai_malloc.h>
+#ifdef __cplusplus
+}
+#endif
+
+
+
 
 // Needed for ROS
 #include <ros/ros.h>
@@ -107,6 +118,7 @@ void StepShm(int cntr)
   double vx = status.x_dot;
   double vy = status.y_dot;
   double vth = status.yaw_dot;
+  //ROS_INFO("[STATUS] x,y,th:[%f,%f,%f]",x,y,th);
   // get from status
   
   //since all odometry is 6DOF we'll need a quaternion created from yaw
@@ -149,7 +161,7 @@ void StepShm(int cntr)
       cmd.yaw_velocity = 0.;
     }
     
-    /*if (cntr % 100 == 0)
+   /* if (cntr % 100 == 0)
       {	
 	if (1)
 	{
@@ -169,9 +181,9 @@ void StepShm(int cntr)
 	    printf("\n");
 	  }
 	}
-      }*/
+      }
     
-      /*if (cntr % 100 == 0)
+      if (cntr % 100 == 0)
       {	
 	if (1)
 	{
@@ -203,9 +215,9 @@ void commandCallback(const geometry_msgs::TwistConstPtr& msg)
   cmd.y_velocity = msg->linear.y;
   cmd.yaw_velocity = msg->angular.z;
   
-  	    /*printf("x: %f\n", cmd.x_velocity);	  
+     /*   printf("x: %f\n", cmd.x_velocity);
 	    printf("y: %f\n", cmd.y_velocity);
-	    printf("a: %f\n", cmd.yaw_velocity);*/
+        printf("a: %f\n", cmd.yaw_velocity);*/
 	    
   last_cmd_ts = status.timestamp;
   
@@ -276,6 +288,11 @@ static void* rt_system_thread(void * arg)
 				
 		end_time = nano2count(rt_get_cpu_time_ns());
 		dt=end_time-start_time;
+        if(step_cnt % 50 == 0)
+        {
+            printf("sta[%f,%f,%f   ]\n",(float)status.timestamp,status.x,status.y,status.yaw);
+            printf("cmd[%f,%f,%f,%f]\n",(float)cmd.timestamp,cmd.x_velocity,cmd.y_velocity,cmd.yaw_velocity);
+        }
 		/*
 		Check the time it takes to run components, and if it takes longer
 		than our period, make us run slower. Otherwise this task locks
@@ -303,7 +320,7 @@ static void* rt_system_thread(void * arg)
 ////////////////////////////////////////////////////////////////////////////////////
 int main (int argc, char **argv)
 {	
-	RT_TASK *task;
+    //RT_TASK *task;
 	M3Sds * sys;
 	int cntr=0;
 	
@@ -345,7 +362,7 @@ int main (int argc, char **argv)
 	usleep(100000); //Let start up
 	if (!sys_thread_active)
 	{
-		rt_task_delete(task);
+        //rt_task_delete(task);
 		rt_shm_free(nam2num(MEKA_ODOM_SHM));
 		printf("Startup of thread failed.\n",0);
 		return 0;

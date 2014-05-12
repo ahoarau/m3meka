@@ -33,7 +33,7 @@ bool M3Head::ReadConfig(const char * filename)
 
 	YAML::Node doc;
 	GetYamlDoc(filename, doc);
-	
+
 	vector<mReal> left_trans;
 	vector<mReal> right_trans;
 	vector<mReal> left_rot;

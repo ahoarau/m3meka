@@ -136,6 +136,14 @@ target_link_libraries(gravity_right_arm ${LIBS})
 ## Declare a cpp executable
 # add_executable(shm_generic_node src/shm_generic_node.cpp)
 
+
+## Wait for the M3JointCmd.h to be generated
+
+add_dependencies(shm_humanoid_controller M3JointCmd.h)
+add_dependencies(move_humanoid M3JointCmd.h)
+add_dependencies(move_gripper M3JointCmd.h)
+add_dependencies(pose_right_arm M3JointCmd.h)
+add_dependencies(gravity_right_arm M3JointCmd.h)
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(shm_generic_node shm_generic_generate_messages_cpp)

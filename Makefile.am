@@ -55,17 +55,17 @@ dist_bin_SCRIPTS = scripts/m3rt_printer_run
 includedir =  /usr/local/include/m3meka_msgs \
 	/usr/local/include
 
-include_HEADERS = ros/m3meka_msgs/msg_gen/cpp/include/m3meka_msgs/M3JointStatus.h \
-		ros/m3meka_msgs/msg_gen/cpp/include/m3meka_msgs/M3OmnibaseJoy.h \
-		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3HumanoidCmd.h \
-		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3HumanoidParam.h \
-		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3HumanoidStatus.h \
-		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3JointArrayCmd.h \
-		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3JointArrayParam.h \
-		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3JointArrayStatus.h \
-		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3LoadX6Cmd.h \
-		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3LoadX6Param.h \
-		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3LoadX6Status.h
+#include_HEADERS = ros/m3meka_msgs/msg_gen/cpp/include/m3meka_msgs/M3JointStatus.h \
+#		ros/m3meka_msgs/msg_gen/cpp/include/m3meka_msgs/M3OmnibaseJoy.h \
+#		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3HumanoidCmd.h \
+#		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3HumanoidParam.h \
+#		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3HumanoidStatus.h \
+#		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3JointArrayCmd.h \
+#		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3JointArrayParam.h \
+#		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3JointArrayStatus.h \
+#		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3LoadX6Cmd.h \
+#		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3LoadX6Param.h \
+#		ros/m3meka_msgs/srv_gen/cpp/include/m3meka_msgs/M3LoadX6Status.h
 
 
 python_install:
@@ -80,6 +80,7 @@ proto:
 	$(MAKE) -C src/m3/robots proto
 	$(MAKE) -C src/m3/robot_ctrl proto
 	$(MAKE) -C src/m3/vehicles proto
+	$(MAKE) -C src/m3/shared_mem
 
 proto_install:	
 	$(MAKE) -C src/m3/hardware proto_install
@@ -87,6 +88,7 @@ proto_install:
 	$(MAKE) -C src/m3/robots proto_install
 	$(MAKE) -C src/m3/robot_ctrl proto_install	
 	$(MAKE) -C src/m3/vehicles proto_install
+	$(MAKE) -C src/m3/shared_mem proto_install
 	
 	
 torque_shm:
@@ -134,12 +136,19 @@ vehicles:
 vehicles_install:
 	$(MAKE) -C src/m3/vehicles install
 
+shared_mem:
+	$(MAKE) -C src/m3/shared_mem
+
+shared_mem_install:
+	$(MAKE) -C src/m3/shared_mem
+
 m3_install:
 	$(MAKE) -C src/m3/hardware install
 	$(MAKE) -C src/m3/chains install
 	$(MAKE) -C src/m3/inverse_kine install
 	$(MAKE) -C src/m3/robots install
 	$(MAKE) -C src/m3/robot_ctrl install
+	$(MAKE) -C src/m3/shared_mem install
 		
 ik:
 	$(MAKE) -C src/m3/inverse_kine

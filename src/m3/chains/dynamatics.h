@@ -114,6 +114,8 @@ class M3Dynamatics : public m3rt::M3Component
 		RotationalInertia payload_I;
 		bool use_velocities;
 		bool use_accelerations;
+		// A.H
+		Segment ToTipSeg;
 	protected:
 		bool ReadConfig(const char * filename);
 		void Startup();
