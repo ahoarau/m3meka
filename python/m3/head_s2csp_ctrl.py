@@ -63,7 +63,7 @@ class M3HeadS2CSPCtrl(M3Component):
 	#CSP frame is translation of head-base frame to neutral eye frame. Origin translates from CSP to head-base
 	def set_target_csp_frame(self,x):
 		self.command.target[0]=x[0]+self.param.origin[0]
-		self.command.target[1]=x[1]+self.param.origin[0]
-		self.command.target[2]=x[2]+self.param.origin[0]
+		self.command.target[1]=x[1]+self.param.origin[1]
+		self.command.target[2]=x[2]+self.param.origin[2]
 
 	
