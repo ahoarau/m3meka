@@ -176,17 +176,6 @@ namespace m3
 	}
 	
 	
-	M3DFilter::M3DFilter()
-	{
-		Nterms=0;
-		buffer_idx=0;
-		for (int cnt = 0;cnt < MAXFILTERTERMS;cnt++){
-			_a[cnt]=0.;
-			_b[cnt]=0.;
-			_x[cnt]=0.;
-			_y[cnt]=0.;
-		}
-	}
 
 	bool M3DFilter::ReadConfig(const YAML::Node & doc)
 	{
@@ -313,13 +302,11 @@ namespace m3
   
 		for (int n = 0; n < Nterms; n++){
 			i = (start_idx + n) % (MAXFILTERTERMS);
-    
-			_y[buffer_idx] += _b[n]*_x[i] - _a[n]*_y[i];
-    
+			_y[buffer_idx] += _b[n]*_x[i] - _a[n]*_y[i];    
 		}
   
 		retval = _y[buffer_idx];
-  
+		
 		buffer_idx = (buffer_idx+1) % (MAXFILTERTERMS);
   
 		return retval;

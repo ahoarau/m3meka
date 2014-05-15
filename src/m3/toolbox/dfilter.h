@@ -115,7 +115,10 @@ namespace m3
 	class M3DFilter
 	{
 		public:
-			M3DFilter();
+			M3DFilter():_a(MAXFILTERTERMS,0.0),_b(MAXFILTERTERMS,0.0),_x(MAXFILTERTERMS,0.0),_y(MAXFILTERTERMS,0.0),Nterms(0),buffer_idx(0)
+			{
+			  
+			}
 			void Dump(); //Dump the contents of the class to cout
 			void Clear(); //Clear the history of the filter
 			int Coefficients(int N,std::vector<mReal> A,std::vector<mReal> B); //Set the coefficients of the filter.
@@ -125,10 +128,10 @@ namespace m3
 			enum {NONE, BUTTERWORTH, DIFF_BUTTERWORTH, LEAST_SQUARES_ESTIMATE, IDENTITY, AVERAGE};
 			int Nterms; //Number of terms in the calculation
 			int buffer_idx; //Present start of the x & y history circular buffers
-			mReal _a[MAXFILTERTERMS]; //y filter coefficients in reverse order.
-			mReal _b[MAXFILTERTERMS]; //x filter coefficients in reverse order. 
-			mReal _x[MAXFILTERTERMS]; //independent value history (circular buffer)
-			mReal _y[MAXFILTERTERMS]; //dependent value history (circular buffer)
+			std::vector<mReal> _a; //y filter coefficients in reverse order.
+			std::vector<mReal> _b; //x filter coefficients in reverse order. 
+			std::vector<mReal> _x; //independent value history (circular buffer)
+			std::vector<mReal> _y; //dependent value history (circular buffer)
 			void      Butterworth_Filter(int order, mReal cutoff_freq, mReal sample_period);
 			void Diff_Butterworth_Filter(int order, mReal cutoff_freq, mReal sample_period);
 			void Least_Squares_Estimate(mReal sample_period,int N);
