@@ -178,10 +178,9 @@ namespace m3
 	
 	M3DFilter::M3DFilter()
 	{
-		int cnt;
 		Nterms=0;
 		buffer_idx=0;
-		for (cnt = 0;cnt < MAXFILTERTERMS;cnt++){
+		for (int cnt = 0;cnt < MAXFILTERTERMS;cnt++){
 			_a[cnt]=0;
 			_b[cnt]=0;
 			x[cnt]=0;
@@ -258,14 +257,12 @@ namespace m3
 	(y(T-1)*a[N-2]+y(T-2)*a[N-3]+...+y(T-N)*a[0])
  */
 	int M3DFilter::Coefficients(int N,mReal *A,mReal *B)
-	{
-		int cnt;
-  
+	{  
 		if (N > MAXFILTERTERMS)
 			return -1; //Filter is too small to take this many coefficients
   
 		Nterms=N;
-		for (cnt = 0;cnt < N;cnt++){
+		for (int cnt = 0;cnt < N;cnt++){
 			_a[cnt]=A[cnt];
 			_b[cnt]=B[cnt];
 		}
@@ -302,8 +299,8 @@ namespace m3
 */
 	mReal M3DFilter::Step(mReal x_0)
 	{
-		mReal retval;
-		int i, start_idx;
+		mReal retval=0.0;
+		int i=0, start_idx=0;
   
 		x[buffer_idx] = x_0;
 		y[buffer_idx] = 0.0;
