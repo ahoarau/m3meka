@@ -183,8 +183,8 @@ namespace m3
 		for (int cnt = 0;cnt < MAXFILTERTERMS;cnt++){
 			_a[cnt]=0;
 			_b[cnt]=0;
-			x[cnt]=0;
-			y[cnt]=0;
+			_x[cnt]=0;
+			_y[cnt]=0;
 		}
 	}
 
@@ -229,7 +229,7 @@ namespace m3
 		std::cout << "terms:" << Nterms << "\n";
 		std::cout << "Index:" << buffer_idx << "\n";
 		for (int cnt = 0; cnt < Nterms; cnt++){
-			std::cout << "a: " << _a[cnt] << " b: " << _b[cnt] << " x: " << x[cnt] << " y: " << y[cnt] << "\n" ;
+			std::cout << "a: " << _a[cnt] << " b: " << _b[cnt] << " x: " << _x[cnt] << " y: " << _y[cnt] << "\n" ;
 		}
 	}
 
@@ -242,8 +242,8 @@ namespace m3
   
 		buffer_idx=0;
 		for (cnt = 0;cnt < MAXFILTERTERMS;cnt++){
-			x[cnt]=0;
-			y[cnt]=0;
+			_x[cnt]=0;
+			_y[cnt]=0;
 		}
 	}
 
@@ -256,7 +256,7 @@ namespace m3
 	y(T) = x(T)*b[N-1]+x(T-1)*b[N-2]+..+x(T-N)*b[0] - 
 	(y(T-1)*a[N-2]+y(T-2)*a[N-3]+...+y(T-N)*a[0])
  */
-	int M3DFilter::Coefficients(int N,mReal *A,mReal *B)
+	int M3DFilter::Coefficients(int N,mReal A[], mReal B[])
 	{  
 		if (N > MAXFILTERTERMS)
 			return -1; //Filter is too small to take this many coefficients
@@ -302,19 +302,19 @@ namespace m3
 		mReal retval=0.0;
 		int i=0, start_idx=0;
   
-		x[buffer_idx] = x_0;
-		y[buffer_idx] = 0.0;
+		_x[buffer_idx] = x_0;
+		_y[buffer_idx] = 0.0;
   
 		start_idx = buffer_idx - Nterms + MAXFILTERTERMS + 1; //Precalc the index where the history data starts in the buffer.
   
 		for (int n = 0; n < Nterms; n++){
 			i = (start_idx + n) % (MAXFILTERTERMS);
     
-			y[buffer_idx] += _b[n]*x[i] - _a[n]*y[i];
+			_y[buffer_idx] += _b[n]*_x[i] - _a[n]*_y[i];
     
 		}
   
-		retval = y[buffer_idx];
+		retval = _y[buffer_idx];
   
 		buffer_idx = (buffer_idx+1) % (MAXFILTERTERMS);
   

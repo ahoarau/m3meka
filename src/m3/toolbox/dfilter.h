@@ -118,7 +118,7 @@ namespace m3
 			M3DFilter();
 			void Dump(); //Dump the contents of the class to cout
 			void Clear(); //Clear the history of the filter
-			int Coefficients(int N,mReal *A,mReal *B); //Set the coefficients of the filter.
+			int Coefficients(int N,mReal A[],mReal B[]); //Set the coefficients of the filter.
 			mReal Step(mReal x_0); //evaluate the filter
 			bool ReadConfig(const YAML::Node & doc);
 		protected:
@@ -127,8 +127,8 @@ namespace m3
 			int buffer_idx; //Present start of the x & y history circular buffers
 			mReal _a[MAXFILTERTERMS]; //y filter coefficients in reverse order.
 			mReal _b[MAXFILTERTERMS]; //x filter coefficients in reverse order. 
-			mReal x[MAXFILTERTERMS]; //independent value history (circular buffer)
-			mReal y[MAXFILTERTERMS]; //dependent value history (circular buffer)
+			mReal _x[MAXFILTERTERMS]; //independent value history (circular buffer)
+			mReal _y[MAXFILTERTERMS]; //dependent value history (circular buffer)
 			void      Butterworth_Filter(int order, mReal cutoff_freq, mReal sample_period);
 			void Diff_Butterworth_Filter(int order, mReal cutoff_freq, mReal sample_period);
 			void Least_Squares_Estimate(mReal sample_period,int N);
