@@ -181,10 +181,10 @@ namespace m3
 		Nterms=0;
 		buffer_idx=0;
 		for (int cnt = 0;cnt < MAXFILTERTERMS;cnt++){
-			_a[cnt]=0;
-			_b[cnt]=0;
-			_x[cnt]=0;
-			_y[cnt]=0;
+			_a[cnt]=0.;
+			_b[cnt]=0.;
+			_x[cnt]=0.;
+			_y[cnt]=0.;
 		}
 	}
 
@@ -379,14 +379,14 @@ namespace m3
 		mReal b[4] = {0.0,0.0,0.0,0.0};
   
 		mReal wo = cutoff_freq*2.0*pi; //Omega naught (rad/sec)
-		mReal w = 2/T*tan(wo*T/2); //Omega cutoff (frequency warping from analog to digital domain)
+		mReal w = 2./T*static_cast<mReal>(tan(wo*T/2.)); //Omega cutoff (frequency warping from analog to digital domain)
   
 		if(order == 1) {
 			mReal st = 2/T/w;
-			scale = 1/(1+st);
+			scale = 1./(1.+st);
     
 			a[1] = 0.0;
-			a[0] = (1-st)*scale;
+			a[0] = (1.-st)*scale;
     
 			b[1] = scale;
 			b[0] = scale;
@@ -396,29 +396,29 @@ namespace m3
 			scale = 1/(1+sqrt(2.0)*st+st);
     
 			a[2] = 0.0;
-			a[1] = (2-2*st) * scale;
-			a[0] = (1-sqrt(2.0)*st+st) * scale;
+			a[1] = (2.-2.*st) * scale;
+			a[0] = (1.-static_cast<mReal>(sqrt(2.0))*st+st) * scale;
     
 			b[2] = scale;
-			b[1] = 2*scale;
+			b[1] = 2.*scale;
 			b[0] = scale;
 		} 
 		else if (order == 3){
-			mReal A = 2/(w*T);
-			mReal p2 = 2*A;
-			mReal p3 = 2*A*A;
+			mReal A = 2./(w*T);
+			mReal p2 = 2.*A;
+			mReal p3 = 2.*A*A;
 			mReal p4 = A*A*A;
     
-			scale = 1/(1+p2+p3+p4);
+			scale = 1./(1.+p2+p3+p4);
      
-			a[3] = 0.0;
-			a[2] = (3+p2-p3-3*p4)*scale;
-			a[1] = (3-p2-p3+3*p4) * scale;
-			a[0] = (1-p2+p3-p4) * scale;
+			a[3] = 0.;
+			a[2] = (3.+p2-p3-3.*p4)*scale;
+			a[1] = (3.-p2-p3+3.*p4) * scale;
+			a[0] = (1.-p2+p3-p4) * scale;
   
 			b[3] = scale;
-			b[2] = 3*scale;
-			b[1] = 3*scale;
+			b[2] = 3.*scale;
+			b[1] = 3.*scale;
 			b[0] = scale;
   
 		}
