@@ -182,8 +182,8 @@ namespace m3
 		Nterms=0;
 		buffer_idx=0;
 		for (cnt = 0;cnt < MAXFILTERTERMS;cnt++){
-			a[cnt]=0;
-			b[cnt]=0;
+			_a[cnt]=0;
+			_b[cnt]=0;
 			x[cnt]=0;
 			y[cnt]=0;
 		}
@@ -230,7 +230,7 @@ namespace m3
 		std::cout << "terms:" << Nterms << "\n";
 		std::cout << "Index:" << buffer_idx << "\n";
 		for (int cnt = 0; cnt < Nterms; cnt++){
-			std::cout << "a: " << a[cnt] << " b: " << b[cnt] << " x: " << x[cnt] << " y: " << y[cnt] << "\n" ;
+			std::cout << "a: " << _a[cnt] << " b: " << _b[cnt] << " x: " << x[cnt] << " y: " << y[cnt] << "\n" ;
 		}
 	}
 
@@ -266,8 +266,8 @@ namespace m3
   
 		Nterms=N;
 		for (cnt = 0;cnt < N;cnt++){
-			a[cnt]=A[cnt];
-			b[cnt]=B[cnt];
+			_a[cnt]=A[cnt];
+			_b[cnt]=B[cnt];
 		}
 		return 0; //success
 	}
@@ -313,7 +313,7 @@ namespace m3
 		for (int n = 0; n < Nterms; n++){
 			i = (start_idx + n) % (MAXFILTERTERMS);
     
-			y[buffer_idx] += b[n]*x[i] - a[n]*y[i];
+			y[buffer_idx] += _b[n]*x[i] - _a[n]*y[i];
     
 		}
   

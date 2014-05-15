@@ -125,8 +125,8 @@ namespace m3
 			enum {NONE, BUTTERWORTH, DIFF_BUTTERWORTH, LEAST_SQUARES_ESTIMATE, IDENTITY, AVERAGE};
 			int Nterms; //Number of terms in the calculation
 			int buffer_idx; //Present start of the x & y history circular buffers
-			mReal a[MAXFILTERTERMS]; //y filter coefficients in reverse order.
-			mReal b[MAXFILTERTERMS]; //x filter coefficients in reverse order. 
+			mReal _a[MAXFILTERTERMS]; //y filter coefficients in reverse order.
+			mReal _b[MAXFILTERTERMS]; //x filter coefficients in reverse order. 
 			mReal x[MAXFILTERTERMS]; //independent value history (circular buffer)
 			mReal y[MAXFILTERTERMS]; //dependent value history (circular buffer)
 			void      Butterworth_Filter(int order, mReal cutoff_freq, mReal sample_period);
