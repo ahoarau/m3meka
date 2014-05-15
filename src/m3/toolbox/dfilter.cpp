@@ -256,11 +256,15 @@ namespace m3
 	y(T) = x(T)*b[N-1]+x(T-1)*b[N-2]+..+x(T-N)*b[0] - 
 	(y(T-1)*a[N-2]+y(T-2)*a[N-3]+...+y(T-N)*a[0])
  */
-	int M3DFilter::Coefficients(int N,mReal A[], mReal B[])
+	int M3DFilter::Coefficients(int N,std::vector<mReal> A, std::vector<mReal> B)
 	{  
 		if (N > MAXFILTERTERMS)
 			return -1; //Filter is too small to take this many coefficients
-  
+		if(N != A.size() || N != B.size())
+		{
+		  M3_ERR("Vector size is different from expected Nterms:%d,vsize:%d",N,A.size());
+		  return -1;
+		}
 		Nterms=N;
 		for (int cnt = 0;cnt < N;cnt++){
 			_a[cnt]=A[cnt];
@@ -271,8 +275,8 @@ namespace m3
 
 	void M3DFilter::Average_Filter(int N)
 	{
-		mReal a[MAXFILTERTERMS];
-		mReal b[MAXFILTERTERMS];
+		std::vector<mReal> a(MAXFILTERTERMS,0.0);
+		std::vector<mReal> b(MAXFILTERTERMS,0.0);
 		if (N>MAXFILTERTERMS)
 		{
 			M3_INFO("M3DFilter Average param N of %d to large\n",N);
@@ -287,8 +291,8 @@ namespace m3
 	}
 	void M3DFilter::Identity_Filter()
 	{
-		mReal a[1] = {0.0};
-		mReal b[1] = {1.0};
+		std::vector<mReal> a(1,0.0);
+		std::vector<mReal> b(1,1.0);
 		Coefficients(1,a,b);
 	}
 	
@@ -329,8 +333,8 @@ namespace m3
 */
 	void M3DFilter::Least_Squares_Estimate(mReal sample_period,int N)
 	{
-		mReal a[8] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
-		mReal b[8] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+		std::vector<mReal> a(8,0.0);
+		std::vector<mReal> b(8,0.0);
 		mReal scale = 1/sample_period;
 		if (N==2){
 			b[1] = scale;
@@ -375,8 +379,8 @@ namespace m3
 
 		mReal pi = 3.14159625;
   
-		mReal a[4] = {0.0,0.0,0.0,0.0};
-		mReal b[4] = {0.0,0.0,0.0,0.0};
+		std::vector<mReal> a(4,0.0);
+		std::vector<mReal> b(4,0.0);
   
 		mReal wo = cutoff_freq*2.0*pi; //Omega naught (rad/sec)
 		mReal w = 2./T*static_cast<mReal>(tan(wo*T/2.)); //Omega cutoff (frequency warping from analog to digital domain)
@@ -447,8 +451,8 @@ namespace m3
 		mReal pi = 3.14159625;
   
   
-		mReal a[4] = {0.0,0.0,0.0,0.0};
-		mReal b[4] = {0.0,0.0,0.0,0.0};
+		std::vector<mReal> a(4,0.0);
+		std::vector<mReal> b(4,0.0);;
   
 		mReal wo = cutoff_freq*2.0*pi; //Omega naught (rad/sec)
 		mReal w = 2/T*tan(wo*T/2); //Omega cutoff (frequency warping from analog to digital domain)

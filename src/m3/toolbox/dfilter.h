@@ -118,7 +118,7 @@ namespace m3
 			M3DFilter();
 			void Dump(); //Dump the contents of the class to cout
 			void Clear(); //Clear the history of the filter
-			int Coefficients(int N,mReal A[],mReal B[]); //Set the coefficients of the filter.
+			int Coefficients(int N,std::vector<mReal> A,std::vector<mReal> B); //Set the coefficients of the filter.
 			mReal Step(mReal x_0); //evaluate the filter
 			bool ReadConfig(const YAML::Node & doc);
 		protected:
