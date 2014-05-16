@@ -251,7 +251,7 @@ namespace m3
 			return -1; //Filter is too small to take this many coefficients
 		if(N != A.size() || N != B.size())
 		{
-		  M3_ERR("Vector size is different from expected Nterms:%d,vsize:%d",N,A.size());
+		  M3_ERR("Vector size is different from expected (N != A.size() || N != B.size()) Nterms: %d, A.size: %d, B.size: %d\n",N,A.size(),B.size());
 		  return -1;
 		}
 		Nterms=N;
@@ -259,13 +259,14 @@ namespace m3
 			_a[cnt]=A[cnt];
 			_b[cnt]=B[cnt];
 		}
+		
 		return 0; //success
 	}
 
 	void M3DFilter::Average_Filter(int N)
 	{
-		std::vector<mReal> a(MAXFILTERTERMS,0.0);
-		std::vector<mReal> b(MAXFILTERTERMS,0.0);
+		std::vector<mReal> a(N,0.0);
+		std::vector<mReal> b(N,0.0);
 		if (N>MAXFILTERTERMS)
 		{
 			M3_INFO("M3DFilter Average param N of %d to large\n",N);
@@ -292,6 +293,9 @@ namespace m3
 */
 	mReal M3DFilter::Step(mReal x_0)
 	{
+		//std::cout<<"********* STEP **********"<<std::endl;
+		//std::cout<<x_0<<std::endl;
+		
 		mReal retval=0.0;
 		int i=0, start_idx=0;
   
@@ -300,11 +304,50 @@ namespace m3
   
 		start_idx = buffer_idx - Nterms + MAXFILTERTERMS + 1; //Precalc the index where the history data starts in the buffer.
   
-		for (int n = 0; n < Nterms; n++){
-			i = (start_idx + n) % (MAXFILTERTERMS);
-			_y[buffer_idx] += _b[n]*_x[i] - _a[n]*_y[i];    
-		}
   
+		
+		mReal tmp=0.0;
+		std::vector<mReal> aaa = _a;
+		std::vector<mReal> bbb = _b;
+		for (int n = 0; n < Nterms; n++){
+			    
+			
+			//std::cout<<"*************************"<<std::endl;
+			if(x_0!=0){
+			std::cout<<"buffer_idx:"<<buffer_idx;
+			//std::cout<<"n"<<std::endl;
+			//std::cout<<n<<std::endl;
+			std::cout<<"_b:[";
+			for(int ii=0;ii<_b.size();ii++){
+				std::cout<<_b[ii]<<";";}
+			std::cout<<"]"<<endl;
+			
+			std::cout<<"_a:[";
+			for(int ii=0;ii<_a.size();ii++){
+				std::cout<<_a[ii]<<";";}
+			std::cout<<"]"<<endl;
+			
+			std::cout<<"_x:[";
+			for(int ii=0;ii<_x.size();ii++){
+				std::cout<<_x[ii]<<";";}
+			std::cout<<"]"<<endl;
+			
+			std::cout<<"_y:[";
+			for(int ii=0;ii<_y.size();ii++){
+				std::cout<<_y[ii]<<";";}
+			std::cout<<"]"<<endl;
+			
+			std::cout<<"; i:"<<i;
+			std::cout<<"; _y[buffer_idx] at "<<n<<":"<<_y[buffer_idx]<<std::endl;
+			std::cout<<bbb[n]<<":"<<_x[i]<<":"<<aaa[n]<<":"<<_y[i]<<endl;
+			getchar();
+			i = (start_idx + n) % (MAXFILTERTERMS);
+			tmp = bbb[n]*_x[i] - aaa[n]*_y[i];
+			_y[buffer_idx] += tmp;
+			}
+			
+		}
+		
 		retval = _y[buffer_idx];
 		
 		buffer_idx = (buffer_idx+1) % (MAXFILTERTERMS);
@@ -366,13 +409,16 @@ namespace m3
 
 		mReal pi = 3.14159625;
   
-		std::vector<mReal> a(4,0.0);
-		std::vector<mReal> b(4,0.0);
+		std::vector<mReal> a;
+		std::vector<mReal> b;
   
 		mReal wo = cutoff_freq*2.0*pi; //Omega naught (rad/sec)
-		mReal w = 2./T*static_cast<mReal>(tan(wo*T/2.)); //Omega cutoff (frequency warping from analog to digital domain)
-  
+		mReal w = (2./T)*tan(wo*T/2.); //Omega cutoff (frequency warping from analog to digital domain)
+		//std::cout<<"tan(wo*T/2.):"<<tan(wo*T/2.)<<";cutoff_freq:"<<cutoff_freq<<std::endl;
+		//std::cout<<"w:"<<w<<";w0:"<<wo<<std::endl;
 		if(order == 1) {
+			a.resize(2,0.0);
+			b.resize(2,0.0);
 			mReal st = 2/T/w;
 			scale = 1./(1.+st);
     
@@ -383,6 +429,8 @@ namespace m3
 			b[0] = scale;
 		} 
 		else if(order == 2) {
+			a.resize(3,0.0);
+			b.resize(3,0.0);
 			mReal st = 2/T/w;
 			scale = 1/(1+sqrt(2.0)*st+st);
     
@@ -395,13 +443,15 @@ namespace m3
 			b[0] = scale;
 		} 
 		else if (order == 3){
+			a.resize(4,0.0);
+			b.resize(4,0.0);
 			mReal A = 2./(w*T);
 			mReal p2 = 2.*A;
 			mReal p3 = 2.*A*A;
 			mReal p4 = A*A*A;
     
 			scale = 1./(1.+p2+p3+p4);
-     
+			
 			a[3] = 0.;
 			a[2] = (3.+p2-p3-3.*p4)*scale;
 			a[1] = (3.-p2-p3+3.*p4) * scale;
@@ -418,6 +468,7 @@ namespace m3
 			return ; //
 		}
 		Coefficients(order+1,a,b);
+		Dump();
 	}
 	
 	
@@ -438,13 +489,15 @@ namespace m3
 		mReal pi = 3.14159625;
   
   
-		std::vector<mReal> a(4,0.0);
-		std::vector<mReal> b(4,0.0);;
+		std::vector<mReal> a;
+		std::vector<mReal> b;
   
 		mReal wo = cutoff_freq*2.0*pi; //Omega naught (rad/sec)
-		mReal w = 2/T*tan(wo*T/2); //Omega cutoff (frequency warping from analog to digital domain)
+		mReal w = 2./T*tan(wo*T/2.); //Omega cutoff (frequency warping from analog to digital domain)
   
 		if(order == 1) {
+			a.resize(2,0.0);
+			b.resize(2,0.0);
 			mReal st = 1/w;
 			scale = 1/(T/2+st);
     
@@ -455,6 +508,8 @@ namespace m3
 			b[0] = -scale;
 		} 
 		else if(order == 2) {
+			a.resize(3,0.0);
+			b.resize(3,0.0);
 			mReal st = sqrt(2.0)/w;
 			scale = 1/(st*st/T + st + T/2.0);
     
@@ -467,6 +522,8 @@ namespace m3
 			b[0] = -scale;
 		} 
 		else if (order == 3){
+			a.resize(4,0.0);
+			b.resize(4,0.0);
 			mReal st = 2/w;
 			mReal nd = st*st/T;
   
