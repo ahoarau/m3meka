@@ -45,7 +45,7 @@ add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # 
 
 
 
-SET(LIBS ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} m3chains m3robots m3hardware m3toolbox ${PROTOBUF_LIBRARIES})
+SET(LIBS ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} m3chains m3robots m3hardware m3toolbox ${PROTOBUF_LIBRARIES} m3base)
 
 set( ALL_SRCS 
 comp_shm.cpp
@@ -74,7 +74,6 @@ message("ALL SRC in ${PROJECT_NAME}:${ALL_SRCS}")
 ## Building
 add_library(${LIBNAME} SHARED ${ALL_SRCS})
 target_link_libraries(${LIBNAME} ${LIBS})
-add_dependencies(${LIBNAME} m3chains m3robots m3hardware m3toolbox)
 set_target_properties(${LIBNAME} PROPERTIES COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}/src")
 
 ## Installing
