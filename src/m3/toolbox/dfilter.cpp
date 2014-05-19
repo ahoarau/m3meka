@@ -293,9 +293,6 @@ namespace m3
 */
 	mReal M3DFilter::Step(mReal x_0)
 	{
-		//std::cout<<"********* STEP **********"<<std::endl;
-		//std::cout<<x_0<<std::endl;
-		
 		mReal retval=0.0;
 		int i=0, start_idx=0;
   
@@ -303,39 +300,12 @@ namespace m3
 		_y[buffer_idx] = 0.0;
   
 		start_idx = buffer_idx - Nterms + MAXFILTERTERMS + 1; //Precalc the index where the history data starts in the buffer.
-  
-  
-		
-		mReal tmp=0.0;
 		std::vector<mReal> aaa = _a;
 		std::vector<mReal> bbb = _b;
 		
 		for (int n = 0; n < Nterms; n++){
-			   
-			
-			//std::cout<<"*************************"<<std::endl;
-			/*if(x_0!=0){
-			std::cout<<"buffer_idx:"<<buffer_idx;
-			//std::cout<<"n"<<std::endl;
-			//std::cout<<n<<std::endl;
-			std::cout<<"bbb:[";
-			for(int ii=0;ii<bbb.size();ii++){
-				std::cout<<bbb[ii]<<";";}
-			std::cout<<"]"<<endl;
-			
-			std::cout<<"aaa:[";
-			for(int ii=0;ii<aaa.size();ii++){
-				std::cout<<aaa[ii]<<";";}
-			std::cout<<"]"<<endl;
-
-			
-			std::cout<<"; i:"<<i;
-			std::cout<<"; _y[buffer_idx] at "<<n<<":"<<_y[buffer_idx]<<std::endl;
-			std::cout<<bbb[n]<<":"<<_x[i]<<":"<<aaa[n]<<":"<<_y[i]<<endl;
-			getchar();*/
 			i = (start_idx + n) % (MAXFILTERTERMS);
-			tmp = bbb[n]*_x[i] - aaa[n]*_y[i];
-			_y[buffer_idx] += tmp;
+			_y[buffer_idx] +=  bbb[n]*_x[i] - aaa[n]*_y[i];
 			//}
 			
 		}
@@ -406,8 +376,6 @@ namespace m3
       
 		mReal wo = cutoff_freq*2.0*pi; //Omega naught (rad/sec)
 		mReal w = (2./T)*atan2(wo*T,2.); //Omega cutoff (frequency warping from analog to digital domain)
-		//std::cout<<"tan(wo*T/2.):"<<tan(wo*T/2.)<<";cutoff_freq:"<<cutoff_freq<<std::endl;
-		std::cout<<"w:"<<w<<";w0:"<<wo<<std::endl;
 		if(order == 1) {
 			a.resize(2,0.0);
 			b.resize(2,0.0);
@@ -460,10 +428,6 @@ namespace m3
 			return ; //
 		}
 		Coefficients(order+1,a,b);
-		 std::cout<<"bbb:[";
-			for(int ii=0;ii<_b.size();ii++){
-				std::cout<<_b[ii]<<";";}
-			std::cout<<"]"<<endl;
 	}
 	
 	

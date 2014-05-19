@@ -48,8 +48,7 @@ class M3ActuatorVirtual : public M3Actuator
 		bool ReadConfig(const char * filename);
 		string jnt_name	;
 		M3Joint * joint;
-		int tmp_cnt;
-        //M3JointFilter torque_df;
+		M3JointFilter torque_df;
 };
 
 

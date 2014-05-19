@@ -79,29 +79,15 @@ void M3ActuatorVirtual::StepStatus()
 		M3Transmission * t=joint->GetTransmission();
 		if (t!=NULL)
 		{
-			//tq_sense.Step(this->GetDesiredTorque()-t->GetTorqueDesJoint()*1000.0/torque_shift);
-			//status.set_torque(tq_sense.GetTorque_mNm());
-			//status.set_torquedot(torquedot_df.Step(status.torque()));
+			// A.H : try to set fake torque to virtual motors = Tdes
+			tq_sense.Step(this->GetDesiredTorque()-t->GetTorqueDesJoint()*1000.0/torque_shift);
+			status.set_torque(tq_sense.GetTorque_mNm());
+			status.set_torquedot(torquedot_df.Step(status.torque()));
 			// A.H test : torque and not torquedot (I don't care about torquedot)
 			//status.set_torque(torquedot_df.Step(tq_jt));
-			//if(pnt_cnt%200 ==0){
-			
-			 //printf("des=%f;curr=%f;t=%f;s=%f \n",-t->GetTorqueDesJoint()*1000.0/torque_shift,t->GetTorqueJoint(),t->GetTorqueSensor(),t->GetTorqueDesActuator());
-			//}
-			
-			//std::cout<<"*** ACTUATORRRRRRRRRR ***"<<std::endl;
-			//std::cout<<"t->GetThetaDesJointDeg(): "<<t->GetThetaDesJointDeg()<<std::endl;
-			
-			
 			
 			angle_df.Step(t->GetThetaDesJointDeg(),0); //Note: should be GetThetaDesSensorDeg, not working. this OK so long as all angle sensors are collocated 1:1
 			status.set_theta(angle_df.GetTheta());
-			
-			//std::cout<<"angle_df.GetTheta(): "<<angle_df.GetTheta()<<std::endl;
-			
-			//status.set_theta(160);
-			//status.set_thetadot(angle_df.GetThetaDot());
-			//status.set_thetadotdot(angle_df.GetThetaDotDot());
 		}
 		else
 			M3_INFO("No transmission found for %s\n",joint->GetName().c_str());
