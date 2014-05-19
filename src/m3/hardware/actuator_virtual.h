@@ -49,7 +49,7 @@ class M3ActuatorVirtual : public M3Actuator
 		string jnt_name	;
 		M3Joint * joint;
 		int tmp_cnt;
-        M3JointFilter torque_df;
+        //M3JointFilter torque_df;
 };
 
 

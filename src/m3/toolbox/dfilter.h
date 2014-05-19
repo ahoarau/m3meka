@@ -124,14 +124,11 @@ namespace m3
 			int Coefficients(int N,std::vector<mReal> A,std::vector<mReal> B); //Set the coefficients of the filter.
 			mReal Step(mReal x_0); //evaluate the filter
 			bool ReadConfig(const YAML::Node & doc);
+			
 		protected:
 			enum {NONE, BUTTERWORTH, DIFF_BUTTERWORTH, LEAST_SQUARES_ESTIMATE, IDENTITY, AVERAGE};
 			int Nterms; //Number of terms in the calculation
 			int buffer_idx; //Present start of the x & y history circular buffers
-			std::vector<mReal> _a; //y filter coefficients in reverse order.
-			std::vector<mReal> _b; //x filter coefficients in reverse order. 
-			std::vector<mReal> _x; //independent value history (circular buffer)
-			std::vector<mReal> _y; //dependent value history (circular buffer)
 			void      Butterworth_Filter(int order, mReal cutoff_freq, mReal sample_period);
 			void Diff_Butterworth_Filter(int order, mReal cutoff_freq, mReal sample_period);
 			void Least_Squares_Estimate(mReal sample_period,int N);
@@ -140,6 +137,12 @@ namespace m3
 			string type;
 			int order;
 			mReal cutoff_freq;
+		private:
+			std::vector<mReal> _a; //y filter coefficients in reverse order.
+			std::vector<mReal> _b; //x filter coefficients in reverse order. 
+			std::vector<mReal> _x; //independent value history (circular buffer)
+			std::vector<mReal> _y; //dependent value history (circular buffer)
+			
 			
 	};
 	

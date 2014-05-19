@@ -309,42 +309,34 @@ namespace m3
 		mReal tmp=0.0;
 		std::vector<mReal> aaa = _a;
 		std::vector<mReal> bbb = _b;
+		
 		for (int n = 0; n < Nterms; n++){
-			    
+			   
 			
 			//std::cout<<"*************************"<<std::endl;
-			if(x_0!=0){
+			/*if(x_0!=0){
 			std::cout<<"buffer_idx:"<<buffer_idx;
 			//std::cout<<"n"<<std::endl;
 			//std::cout<<n<<std::endl;
-			std::cout<<"_b:[";
-			for(int ii=0;ii<_b.size();ii++){
-				std::cout<<_b[ii]<<";";}
+			std::cout<<"bbb:[";
+			for(int ii=0;ii<bbb.size();ii++){
+				std::cout<<bbb[ii]<<";";}
 			std::cout<<"]"<<endl;
 			
-			std::cout<<"_a:[";
-			for(int ii=0;ii<_a.size();ii++){
-				std::cout<<_a[ii]<<";";}
+			std::cout<<"aaa:[";
+			for(int ii=0;ii<aaa.size();ii++){
+				std::cout<<aaa[ii]<<";";}
 			std::cout<<"]"<<endl;
-			
-			std::cout<<"_x:[";
-			for(int ii=0;ii<_x.size();ii++){
-				std::cout<<_x[ii]<<";";}
-			std::cout<<"]"<<endl;
-			
-			std::cout<<"_y:[";
-			for(int ii=0;ii<_y.size();ii++){
-				std::cout<<_y[ii]<<";";}
-			std::cout<<"]"<<endl;
+
 			
 			std::cout<<"; i:"<<i;
 			std::cout<<"; _y[buffer_idx] at "<<n<<":"<<_y[buffer_idx]<<std::endl;
 			std::cout<<bbb[n]<<":"<<_x[i]<<":"<<aaa[n]<<":"<<_y[i]<<endl;
-			getchar();
+			getchar();*/
 			i = (start_idx + n) % (MAXFILTERTERMS);
 			tmp = bbb[n]*_x[i] - aaa[n]*_y[i];
 			_y[buffer_idx] += tmp;
-			}
+			//}
 			
 		}
 		
@@ -411,11 +403,11 @@ namespace m3
   
 		std::vector<mReal> a;
 		std::vector<mReal> b;
-  
+      
 		mReal wo = cutoff_freq*2.0*pi; //Omega naught (rad/sec)
-		mReal w = (2./T)*tan(wo*T/2.); //Omega cutoff (frequency warping from analog to digital domain)
+		mReal w = (2./T)*atan2(wo*T,2.); //Omega cutoff (frequency warping from analog to digital domain)
 		//std::cout<<"tan(wo*T/2.):"<<tan(wo*T/2.)<<";cutoff_freq:"<<cutoff_freq<<std::endl;
-		//std::cout<<"w:"<<w<<";w0:"<<wo<<std::endl;
+		std::cout<<"w:"<<w<<";w0:"<<wo<<std::endl;
 		if(order == 1) {
 			a.resize(2,0.0);
 			b.resize(2,0.0);
@@ -468,7 +460,10 @@ namespace m3
 			return ; //
 		}
 		Coefficients(order+1,a,b);
-		Dump();
+		 std::cout<<"bbb:[";
+			for(int ii=0;ii<_b.size();ii++){
+				std::cout<<_b[ii]<<";";}
+			std::cout<<"]"<<endl;
 	}
 	
 	
@@ -493,7 +488,7 @@ namespace m3
 		std::vector<mReal> b;
   
 		mReal wo = cutoff_freq*2.0*pi; //Omega naught (rad/sec)
-		mReal w = 2./T*tan(wo*T/2.); //Omega cutoff (frequency warping from analog to digital domain)
+		mReal w = 2./T*atan2(wo*T,2.); //Omega cutoff (frequency warping from analog to digital domain)
   
 		if(order == 1) {
 			a.resize(2,0.0);
