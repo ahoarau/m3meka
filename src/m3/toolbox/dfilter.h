@@ -29,7 +29,6 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #include <Eigen/QR>
 #include "inttypes.h"
 
-
 namespace m3
 {
 
@@ -115,7 +114,7 @@ namespace m3
 	class M3DFilter
 	{
 		public:
-			M3DFilter():_a(MAXFILTERTERMS,0.0),_b(MAXFILTERTERMS,0.0),_x(MAXFILTERTERMS,0.0),_y(MAXFILTERTERMS,0.0),Nterms(0),buffer_idx(0)
+			M3DFilter():_a(MAXFILTERTERMS,0.0),_b(MAXFILTERTERMS,0.0),_x(MAXFILTERTERMS,0.0),_y(MAXFILTERTERMS,0.0),Nterms(0),buffer_idx(0),T(1.0/RT_TASK_FREQUENCY)
 			{
 			  
 			}
@@ -123,20 +122,38 @@ namespace m3
 			void Clear(); //Clear the history of the filter
 			int Coefficients(int N,std::vector<mReal> A,std::vector<mReal> B); //Set the coefficients of the filter.
 			mReal Step(mReal x_0); //evaluate the filter
+			mReal Step(mReal x_0,int N); //evaluate the filter
+			void UpdateFilter();
 			bool ReadConfig(const YAML::Node & doc);
+			int GetN()const{return Nterms;}
+			int GetOrder()const{return order;}
+			//int GetType()const{return type;}
+			mReal GetCutOffFreq(){return cutoff_freq;}
+			void SetN(int N){
+			  if(N>MAXFILTERTERMS){
+			    N = MAXFILTERTERMS;
+			    M3_INFO("N set to max (%d)",MAXFILTERTERMS);
+			  }
+			  Nterms = N;
+			  UpdateFilter();}
+			void SetCutoff_freq(mReal cutoff_freq){this->cutoff_freq = cutoff_freq;UpdateFilter();} 
+			void SetOrder(int order){this->order = order;UpdateFilter();}
+			void SetType(string t);
+                       const char * GetType();
 			
 		protected:
-			enum {NONE, BUTTERWORTH, DIFF_BUTTERWORTH, LEAST_SQUARES_ESTIMATE, IDENTITY, AVERAGE};
+			enum FILTER_TYPE{NONE, BUTTERWORTH, DIFF_BUTTERWORTH, LEAST_SQUARES_ESTIMATE, IDENTITY, AVERAGE}; // is inside actuator.pb.h
 			int Nterms; //Number of terms in the calculation
 			int buffer_idx; //Present start of the x & y history circular buffers
-			void      Butterworth_Filter(int order, mReal cutoff_freq, mReal sample_period);
-			void Diff_Butterworth_Filter(int order, mReal cutoff_freq, mReal sample_period);
-			void Least_Squares_Estimate(mReal sample_period,int N);
+			void      Butterworth_Filter();
+			void Diff_Butterworth_Filter();
+			void Least_Squares_Estimate();
 			void Identity_Filter();
-			void Average_Filter(int N);
-			string type;
+			void Average_Filter();
+			int type;
 			int order;
 			mReal cutoff_freq;
+			mReal T; //Period
 		private:
 			std::vector<mReal> _a; //y filter coefficients in reverse order.
 			std::vector<mReal> _b; //x filter coefficients in reverse order. 
@@ -158,6 +175,21 @@ namespace m3
 			mReal GetX(){return x;}
 			mReal GetXDot(){return xdot;}
 			mReal GetXDotDot(){return xdotdot;}
+			// Setters for params
+			M3DFilter* GetXdf(){return &x_df;}
+			M3DFilter* GetXdotdf(){return &xdot_df;}
+			M3DFilter* GetXdotdotdf(){return &xdotdot_df;}
+			/*void SetXdf_N(int N){x_df.SetN(N);}
+			void SetXdotdf_N(int N){xdot_df.SetN(N);}
+			void SetXdotdotdf_N(int N){xdotdot_df.SetN(N);}
+			
+			void SetXdf_CutoffFreq(mReal cutoff_freq){x_df.SetCutoff_freq(cutoff_freq);}
+			void SetXdotdf_CutoffFreq(mReal cutoff_freq){xdot_df.SetCutoff_freq(cutoff_freq);}
+			void SetXdotdotdf_CutoffFreq(mReal cutoff_freq){xdotdot_df.SetCutoff_freq(cutoff_freq);}
+			
+			void SetXdf_Order(int order){x_df.SetOrder(order);}
+			void SetXdotdf_Order(int order){xdot_df.SetOrder(order);}
+			void SetXdotdotdf_Order(int order){xdotdot_df.SetOrder(order);}*/
 		protected: 
 			enum {NONE, DF_CHAIN, POLY_LEAST_SQUARES, DF_POLY_LEAST_SQUARES, DF_APERIODIC};
 			M3DiffAperiodic xdot_aperiodic;

@@ -120,8 +120,20 @@ bool M3Actuator::ReadConfig(const char * filename)
 		tq_sense.ReadConfig(doc["calib"]["torque"]);
 		at_sense.ReadConfig(doc["calib"]["amp_temp"]);
 		i_sense.ReadConfig( doc["calib"]["current"]);
-		angle_df.ReadConfig( doc["calib"]["angle_df"]);
-		torquedot_df.ReadConfig(doc["calib"]["torquedot_df"]);
+                try 
+                {
+                        angle_df.ReadConfig( doc["param"]["angle_df"]); // A.H : now allow to modify it online
+                } catch(YAML::TypedKeyNotFound<string> e) 
+                {
+                        angle_df.ReadConfig( doc["calib"]["angle_df"]);
+                }
+                try 
+                {
+                        torquedot_df.ReadConfig(doc["param"]["torquedot_df"]); // A.H : now allow to modify it online
+                } catch(YAML::TypedKeyNotFound<string> e) 
+                {
+                        torquedot_df.ReadConfig(doc["calib"]["torquedot_df"]);
+                }
 		try 
 		{
 			doc["param"]["max_overload_time"] >> mval;

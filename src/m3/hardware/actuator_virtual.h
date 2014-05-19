@@ -35,6 +35,9 @@ class M3ActuatorVirtual : public M3Actuator
 		M3ActuatorVirtual():joint(0){}	
 		virtual bool IsMotorPowerOn(){return true;}
 		virtual bool IsMotorPowerSlewedOn(){return true;}
+		M3ActuatorParamFilter* ParamThetaDf(){return param.mutable_angle_df()->mutable_theta_df();}
+		M3ActuatorParamFilter* ParamThetaDotDf(){return param.mutable_angle_df()->mutable_thetadot_df();}
+		M3ActuatorParamFilter* ParamThetaDotDotDf(){return param.mutable_angle_df()->mutable_thetadotdot_df();}
 	protected:
 		void Startup();
 		//void Shutdown();
@@ -48,7 +51,7 @@ class M3ActuatorVirtual : public M3Actuator
 		bool ReadConfig(const char * filename);
 		string jnt_name	;
 		M3Joint * joint;
-		M3JointFilter torque_df;
+		//M3JointFilter torque_df;
 };
 
 

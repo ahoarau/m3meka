@@ -32,7 +32,6 @@ class M3Actuator(M3Component):
         self.command=m3.actuator_pb2.M3ActuatorCommand()
         self.param=m3.actuator_pb2.M3ActuatorParam()
         self.read_config()
-        
     #Utility API
     def set_mode(self,p):
     	self.command.ctrl_mode = p;

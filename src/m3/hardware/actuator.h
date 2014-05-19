@@ -26,8 +26,8 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #include "actuator_ec.h"
 #include "sensor.h"
 #include "motor.h"
-#include "../toolbox/toolbox.h"
-#include "../toolbox/dfilter.h"
+#include "m3/toolbox/toolbox.h"
+#include "m3/toolbox/dfilter.h"
 #include <google/protobuf/message.h>
 
 
