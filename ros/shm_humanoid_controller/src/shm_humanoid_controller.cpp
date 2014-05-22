@@ -465,7 +465,7 @@ float64[] effort
   return joint_state;
 }
 
-bool GetEnvironmentVar(const char * var, string &s)
+/*bool GetEnvironmentVar(const char * var, string &s)
 {
 	char *p=getenv(var);
 	if (p!=NULL)
@@ -497,7 +497,7 @@ void GetYamlDoc(const char * filename, YAML::Node & doc)
    	parser.GetNextDocument(doc);
 	fin.close();
 	return;
-}
+}*/
 
 ////////////////////////// RTAI PROCESS BOILERPLATE /////////////////////////////
 

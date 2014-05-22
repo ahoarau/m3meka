@@ -40,7 +40,10 @@ from m3.toolbox_core import *
 
 def get_m3_animation_path():
         try:
-                return os.environ['M3_ROBOT']+'/animations/'
+                vpath = os.environ['M3_ROBOT']
+                vpath = vpath.split(':')
+                path  = vpath[0]+'/animations/'
+                return path
         except KeyError:
                 print 'SET YOUR M3_ROBOT ENVIRONMENT VARIABLE'
         return ''

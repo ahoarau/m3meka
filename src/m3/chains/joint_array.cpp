@@ -190,7 +190,6 @@ void M3JointArray::StepCommand()
 					joints[i]->SetDesiredControlMode(JOINT_MODE_TORQUE);
 					break;
 				case JOINT_ARRAY_MODE_THETA:
-
 					joints[i]->SetDesiredControlMode(JOINT_MODE_THETA);
 					break;
 				case JOINT_ARRAY_MODE_TORQUE_GC:
@@ -215,21 +214,17 @@ void M3JointArray::StepCommand()
 				case JOINT_ARRAY_MODE_THETADOT:
 					joints[i]->SetDesiredControlMode(JOINT_MODE_THETADOT);
 					break;	
-
 				case JOINT_ARRAY_MODE_SPLINED_TRAJ_GC:
-				{
 					joints[i]->SetDesiredControlMode(JOINT_MODE_THETA_GC);	
 					joints[i]->SetDesiredThetaDeg(traj_des(i));
 					break;
-				}
 				case JOINT_ARRAY_MODE_SPLINED_TRAJ:
-				{
 					joints[i]->SetDesiredControlMode(JOINT_MODE_THETA);	
 					joints[i]->SetDesiredThetaDeg(traj_des(i));
 					break;
-				}
 				default:
 					joints[i]->SetDesiredControlMode(JOINT_MODE_OFF);
+                                       break;
 			};
 		}
 	}

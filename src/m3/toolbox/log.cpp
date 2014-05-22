@@ -25,12 +25,20 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #include "m3rt/base/component_factory.h"
 #include <unistd.h> 
 #ifdef __RTAI__
+#ifdef __cplusplus
+extern "C" {
+#endif 
+#include <rtai_registry.h>
 #include <rtai.h>
+#include <rtai_lxrt.h>
 #include <rtai_shm.h>
 #include <rtai_sched.h>
 #include <rtai_nam2num.h>
 #include <rtai_sem.h>
-#include <rtai_lxrt.h>
+#include <rtai_malloc.h> 
+#ifdef __cplusplus
+}  // extern "C"
+#endif 
 #endif
 
 
@@ -104,9 +112,10 @@ void M3MekaLog::Startup()
 	page_size = int(2*freq/5);	
 	
 	command.set_enable(enable);
-	
-	  if (GetEnvironmentVar(M3_ROBOT_ENV_VAR, path))
-	  {		
+	 vector<string> vpath;
+        if (GetEnvironmentVariable(M3_ROBOT_ENV_VAR, vpath))
+        {
+                 path=vpath[0];		
 		  time_t rawtime;
 		  struct tm *timeinfo;
 		  char buf[80];

@@ -80,7 +80,7 @@ void M3MotorModel::ThermalInit(string config_filename)
 	    // Get Old Temps to init model
 	    string temp_filename = config_filename.substr(0, config_filename.length()-4);
 	    temp_filename += "_temps.yml";
-	    YAML::Node doc;
+	    
 	    
 	    bool previous_temp_missing = false;	
 	    
@@ -88,23 +88,8 @@ void M3MotorModel::ThermalInit(string config_filename)
 	    string s(temp_filename);
 	    string path;
 	    
-	    if (GetEnvironmentVar(M3_ROBOT_ENV_VAR, path))
-	    {		
-		    path.append("/robot_config/");
-		    path.append(s);
-	    }
-	    
-	    ifstream fin(path.c_str());
-	    if (fin.fail())
-	    {		
-		    //M3_ERR("could not read %s \n", path.c_str());	
-		    return;
-	    }
-
-	    YAML::Parser parser(fin);
-	    
-	    parser.GetNextDocument(doc);
-	    fin.close();
+            YAML::Node doc;
+	    m3rt::GetYamlDoc(s.c_str(),doc);
 	    
 	    /*try
 	    {

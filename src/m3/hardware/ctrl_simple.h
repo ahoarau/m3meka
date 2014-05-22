@@ -28,7 +28,7 @@
 #include "m3/toolbox/toolbox.h"
 #include "m3/toolbox/dfilter.h"
 #include "m3/hardware/ctrl_simple.pb.h"
-#include "actuator.h"
+#include "m3/hardware/actuator.h"
 #include "m3/hardware/actuator.pb.h"
 
 namespace m3
@@ -40,8 +40,7 @@ namespace m3
 class M3CtrlSimple: public  m3rt::M3Component
 {
 	public:
-		M3CtrlSimple(): m3rt::M3Component(CONTROL_PRIORITY),	pnt_cnt(0),
-																act(NULL)
+		M3CtrlSimple(): m3rt::M3Component(CONTROL_PRIORITY),	pnt_cnt(0),act(NULL)
 		{
 			RegisterVersion("default",DEFAULT);	
 		}

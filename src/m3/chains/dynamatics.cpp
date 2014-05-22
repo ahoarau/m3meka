@@ -102,7 +102,7 @@ void M3Dynamatics::Startup()
 			kdlchain.addSegment(Segment(Joint(Joint::RotZ), frame, frame.Inverse()*RigidBodyInertia(m[i-1],vcog, ri)));
 		}
 	}
-	if(kdlchain.getNrOfSegments()!=m3chain->GetNumDof())
+	if(kdlchain.getNrOfSegments()!=m3chain->GetNumDof()+3)
 	{
 	  M3_ERR("kdlchain not created properly (ndof:%d,m3chainndof:%d)\n",kdlchain.getNrOfSegments(),m3chain->GetNumDof());
 	}
@@ -121,7 +121,7 @@ void M3Dynamatics::Startup()
 	
 	SetPayload();
 	SetStateSafeOp();
-	std::cout<<"kdlchain("<<m3chain->GetName()<<") njts:"<<kdlchain.getNrOfJoints()<<" nseg;"<<kdlchain.getNrOfSegments()<<std::endl;
+	//std::cout<<"kdlchain("<<m3chain->GetName()<<") njts:"<<kdlchain.getNrOfJoints()<<" nseg;"<<kdlchain.getNrOfSegments()<<std::endl;
 }
 
 
