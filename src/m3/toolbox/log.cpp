@@ -236,11 +236,11 @@ void M3MekaLog::Shutdown()
 
 bool M3MekaLog::ReadConfig(const char * filename)
 {
-  YAML::Node doc;
+  //YAML::Node doc;
 
   if (!M3Component::ReadConfig(filename))
 	  return false;
-  GetYamlDoc(filename, doc);
+  //GetYamlDoc(filename, doc);
 
   try 
 	{

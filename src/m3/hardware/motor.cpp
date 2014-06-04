@@ -86,14 +86,13 @@ void M3MotorModel::ThermalInit(string config_filename)
 	    
 	    
 	    string s(temp_filename);
-	    string path;
 	    
-            YAML::Node doc;
-	    m3rt::GetYamlDoc(s.c_str(),doc);
+            YAML::Node node;
+	    m3rt::GetYamlDoc(s.c_str(),node,&doc_path);
 	    
 	    /*try
 	    {
-	      GetYamlDoc(temp_filename.c_str(), doc);
+	      GetYamlDoc(temp_filename.c_str(), node);
 	    } catch(YAML::RepresentationException e) {
 	      previous_temp_missing = true;
 	      M3_DEBUG("b\n");
@@ -108,7 +107,7 @@ void M3MotorModel::ThermalInit(string config_filename)
 	      try 
 	      {
 		
-		      doc["previous_winding_temp"] >> previous_winding_temp;
+		      node["previous_winding_temp"] >> previous_winding_temp;
 		      
 	      } catch(YAML::TypedKeyNotFound<string> e) 
 	      {		
@@ -117,7 +116,7 @@ void M3MotorModel::ThermalInit(string config_filename)
 
 	      try 
 	      {
-		      doc["previous_case_temp"] >> previous_case_temp;
+		      node["previous_case_temp"] >> previous_case_temp;
 		      
 	      } catch(YAML::TypedKeyNotFound<string> e) 
 	      {		
@@ -127,7 +126,7 @@ void M3MotorModel::ThermalInit(string config_filename)
 
 	      try 
 	      {
-		      doc["previous_temp_timestamp"] >> previous_temp_timestamp;
+		      node["previous_temp_timestamp"] >> previous_temp_timestamp;
 		      
 	      } catch(YAML::TypedKeyNotFound<string> e) 
 	      {
@@ -230,8 +229,8 @@ void M3MotorModel::ThermalShutdown(string config_filename, mReal ambient_temp)
 		  out << YAML::Key << "previous_case_temp";
 		  out << YAML::Value << case_temp;
 		  out << YAML::EndMap;
-		  
-		  WriteYamlDoc(temp_filename.c_str(), out);
+		  string fileout = doc_path+temp_filename;
+		  m3rt::WriteYamlDoc(fileout.c_str(), out);
 		  
 	}
 		  //M3_DEBUG("writing: %s\n", temp_filename.c_str() );

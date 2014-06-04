@@ -353,8 +353,10 @@ void M3Omnibase::StepCommand() {
 
 bool M3Omnibase::ReadConfig ( const char * filename ) {
 
-    YAML::Node doc;
-    GetYamlDoc ( filename, doc );
+    //YAML::Node doc;
+    //GetYamlDoc ( filename, doc);
+    if(!M3Vehicle::ReadConfig(filename)){return false;}
+    
     doc["pwr_component"] >> pwr_name;
     doc["holomni_pcv_config"] >> holomni_pcv_config;
     doc["joint_array_component"] >> joint_array_name;
@@ -384,11 +386,21 @@ bool M3Omnibase::ReadConfig ( const char * filename ) {
     catch ( YAML::KeyNotFound& e ) {
         truss_vel_thresh = 1000.0;
         }
-
+    YAML::Node pcv_doc;
+    m3rt::GetYamlDoc(holomni_pcv_config.c_str(),pcv_doc);
+    pcv = new PCV ( pcv_doc, RT_TASK_FREQUENCY );
+    if ( pcv == NULL ) {
+        M3_ERR ( "Error creating Holomni_lib component.\n" );
+        SetStateError();
+	return false;
+        }
+    else {
+        SetStateSafeOp();
+        }
 
     //angle_df.ReadConfig( doc["calib"]["angle_df"]);
 
-    return M3Vehicle::ReadConfig ( filename );;
+    return true;
     }
 
 
@@ -458,22 +470,13 @@ void M3Omnibase::Startup() {
     command.set_adjust_local_position ( 0 );
     command.set_adjust_global_position ( 0 );
 
-    string path;
+    /*string path;
 
     vector<string> vpath;
     if ( GetEnvironmentVariable ( M3_ROBOT_ENV_VAR, vpath ) ) {
         path=vpath[0]+"/robot_config/"+holomni_pcv_config;
-    }
+    }*/
     
-
-    pcv = new PCV ( path, RT_TASK_FREQUENCY );
-    if ( pcv == NULL ) {
-        M3_ERR ( "Error creating Holomni_lib component.\n" );
-        SetStateError();
-        }
-    else {
-        SetStateSafeOp();
-        }
 
     pid_steer_vel = vector<M3PID> ( motor_array->GetNumDof() /2 );
     pid_roll_vel = vector<M3PID> ( motor_array->GetNumDof() /2 );

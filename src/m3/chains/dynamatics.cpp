@@ -102,10 +102,10 @@ void M3Dynamatics::Startup()
 			kdlchain.addSegment(Segment(Joint(Joint::RotZ), frame, frame.Inverse()*RigidBodyInertia(m[i-1],vcog, ri)));
 		}
 	}
-	if(kdlchain.getNrOfSegments()!=m3chain->GetNumDof()+3)
+	/*if(kdlchain.getNrOfSegments()!=m3chain->GetNumDof()+3)
 	{
 	  M3_ERR("kdlchain not created properly (ndof:%d,m3chainndof:%d)\n",kdlchain.getNrOfSegments(),m3chain->GetNumDof());
-	}
+	}*/
 	//Store no-load payload for last link
 	Frame toTip = kdlchain.getSegment(kdlchain.getNrOfSegments()-1).getFrameToTip();
 	RigidBodyInertia z_I_rigid = toTip*kdlchain.getSegment(kdlchain.getNrOfSegments()-1).getInertia();
@@ -296,8 +296,8 @@ bool M3Dynamatics::ReadConfig(const char * filename)
 	if (!M3Component::ReadConfig(filename))
 		return false;
 	
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
+	//YAML::Node doc;
+	//GetYamlDoc(filename, doc);
 	
 	mReal rtemp;
 	int itemp;

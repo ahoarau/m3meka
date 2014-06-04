@@ -188,8 +188,8 @@ bool M3HeadS2CSPCtrl::ReadConfig(const char * filename)
 {
 	if (!M3Component::ReadConfig(filename))
 		return false;
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
+	//YAML::Node doc;
+	//GetYamlDoc(filename, doc);
 	mReal mval;
 	doc["robot_component"] >> bot_name;
 	doc["head_component"] >> head_name;

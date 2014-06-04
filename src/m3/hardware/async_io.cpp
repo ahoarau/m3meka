@@ -94,11 +94,11 @@ bool M3AsyncIO::ReadConfig(const char * filename)
    
 	int val;
 	mReal mval;
-	YAML::Node doc;
+	//YAML::Node doc;
 
 	if (!M3ComponentAsync::ReadConfig(filename))
 		return false;
-	GetYamlDoc(filename, doc);
+	//GetYamlDoc(filename, doc);
 
 	// read  config files here
 	

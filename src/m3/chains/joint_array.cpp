@@ -263,10 +263,11 @@ bool M3JointArray::ReadConfig(const char * filename)
 {
 	if (!M3Component::ReadConfig(filename))
 		return false;
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
+	//YAML::Node doc;
+        //m3rt::GetYamlDoc(filename,doc);
 	doc["ndof"] >> ndof;
-	for(YAML::Iterator it=doc["joint_components"].begin();it!=doc["joint_components"].end();++it) 
+	const YAML::Node& joint_components = doc["joint_components"];
+	for(YAML::Iterator it=joint_components.begin();it!=joint_components.end();++it) 
 	{
    		string key, value;
     		it.first() >> key;

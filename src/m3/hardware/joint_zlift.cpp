@@ -30,8 +30,8 @@ bool M3JointZLift::ReadConfig(const char * filename)
 {	
 	if (!M3Joint::ReadConfig(filename))
 		return false;
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
+	//YAML::Node doc;
+	//GetYamlDoc(filename, doc);
 	doc["calib"]["cb_payload_mass"] >>  cb_payload_mass;
 	doc["calib"]["cb_gearing"] >>  cb_gearing;
 	doc["calib"]["cb_screw_pitch"] >>  cb_screw_pitch;

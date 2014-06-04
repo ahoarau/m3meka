@@ -41,10 +41,10 @@ void M3ActuatorVirtual::Startup()
 bool M3ActuatorVirtual::ReadConfig(const char * filename)
 {
 	int val;
-	YAML::Node doc;
+	//YAML::Node doc;
 	if (!M3Actuator::ReadConfig(filename))
 		return false;
-	GetYamlDoc(filename, doc);
+	//GetYamlDoc(filename, doc);
 	doc["joint_component"] >> jnt_name;
 	// Set Order
 	ParamThetaDf()->set_order(angle_df.GetXdf()->GetOrder());

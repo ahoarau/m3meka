@@ -31,8 +31,8 @@ bool M3Head::ReadConfig(const char * filename)
 	if (!M3JointChain::ReadConfig(filename))
 		return false;
 
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
+	//YAML::Node doc;
+	//GetYamlDoc(filename, doc);
 	
 	vector<mReal> left_trans;
 	vector<mReal> right_trans;

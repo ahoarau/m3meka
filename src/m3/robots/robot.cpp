@@ -47,14 +47,12 @@ bool M3Robot::ReadConfig(const char * filename)
 	if (!M3Component::ReadConfig(filename))
 		return false;	
 	
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
+	//YAML::Node doc;
+	//GetYamlDoc(filename, doc);
 	
 	doc["pwr_component"] >> pwr_name;
 
 	return true;	
-
-	return true;
 }
 
 void M3Robot::Startup()

@@ -35,14 +35,17 @@ import m3.component_base_pb2 as mbs
 #import roslib; roslib.load_manifest('m3_toolbox_ros')
 #import rospy
 #import rosbag
+
 from m3.toolbox_core import *
 
+def get_m3_robot_path():
+    vpath = os.environ['M3_ROBOT']
+    vpath = vpath.split(':')
 
 def get_m3_animation_path():
         try:
-                vpath = os.environ['M3_ROBOT']
-                vpath = vpath.split(':')
-                path  = vpath[0]+'/animations/'
+                vpath = get_m3_robot_path()
+                path  = [p+'/animations/' for p in vpath]
                 return path
         except KeyError:
                 print 'SET YOUR M3_ROBOT ENVIRONMENT VARIABLE'
@@ -310,11 +313,11 @@ def load_animation(filename):
 
 def get_via_files():
         path=get_m3_animation_path()
-        return glob.glob(path+'*.via')
+        return [glob.glob(p+'*.via')[0] for p in path]
 
 def get_via_names():
         path=get_m3_animation_path()
-        full=glob.glob(path+'*.via')
+        full=[glob.glob(p+'*.via')[0] for p in path]
         names=[]
         for s in full:
                 names.append(s[s.rfind('/')+1:s.rfind('.')])

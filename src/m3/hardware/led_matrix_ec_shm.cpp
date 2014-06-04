@@ -153,8 +153,8 @@ bool M3LedMatrixEcShm::ReadConfig(const char * filename)
 	if (!M3CompShm::ReadConfig(filename))
 		return false;
 
-	YAML::Node doc;	
-	GetYamlDoc(filename, doc);	
+	//YAML::Node doc;	
+	//GetYamlDoc(filename, doc);	
 		
 	doc["led_matrix_component"] >> led_matrix_name;
 		

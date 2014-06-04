@@ -24,12 +24,12 @@ namespace m3
 
 bool M3CompShm::ReadConfig(const char * filename)
 {
-	YAML::Node doc;
+	//YAML::Node doc;
 	
 	if (!M3Component::ReadConfig(filename)) return false;
-	GetYamlDoc(filename, doc);
+	//GetYamlDoc(filename, doc);
 	
-	doc["shm_id"] >> shm_id;
+	this->doc["shm_id"] >> shm_id;
 	
 	return true;
 }

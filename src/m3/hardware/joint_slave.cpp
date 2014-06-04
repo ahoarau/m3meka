@@ -58,10 +58,10 @@ void M3JointSlave::Shutdown()
 
 bool M3JointSlave::ReadConfig(const char * filename)
 {
-	YAML::Node doc;
+	//YAML::Node doc;
 	if (!M3Component::ReadConfig(filename))
 		return false;
-	GetYamlDoc(filename, doc);
+	//GetYamlDoc(filename, doc);
 	doc["cpj_component"] >> cpj_name;
 	doc["calib"]["cb_ms_ratio"]>>cb_ms_ratio; //N:1 gearing
 	return true;

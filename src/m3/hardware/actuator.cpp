@@ -63,12 +63,12 @@ bool M3Actuator::ReadConfig(const char * filename)
 	int val;
 	string str;
 	mReal mval;
-	YAML::Node doc;
+	//YAML::Node doc;
 	config_filename = string(filename);
 
 	if (!M3Component::ReadConfig(filename))
 		return false;
-	GetYamlDoc(filename, doc);
+	//GetYamlDoc(filename, doc);
 	
 	if (IsVersion(ISS) || IsVersion(IQ))
 	{
