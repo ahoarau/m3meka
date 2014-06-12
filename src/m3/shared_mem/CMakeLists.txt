@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(shared_mem)
-set(LIBNAME "m3shm")
+set(LIBNAME "shared_mem")
 
 
 
