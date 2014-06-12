@@ -33,7 +33,8 @@ import m3.pwr
 import m3.component_factory as m3f
 import m3.actuator_pb2 as mrt 
 import math
-
+from m3.component_factory import create_component
+from pprint import pprint
 class M3Proc:
     def __init__(self):
         self.proxy = m3p.M3RtProxy()
@@ -87,7 +88,6 @@ class M3Proc:
                 self.proxy.publish_param(self.actuator[-1]) 
                 
         for n in ctrl_names:
-            print "creating" + n
             c=m3f.create_component(n)
             if c is not None:
                 self.ctrl.append(c)
@@ -103,11 +103,11 @@ class M3Proc:
                 self.proxy.publish_param(self.joint[-1]) 
 
         #Enable motor power
-	pwr_rt=m3t.get_actuator_ec_pwr_component_name(actuator_ec_names[0])
-	self.pwr=m3f.create_component(pwr_rt)
-	if self.pwr is not None:
-	    self.proxy.publish_command(self.pwr)
-	    self.pwr.set_motor_power_on()
+        pwr_rt=m3t.get_actuator_ec_pwr_component_name(actuator_ec_names[0])
+        self.pwr=m3f.create_component(pwr_rt)
+        if self.pwr is not None:
+            self.proxy.publish_command(self.pwr)
+            self.pwr.set_motor_power_on()
 
         #Start them all up
         self.proxy.make_operational_all()
@@ -120,7 +120,7 @@ class M3Proc:
                 self.proxy.make_safe_operational(ccc)
 
         #Force safe-op of chain so that gravity terms are computed
-        self.chain=None	
+        self.chain=None    
         if len(joint_names)>0:
             for j in joint_names:
                 chain_name=m3t.get_joint_chain_name(j)
@@ -130,7 +130,7 @@ class M3Proc:
                     #self.proxy.publish_param(self.chain) #allow to set payload
                     #Force safe-op of chain so that gravity terms are computed
                     dynamatics_name = m3t.get_chain_dynamatics_component_name(chain_name)
-                    if dynamatics_name != "":	    
+                    if dynamatics_name != "":        
                         self.proxy.make_safe_operational(dynamatics_name)
                         self.dyn=m3f.create_component(dynamatics_name)
                         self.proxy.publish_param(self.dyn) #allow to set payload
@@ -141,7 +141,7 @@ class M3Proc:
         if robot_name != "":
             self.proxy.make_safe_operational(robot_name)
             self.robot=m3f.create_component(robot_name)
-            self.proxy.publish_param(self.robot) #allow to set payload	
+            self.proxy.publish_param(self.robot) #allow to set payload    
 
         tmax=max([x.param.max_tq for x in self.actuator])
         tmin=min([x.param.min_tq for x in self.actuator])
@@ -149,11 +149,14 @@ class M3Proc:
         qmax=max([x.param.max_q for x in self.joint])
         qmin=min([x.param.min_q for x in self.joint])
         self.scope_torque=None
-	self.scope_theta=None
+        self.scope_theta=None
+        self.scope_thetadot=None
+        self.scope_thetadotdot=None
+        self.scope_torquedot=None
         #Create gui
         self.mode=[0]*len(self.joint)
         self.tq_desire_a=[0]*len(self.joint)
-	self.tq_desire_b=[0]*len(self.joint)
+        self.tq_desire_b=[0]*len(self.joint)
         self.pwm_desire=[0]*len(self.joint)
         self.theta_desire_a=[0]*len(self.joint)
         self.theta_desire_b=[0]*len(self.joint)
@@ -163,11 +166,14 @@ class M3Proc:
         self.step_period=[2000.0]*len(self.joint)
         self.cycle_theta=False
         self.cycle_last_theta=False
-	self.cycle_torque=False
+        self.cycle_torque=False
         self.cycle_last_torque=False
         self.save=False
-	self.do_scope_torque=False
-	self.do_scope_theta=False
+        self.do_scope_torque=False
+        self.do_scope_torquedot=False
+        self.do_scope_theta=False
+        self.do_scope_thetadot=False
+        self.do_scope_thetadotdot=False
         self.brake=False
         self.save_last=False
         self.status_dict=self.proxy.get_status_dict()
@@ -176,34 +182,50 @@ class M3Proc:
         self.gui.add('M3GuiTree',   'Param',   (self,'param_dict'),[],[],m3g.M3GuiWrite,column=3)
         self.gui.add('M3GuiModes',  'Mode',      (self,'mode'),range(len(self.joint)),[['Off','Pwm','Torque','Theta','Torque_GC','Theta_GC','Theta_MJ', 'Theta_GC_MJ'],1],m3g.M3GuiWrite)
         self.gui.add('M3GuiSliders','TorqueA (mNm)',  (self,'tq_desire_a'),range(len(self.joint)),[tmin,tmax],m3g.M3GuiWrite)
-	self.gui.add('M3GuiSliders','TorqueB (mNm)',  (self,'tq_desire_b'),range(len(self.joint)),[tmin,tmax],m3g.M3GuiWrite)
+        self.gui.add('M3GuiSliders','TorqueB (mNm)',  (self,'tq_desire_b'),range(len(self.joint)),[tmin,tmax],m3g.M3GuiWrite)
         self.gui.add('M3GuiSliders','Pwm', (self,'pwm_desire'),range(len(self.joint)),[-3200,3200],m3g.M3GuiWrite) 
         self.gui.add('M3GuiSliders','Theta A(Deg)', (self,'theta_desire_a'),range(len(self.joint)),[qmin,qmax],m3g.M3GuiWrite,column=2) 
-        self.gui.add('M3GuiSliders','Theta B(Deg)', (self,'theta_desire_b'),range(len(self.joint)),[qmin,qmax],m3g.M3GuiWrite,column=2) 	
-        self.gui.add('M3GuiSliders','Thetadot (Deg)', (self,'thetadot_desire'),range(len(self.joint)),[0,120.0],m3g.M3GuiWrite,column=2) 		
+        self.gui.add('M3GuiSliders','Theta B(Deg)', (self,'theta_desire_b'),range(len(self.joint)),[qmin,qmax],m3g.M3GuiWrite,column=2)     
+        self.gui.add('M3GuiSliders','Thetadot (Deg)', (self,'thetadot_desire'),range(len(self.joint)),[0,120.0],m3g.M3GuiWrite,column=2)         
         self.gui.add('M3GuiSliders','Stiffness ', (self,'stiffness'),range(len(self.joint)),[0,100],m3g.M3GuiWrite,column=3) 
         self.gui.add('M3GuiSliders','Slew ', (self,'slew'),range(len(self.joint)),[0,100],m3g.M3GuiWrite,column=3) 
         self.gui.add('M3GuiToggle', 'Save',      (self,'save'),[],[['On','Off']],m3g.M3GuiWrite)
-	self.gui.add('M3GuiToggle', 'ScopeTorque',      (self,'do_scope_torque'),[],[['On','Off']],m3g.M3GuiWrite)
-	self.gui.add('M3GuiToggle', 'ScopeTheta',      (self,'do_scope_theta'),[],[['On','Off']],m3g.M3GuiWrite)
-        self.gui.add('M3GuiSliders','StepPeriod (ms) ', (self,'step_period'),range(len(self.joint)),[0,4000],m3g.M3GuiWrite) 	
+        self.gui.add('M3GuiToggle', 'ScopeTorque',      (self,'do_scope_torque'),[],[['On','Off']],m3g.M3GuiWrite)
+        self.gui.add('M3GuiToggle', 'ScopeTorqueDot',      (self,'do_scope_torquedot'),[],[['On','Off']],m3g.M3GuiWrite)
+        self.gui.add('M3GuiToggle', 'ScopeTheta',      (self,'do_scope_theta'),[],[['On','Off']],m3g.M3GuiWrite)
+        self.gui.add('M3GuiToggle', 'ScopeThetaDot',      (self,'do_scope_thetadot'),[],[['On','Off']],m3g.M3GuiWrite)
+        self.gui.add('M3GuiToggle', 'ScopeThetaDotDot',      (self,'do_scope_thetadotdot'),[],[['On','Off']],m3g.M3GuiWrite)
+        self.gui.add('M3GuiSliders','StepPeriod (ms) ', (self,'step_period'),range(len(self.joint)),[0,4000],m3g.M3GuiWrite)     
         self.gui.add('M3GuiToggle', 'CycleTheta',      (self,'cycle_theta'),[],[['On','Off']],m3g.M3GuiWrite)
-	self.gui.add('M3GuiToggle', 'CycleTorque',      (self,'cycle_torque'),[],[['On','Off']],m3g.M3GuiWrite)
+        self.gui.add('M3GuiToggle', 'CycleTorque',      (self,'cycle_torque'),[],[['On','Off']],m3g.M3GuiWrite)
         self.gui.add('M3GuiToggle', 'Brake',      (self,'brake'),[],[['On','Off']],m3g.M3GuiWrite)
         self.gui.start(self.step)
 
     def step(self):
         self.proxy.step()
         self.status_dict=self.proxy.get_status_dict()
+        pprint(self.param_dict)
         self.proxy.set_param_from_dict(self.param_dict)
         idx=0
         current=0
         #self.proxy.pretty_print_component(self.actuator_ec[0].name)
         #self.proxy.pretty_print_component(self.joint[0].name)
-	if self.do_scope_torque and self.scope_torque is None and len(self.joint)==1:
-	    self.scope_torque=m3t.M3Scope2(xwidth=100,yrange=None)
-	if self.do_scope_theta and self.scope_theta is None and len(self.joint)==1:
-	    self.scope_theta=m3t.M3Scope2(xwidth=100,yrange=None)
+        if self.do_scope_torque and self.scope_torque is None and len(self.joint)==1:
+            self.scope_torque=m3t.M3Scope2(xwidth=100,yrange=None,title='Torque')
+    
+        if self.do_scope_theta and self.scope_theta is None and len(self.joint)==1:
+            self.scope_theta=m3t.M3Scope2(xwidth=100,yrange=None,title='Theta')
+    
+        if self.do_scope_torquedot and self.scope_torquedot is None and len(self.joint)==1:
+            self.scope_torquedot=m3t.M3Scope(xwidth=100,yrange=None,title='TorqueDot')
+    
+        if self.do_scope_thetadot and self.scope_thetadot is None and len(self.joint)==1:
+            self.scope_thetadot=m3t.M3Scope2(xwidth=100,yrange=None,title='ThetaDot')
+    
+        if self.do_scope_thetadotdot and self.scope_thetadotdot is None and len(self.joint)==1:
+            self.scope_thetadotdot=m3t.M3Scope(xwidth=100,yrange=None,title='ThetaDotDot')
+
+
         for c in self.joint:
             print 'Theta',c.name,c.get_theta_deg()
             if self.brake:
@@ -218,28 +240,41 @@ class M3Proc:
                 self.step_start=time.time()
             self.cycle_last_theta=self.cycle_theta
 
-	    if not self.cycle_last_torque and self.cycle_torque:
+            if not self.cycle_last_torque and self.cycle_torque:
                 self.step_start=time.time()
             self.cycle_last_torque=self.cycle_torque
-	    
+        
             td=self.theta_desire_a[idx]
-	    tqd=self.tq_desire_a[idx]
+            tddot=self.thetadot_desire[idx]
+            tqd=self.tq_desire_a[idx]
+
             if self.cycle_theta:
                 dt=time.time()-self.step_start
                 if math.fmod(dt,self.step_period[idx]/1000.0)>self.step_period[idx]/2000.0:
                     td=self.theta_desire_b[idx]
-		    
-	    if self.cycle_torque:
+            
+            if self.cycle_torque:
                 dt=time.time()-self.step_start
                 if math.fmod(dt,self.step_period[idx]/1000.0)>self.step_period[idx]/2000.0:
                     tqd=self.tq_desire_b[idx]
 
             c.set_theta_deg(td)
-	    c.set_torque_mNm(tqd)
-	    if self.do_scope_theta and self.scope_theta is not None:
-		self.scope_theta.plot(c.get_theta_deg(),td)
-	    if self.do_scope_torque and self.scope_torque is not None:
-		self.scope_torque.plot(c.get_torque_mNm(),tqd)
+            c.set_torque_mNm(tqd)
+    
+            if self.do_scope_theta and self.scope_theta is not None:
+                self.scope_theta.plot(c.get_theta_deg(),td)
+    
+            if self.do_scope_thetadot and self.scope_thetadot is not None:
+                self.scope_thetadot.plot(c.get_thetadot_deg(),tddot)
+    
+            if self.do_scope_thetadotdot and self.scope_thetadotdot is not None:
+                self.scope_thetadotdot.plot(c.get_thetadotdot_deg())
+    
+            if self.do_scope_torque and self.scope_torque is not None:
+                self.scope_torque.plot(c.get_torque_mNm(),tqd)
+            if self.do_scope_torquedot and self.scope_torquedot is not None:
+                self.scope_torquedot.plot(c.get_torquedot_mNm())
+
             current=current+c.get_current_mA()
             c.set_control_mode(self.mode[idx])
             c.set_pwm(int(self.pwm_desire[idx]))
@@ -266,7 +301,5 @@ if __name__ == '__main__':
     except (KeyboardInterrupt,EOFError):
         pass
     t.stop()
-
-
 
 

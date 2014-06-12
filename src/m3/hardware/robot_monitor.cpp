@@ -164,8 +164,8 @@ bool M3RobotMonitor::ReadConfig(const char * filename)
 {
 	if (!M3Component::ReadConfig(filename))
 		return false;
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
+	//YAML::Node doc;
+	//GetYamlDoc(filename, doc);
 	
 	bool has_volt = true;
 	try 

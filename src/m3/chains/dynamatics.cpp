@@ -29,7 +29,7 @@ using namespace KDL;
 
 bool M3Dynamatics::LinkDependentComponents()
 {	
-	m3chain = (M3JointChain*)factory->GetComponent(chain_name);
+	m3chain = dynamic_cast<M3JointChain*>(factory->GetComponent(chain_name));
 	
 	if (m3chain!=NULL)
 		return true;
@@ -102,7 +102,10 @@ void M3Dynamatics::Startup()
 			kdlchain.addSegment(Segment(Joint(Joint::RotZ), frame, frame.Inverse()*RigidBodyInertia(m[i-1],vcog, ri)));
 		}
 	}
-	
+	/*if(kdlchain.getNrOfSegments()!=m3chain->GetNumDof()+3)
+	{
+	  M3_ERR("kdlchain not created properly (ndof:%d,m3chainndof:%d)\n",kdlchain.getNrOfSegments(),m3chain->GetNumDof());
+	}*/
 	//Store no-load payload for last link
 	Frame toTip = kdlchain.getSegment(kdlchain.getNrOfSegments()-1).getFrameToTip();
 	RigidBodyInertia z_I_rigid = toTip*kdlchain.getSegment(kdlchain.getNrOfSegments()-1).getInertia();
@@ -115,9 +118,10 @@ void M3Dynamatics::Startup()
 	idsolver = new ChainIdSolver_RNE(kdlchain, grav);
 	f_ext = std::vector<Wrench>(kdlchain.getNrOfSegments());
 	jjsolver = new ChainJntToJacSolver(kdlchain); 
-
+	
 	SetPayload();
 	SetStateSafeOp();
+	//std::cout<<"kdlchain("<<m3chain->GetName()<<") njts:"<<kdlchain.getNrOfJoints()<<" nseg;"<<kdlchain.getNrOfSegments()<<std::endl;
 }
 
 
@@ -133,9 +137,11 @@ void M3Dynamatics::StepCommand()
 }
 
 void M3Dynamatics::StepStatus()
-{	
+{	return;
 	if (IsStateError())
 		return;
+	tmp_cnt++;
+	
 	// ToDo: find out why copy operator= causes lockups in hard RT	
 	for (int i=0; i<3; i++)
 	{
@@ -143,7 +149,7 @@ void M3Dynamatics::StepStatus()
 		q.qdot(i) = 0.;
 		qdotdot_id(i) = 0.;
 		qdot_id(i) = 0.;
-	}	
+	}
 	for (int i=0; i<ndof; i++)
 	{
 		q.q(i+3) = m3chain->GetThetaRad(i);
@@ -160,12 +166,14 @@ void M3Dynamatics::StepStatus()
 			qdot_id(i+3) = 0.;
 
 	}	
-   	// HACK : Try to use end_wrench
 	SetPayload();
 	//idsolver->SetGrav(grav); // Useless in new KDL
 	
 	f_ext[kdlchain.getNrOfSegments()-1] = end_wrench;	
-	
+	if(tmp_cnt % 50 ==0)
+	{
+	  printf("\nf_ext:%f,%f,%f,%f,%f,%f\n",end_wrench.force.x(),end_wrench.force.y(),end_wrench.force.z(),end_wrench.torque.x(),end_wrench.torque.y(),end_wrench.torque.z());
+	}
 	int result = idsolver->CartToJnt(q.q, qdot_id, qdotdot_id, f_ext, G);
 	
 	for (int i=0; i<G.rows(); i++)
@@ -173,6 +181,10 @@ void M3Dynamatics::StepStatus()
 	if (result==-1)
 		M3_ERR("ID solver returned error %d for M3Kinestatics component %s\n", result, GetName().c_str());
 	jjsolver->JntToJac(q.q, J);
+	printf("chain :[%s];q:[%dx%d]\n",m3chain->GetName().c_str(),q.q.rows(),q.qdot.columns());
+	for(size_t i=0;i<ndof+3;i++)
+	  printf("%f;",q.q(i));
+	printf("\n");
 	fksolver_vel->JntToCart(q, end_2_base_framevel);
 	//fksolver_pos->JntToCart(q.q,T80);
 	end_twist = Twist(end_2_base_framevel.p.v, end_2_base_framevel.M.w);
@@ -180,7 +192,6 @@ void M3Dynamatics::StepStatus()
 	end_rot = end_2_base_framevel.M.R;
 	base_wrench.force = grav*GetMass();
 	base_wrench.torque = Vector(G(0),G(1),G(2))/1000.;
-	
 	for (int i=0; i<ndof; i++){
 		status.set_g(i, G(i+3));
 	}
@@ -221,6 +232,7 @@ void M3Dynamatics::StepStatus()
 // not exceed the size of the previous allocation and not reallocate any memory.
 void M3Dynamatics::SetPayload()
 {
+    
 	if (param.payload_inertia_size()==6)
 	{		
 		//param.payload_inertia defined as Ixx, Ixy, Ixz, Iyy, Iyz, Izz
@@ -240,7 +252,7 @@ void M3Dynamatics::SetPayload()
 	}
 	if (param.payload_com_size()==3)
 	{
-		for (int i; i<3; i++)
+		for (int i=0; i<3; i++)
 			payload_com(i)=param.payload_com(i);		
 	}
 	else
@@ -249,23 +261,32 @@ void M3Dynamatics::SetPayload()
 		M3_ERR("Bug: Bad field size in M3Dynamatics::payload_com...%d instead of 3 \n", param.payload_com_size());
 		PrettyPrint();
 	}
+
+	if(kdlchain.getNrOfSegments()-1<0)
+	{
+		M3_ERR("Number of segments for the chain is wrong: %d \n", kdlchain.getNrOfSegments());
+		PrettyPrint();
+		return;
+	}
 	ToTipSeg = kdlchain.getSegment(kdlchain.getNrOfSegments()-1); // A.H : Get the last segment
 	
-	Frame toTip = ToTipSeg.getFrameToTip();
+ 	toTip = ToTipSeg.getFrameToTip();
 	
 	// REPLACED Segment * end_eff = kdlchain.getMutableSegment(kdlchain.getNrOfSegments()-1);
+	
 	mReal m = GetPayloadMass();
-	Vector com = toTip*GetPayloadCom(); // tranforming from wrist to last joint's frame where we defined it's COM...
-	RotationalInertia rot_inertia = (toTip*RigidBodyInertia(0.,Vector(0.,0.,0.),GetPayloadInertia())).getRotationalInertia();
-						
+	com = toTip*GetPayloadCom(); // tranforming from wrist to last joint's frame where we defined it's COM...
+	rb_inertia = (toTip*RigidBodyInertia(0.,Vector(0.,0.,0.),GetPayloadInertia()));
+	rot_inertia = rb_inertia.getRotationalInertia();			
 	if (m+z_m>0.001)
 	{
-		Vector ecom = (m*com+z_com*z_m)/(m+z_m);		
+
+		ecom = (m*com+z_com*z_m)/(m+z_m);		
 		ToTipSeg.setInertia(toTip.Inverse()*RigidBodyInertia(m+z_m, ecom, rot_inertia + z_I));
 	}
 	else
 	{
-		Vector ecom = (com+z_com);		
+		ecom = (com+z_com);		
 		ToTipSeg.setInertia(toTip.Inverse()*RigidBodyInertia(m+z_m, ecom, rot_inertia + z_I));
 	}
 	// Should not be needed anymore as we modify the segment directly idsolver->chain = kdlchain;
@@ -277,8 +298,8 @@ bool M3Dynamatics::ReadConfig(const char * filename)
 	if (!M3Component::ReadConfig(filename))
 		return false;
 	
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
+	//YAML::Node doc;
+	//GetYamlDoc(filename, doc);
 	
 	mReal rtemp;
 	int itemp;

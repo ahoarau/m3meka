@@ -49,8 +49,8 @@ bool M3LoadX6::ReadConfig(const char * filename)
 {
 	if (!M3Component::ReadConfig(filename))
 		return false;
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
+	//YAML::Node doc;
+	//GetYamlDoc(filename, doc);
 	doc["ec_component"] >> ecc_name;
 	w_sense.ReadConfig(doc["calib"]["wrench"]);
 	for (int i=0;i<6;i++)

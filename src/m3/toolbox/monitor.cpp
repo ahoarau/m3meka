@@ -34,8 +34,8 @@ M3BaseStatus * M3Monitor::GetBaseStatus(){return factory->GetMonitorStatus()->mu
 		
 bool M3Monitor::ReadConfig(const char * filename)
 {
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
+	//YAML::Node doc;
+	//GetYamlDoc(filename, doc);
 	
 	if (!M3Component::ReadConfig(filename))
 		return false;

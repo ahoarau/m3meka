@@ -71,8 +71,8 @@ bool M3TactilePPS22Ec::ReadConfig(const char * filename)
 {
 	if (!M3ComponentEc::ReadConfig(filename))
 		return false;
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
+	//YAML::Node doc;
+	//GetYamlDoc(filename, doc);
 	int val;
 	doc["chid"] >> val;
 	chid = val;

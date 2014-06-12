@@ -64,8 +64,12 @@ public:
 	sizeTmp(0),read_esc_last(0),read_state(0),n_bytes_read(0),n_bytes_data(0),n_bytes_skip(0),
 	write_data_bytes(0),write_size_bytes(0),write_crc_bytes(0)
 	{
-		pendingBufferMutex = PTHREAD_MUTEX_INITIALIZER;
-		rawBufferMutex = PTHREAD_MUTEX_INITIALIZER;
+        pthread_mutex_init (&pendingBufferMutex, NULL);
+        pthread_mutex_init (&rawBufferMutex, NULL);
+        //A.Hoarau : 17.05.14
+        //Deprecated stuff
+        //pendingBufferMutex = PTHREAD_MUTEX_INITIALIZER;
+        //rawBufferMutex = PTHREAD_MUTEX_INITIALIZER;
 	}
 	virtual ~M3SerialPort(){}
 	bool stop_thread;

@@ -87,7 +87,6 @@ pkgpython_PYTHON = \
 	m3/trajectory.py\
 	m3/ctrl_simple.py\
 	m3/ctrl_simple_pb2.py\
-	m3/nanokontrol.py\
 	m3/smoothing_mode_pb2.py\
 	m3/haptic_demo.py\
 	m3/haptic_demo_pb2.py\
@@ -105,7 +104,6 @@ pkgpython_PYTHON = \
 
 
 dist_bin_SCRIPTS = \
-	scripts/m3rt/ps3joy.py\
 	scripts/dev/m3dev_actuator_ec_tuning.py\
 	scripts/dev/m3dev_joint_tuning.py\
 	scripts/dev/m3dev_humanoid_tuning.py\

@@ -907,9 +907,9 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	if (!M3Robot::ReadConfig(filename))
 		return false;
 
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
-	
+	//YAML::Node doc;
+	//GetYamlDoc(filename, doc);
+	assert(doc.size());
 	const YAML::Node * ra_node;
 	const YAML::Node * la_node;
 	const YAML::Node * t_node;

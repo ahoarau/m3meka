@@ -117,15 +117,7 @@ M3JointTrajectory::~M3JointTrajectory()
 	for (int i=0;i<splines.size();i++)
 		delete splines[i];
 }
-M3JointTrajectory::M3JointTrajectory()
-{
-	vidx_last=-1;
-	ndof=0;
-	nactive=0;
-	set_idle_q=false;
-	current=NULL;
-	reset=true;	
-}
+
 void M3JointTrajectory::Reset(vector<bool> active,int num_dof)
 {
 	vidx_last=-1;

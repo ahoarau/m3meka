@@ -33,7 +33,7 @@ enum JOINT_MODE{
 	JOINT_MODE_THETA_GC_MJ = 7;	//Minimum Jerk gravity compensated joint angle control
 	JOINT_MODE_POSE = 8;	//Gravity comp with only D term on 
 	JOINT_MODE_TORQUE_GRAV_MODEL = 9; //Tracks torque from GC model instead of actual torque
-	JOINT_MODE_THETADOT = 10; //Tracks VElocity
+	JOINT_MODE_THETADOT = 10; //Tracks Velocity
 }
 
 message M3JointStatus{

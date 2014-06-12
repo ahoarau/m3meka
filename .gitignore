@@ -25,10 +25,12 @@ libtool
 configure
 config.h
 *.txt.user
-INSTALL
+*.pb.cc
+*.pb.h
 aclocal.m4
 config.h.in
 config/
 m4/
-stamp-h1
-
+.project
+.pydevproject
+.settings/

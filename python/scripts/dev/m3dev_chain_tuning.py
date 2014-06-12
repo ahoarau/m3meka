@@ -29,7 +29,7 @@ import m3.unit_conversion as m3u
 import m3.pwr
 import m3.component_factory as m3f
 import numpy as nu
-import m3.viz as m3v
+#import m3.viz as m3v
 import time
 
 
@@ -46,10 +46,10 @@ class M3Proc:
 
 	def start(self):
 		self.proxy.start()
-		print 'Enable RVIZ [n]?'
+		#print 'Enable RVIZ [n]?'
 		self.rviz = False
-		if m3t.get_yes_no('n'):
-			self.rviz = True
+		#if m3t.get_yes_no('n'):
+		#	self.rviz = True
 			
 		chain_names=self.proxy.get_chain_components()
 		self.chain=[]

@@ -125,6 +125,7 @@ class M3MotorModel
 		MatrixXf eA1;
 		VectorXf eA2, Tprev;
 		bool use_old_temp_values;
+		string doc_path;
 };
 
 }

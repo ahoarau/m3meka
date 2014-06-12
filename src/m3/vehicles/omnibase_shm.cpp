@@ -182,8 +182,8 @@ bool M3OmnibaseShm::ReadConfig(const char * filename)
 	if (!M3CompShm::ReadConfig(filename))
 		return false;
 
-	YAML::Node doc;	
-	GetYamlDoc(filename, doc);	
+	//YAML::Node doc;	
+	//GetYamlDoc(filename, doc);	
 		
 	doc["omnibase_component"] >> omni_name;
 	

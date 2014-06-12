@@ -47,10 +47,10 @@ void M3LoadX1::Shutdown()
 bool M3LoadX1::ReadConfig(const char * filename)
 {
 	int val;
-	YAML::Node doc;
+	//YAML::Node doc;
 	if (!M3Component::ReadConfig(filename))
 		return false;
-	GetYamlDoc(filename, doc);
+	//GetYamlDoc(filename, doc);
 	doc["ec_component"] >> ecc_name;
 	tq_sense.ReadConfig(doc["calib"]["torque"]);
 	torquedot_df.ReadConfig(doc["calib"]["torquedot_df"]);

@@ -87,12 +87,14 @@ void M3JointChain::SetGCoupled()
 
 bool M3JointChain::ReadConfig(const char * filename)
 {	
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
-	
+	//YAML::Node doc;
+	//GetYamlDoc(filename, doc);
+	if(!M3JointArray::ReadConfig(filename)){return false;}
+	try{
 	doc["dynamatics_component"] >> dynamatics_name;	
-
-	return M3JointArray::ReadConfig(filename);
+	}catch(YAML::BadDereference& e){
+		return false;}
+	return true;
 }
 
 }

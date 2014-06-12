@@ -63,12 +63,12 @@ bool M3Actuator::ReadConfig(const char * filename)
 	int val;
 	string str;
 	mReal mval;
-	YAML::Node doc;
+	//YAML::Node doc;
 	config_filename = string(filename);
 
 	if (!M3Component::ReadConfig(filename))
 		return false;
-	GetYamlDoc(filename, doc);
+	//GetYamlDoc(filename, doc);
 	
 	if (IsVersion(ISS) || IsVersion(IQ))
 	{
@@ -120,8 +120,22 @@ bool M3Actuator::ReadConfig(const char * filename)
 		tq_sense.ReadConfig(doc["calib"]["torque"]);
 		at_sense.ReadConfig(doc["calib"]["amp_temp"]);
 		i_sense.ReadConfig( doc["calib"]["current"]);
-		angle_df.ReadConfig( doc["calib"]["angle_df"]);
-		torquedot_df.ReadConfig(doc["calib"]["torquedot_df"]);
+                try 
+                {
+			const YAML::Node& conf = doc["param"]["angle_df"];
+                        angle_df.ReadConfig(conf); // A.H : now allow to modify it online
+                } catch(YAML::TypedKeyNotFound<string> e) 
+                {
+                        angle_df.ReadConfig( doc["calib"]["angle_df"]);
+                }
+                try 
+                {
+			const YAML::Node& conf = doc["param"]["torquedot_df"];
+                        torquedot_df.ReadConfig(conf); // A.H : now allow to modify it online
+                } catch(YAML::TypedKeyNotFound<string> e) 
+                {
+                        torquedot_df.ReadConfig(doc["calib"]["torquedot_df"]);
+                }
 		try 
 		{
 			doc["param"]["max_overload_time"] >> mval;
@@ -211,6 +225,24 @@ bool M3Actuator::LinkDependentComponents()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void M3Actuator::StepFilterParam()
+{
+			//A.H: DFilter Params
+			// Set Order
+			if(ParamThetaDf()->order()) angle_df.GetXdf()->SetOrder(ParamThetaDf()->order());
+			if(ParamThetaDotDf()->order()) angle_df.GetXdotdf()->SetOrder(ParamThetaDotDf()->order());
+			if(ParamThetaDotDotDf()->order()) angle_df.GetXdotdotdf()->SetOrder(ParamThetaDotDotDf()->order());
+			
+			// Set N
+			if(ParamThetaDf()->n()) angle_df.GetXdf()->SetN(ParamThetaDf()->n());
+			if(ParamThetaDotDf()->n()) angle_df.GetXdotdf()->SetN(ParamThetaDotDf()->n());
+			if(ParamThetaDotDotDf()->n()) angle_df.GetXdotdotdf()->SetN(ParamThetaDotDotDf()->n());
+			
+			// Set Cutoff
+			if(ParamThetaDf()->cutoff_freq()) angle_df.GetXdf()->SetCutoff_freq(ParamThetaDf()->cutoff_freq());
+			if(ParamThetaDotDf()->cutoff_freq()) angle_df.GetXdotdf()->SetCutoff_freq(ParamThetaDotDf()->cutoff_freq());
+			if(ParamThetaDotDotDf()->cutoff_freq()) angle_df.GetXdotdotdf()->SetCutoff_freq(ParamThetaDotDotDf()->cutoff_freq());
+}
 
 
 void M3Actuator::StepStatus()
@@ -223,7 +255,9 @@ void M3Actuator::StepStatus()
 	if (IsVersion(DEFAULT) || IsVersion(ISS) || IsVersion(IQ))
 	{
 		M3ActuatorEcStatus * ecs = (M3ActuatorEcStatus * )(ecc->GetStatus());
-
+		
+		//A.H: Added Filter param step
+		this->StepFilterParam();
 		
 		//Calibrate Raw Data
 		
@@ -420,6 +454,22 @@ void M3Actuator::StepCommand()
 	
 	
 	if (IsVersion(IQ)) { // new style is simple pass through, with limit checking
+		//A.H: DFilter Params 
+		// Set Order
+		ParamThetaDf()->set_order(angle_df.GetXdf()->GetOrder());
+		ParamThetaDotDf()->set_order(angle_df.GetXdotdf()->GetOrder());
+		ParamThetaDotDotDf()->set_order(angle_df.GetXdotdotdf()->GetOrder());
+		
+		// Set N
+		ParamThetaDf()->set_n(angle_df.GetXdf()->GetN());
+		ParamThetaDotDf()->set_n(angle_df.GetXdotdf()->GetN());
+		ParamThetaDotDotDf()->set_n(angle_df.GetXdotdotdf()->GetN());
+		
+		// Set Cutoff
+		ParamThetaDf()->set_cutoff_freq(angle_df.GetXdf()->GetCutOffFreq());
+		ParamThetaDotDf()->set_cutoff_freq(angle_df.GetXdotdf()->GetCutOffFreq());
+		ParamThetaDotDotDf()->set_cutoff_freq(angle_df.GetXdotdotdf()->GetCutOffFreq());
+		
 		status.set_mode_cmd(command.ctrl_mode());
 		ec_command->set_brake_off(command.brake_off());
 		switch (command.ctrl_mode())

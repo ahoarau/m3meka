@@ -31,8 +31,8 @@ void M3HapticDemo::Shutdown()
 						  
 bool M3HapticDemo::ReadConfig(const char * filename)
 {
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
+	//YAML::Node doc;
+	//GetYamlDoc(filename, doc);
 	if (!M3Component::ReadConfig(filename))
 		return false;
 	doc["humanoid"] >> bot_name;

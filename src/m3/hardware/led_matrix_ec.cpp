@@ -87,8 +87,8 @@ bool M3LedMatrixEc::ReadConfig(const char * filename)
 {	
 	if (!M3ComponentEc::ReadConfig(filename))
 		return false;	
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
+	//YAML::Node doc;
+	//GetYamlDoc(filename, doc);
 	doc["num_rows"] >> nr;
 	doc["num_cols"] >> nc;
 	mReal val;
