@@ -46,6 +46,8 @@ bool M3ActuatorVirtual::ReadConfig(const char * filename)
 		return false;
 	//GetYamlDoc(filename, doc);
 	doc["joint_component"] >> jnt_name;
+	
+	// DFilter Params 
 	// Set Order
 	ParamThetaDf()->set_order(angle_df.GetXdf()->GetOrder());
 	ParamThetaDotDf()->set_order(angle_df.GetXdotdf()->GetOrder());
@@ -61,10 +63,6 @@ bool M3ActuatorVirtual::ReadConfig(const char * filename)
 	ParamThetaDotDf()->set_cutoff_freq(angle_df.GetXdotdf()->GetCutOffFreq());
 	ParamThetaDotDotDf()->set_cutoff_freq(angle_df.GetXdotdotdf()->GetCutOffFreq());
 	
-	// Set Type
-	ParamThetaDf()->set_type(angle_df.GetXdf()->GetType());
-	ParamThetaDotDf()->set_type(angle_df.GetXdotdf()->GetType());
-	ParamThetaDotDotDf()->set_type(angle_df.GetXdotdotdf()->GetType());
 	
 	
 	return true;
@@ -100,29 +98,7 @@ void M3ActuatorVirtual::StepStatus()
 		M3Transmission * t=joint->GetTransmission();
 		if (t!=NULL)
 		{
-			
-			//ParamThetaDotDf().cutoff_freq();
-			
-			// Set Order
-			angle_df.GetXdf()->SetOrder(ParamThetaDf()->order());
-			angle_df.GetXdotdf()->SetOrder(ParamThetaDotDf()->order());
-			angle_df.GetXdotdotdf()->SetOrder(ParamThetaDotDotDf()->order());
-			
-			// Set N
-			angle_df.GetXdf()->SetN(ParamThetaDf()->n());
-			angle_df.GetXdotdf()->SetN(ParamThetaDotDf()->n());
-			angle_df.GetXdotdotdf()->SetN(ParamThetaDotDotDf()->n());
-			
-			// Set Cutoff
-			angle_df.GetXdf()->SetCutoff_freq(ParamThetaDf()->cutoff_freq());
-			angle_df.GetXdotdf()->SetCutoff_freq(ParamThetaDotDf()->cutoff_freq());
-			angle_df.GetXdotdotdf()->SetCutoff_freq(ParamThetaDotDotDf()->cutoff_freq());
-			
-			// Set Type
-			angle_df.GetXdf()->SetType(ParamThetaDf()->type());
-			angle_df.GetXdotdf()->SetType(ParamThetaDotDf()->type());
-			angle_df.GetXdotdotdf()->SetType(ParamThetaDotDotDf()->type());
-			
+			this->StepFilterParam();
 			// A.H : try to set fake torque to virtual motors = Tdes // TODO: investigate on torque jumps
 			tq_sense.Step(this->GetDesiredTorque()-t->GetTorqueDesJoint()*1000.0/torque_shift);
 			status.set_torque(tq_sense.GetTorque_mNm());

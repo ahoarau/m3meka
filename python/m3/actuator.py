@@ -22,7 +22,6 @@ import m3.actuator_pb2
 import m3.actuator_ec_pb2  as aepb
 from m3.component import M3Component
 from m3.unit_conversion import *
-from scipy import polyval
 
 class M3Actuator(M3Component):
     """Calibrated interface for the M3 Actuator"""

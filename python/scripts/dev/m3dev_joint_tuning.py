@@ -33,7 +33,8 @@ import m3.pwr
 import m3.component_factory as m3f
 import m3.actuator_pb2 as mrt 
 import math
-
+from m3.component_factory import create_component
+from pprint import pprint
 class M3Proc:
     def __init__(self):
         self.proxy = m3p.M3RtProxy()
@@ -203,6 +204,7 @@ class M3Proc:
     def step(self):
         self.proxy.step()
         self.status_dict=self.proxy.get_status_dict()
+        pprint(self.param_dict)
         self.proxy.set_param_from_dict(self.param_dict)
         idx=0
         current=0

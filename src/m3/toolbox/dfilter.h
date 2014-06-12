@@ -114,7 +114,7 @@ namespace m3
 	class M3DFilter
 	{
 		public:
-			M3DFilter():_a(MAXFILTERTERMS,0.0),_b(MAXFILTERTERMS,0.0),_x(MAXFILTERTERMS,0.0),_y(MAXFILTERTERMS,0.0),Nterms(0),buffer_idx(0),T(1.0/RT_TASK_FREQUENCY)
+			M3DFilter():_a(MAXFILTERTERMS,0.0),_b(MAXFILTERTERMS,0.0),_x(MAXFILTERTERMS,0.0),_y(MAXFILTERTERMS,0.0),Nterms(MAXFILTERTERMS),order(2),buffer_idx(0),T(1.0/RT_TASK_FREQUENCY)
 			{
 			  
 			}

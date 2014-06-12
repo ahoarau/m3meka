@@ -59,7 +59,6 @@ message M3ActuatorParamFilter {
     optional int32		order		= 1;
     optional double		cutoff_freq	= 2;
     optional int32		n		= 3;
-    optional string 		type		= 4;
     }
 
 
