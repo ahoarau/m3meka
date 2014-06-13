@@ -14,7 +14,13 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   tf
 )
-find_package(YamlCpp REQUIRED)
+## YAML CPP 
+find_package(PkgConfig REQUIRED)
+#find_package(YamlCpp  REQUIRED)
+pkg_check_modules(YAML_CPP REQUIRED yaml-cpp<=0.5)
+if(NOT ${YAML_CPP_VERSION} VERSION_LESS "0.5")
+add_definitions(-DHAVE_NEW_YAMLCPP)
+endif(NOT ${YAML_CPP_VERSION} VERSION_LESS "0.5")
 find_package(RTAI REQUIRED)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
