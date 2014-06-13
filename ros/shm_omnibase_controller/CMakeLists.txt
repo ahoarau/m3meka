@@ -16,10 +16,14 @@ find_package(catkin REQUIRED COMPONENTS
 ## YAML CPP 
 find_package(PkgConfig REQUIRED)
 #find_package(YamlCpp  REQUIRED)
-pkg_check_modules(YAML_CPP REQUIRED yaml-cpp<=0.5)
-if(NOT ${YAML_CPP_VERSION} VERSION_LESS "0.5")
+pkg_check_modules(YAMLCPP REQUIRED yaml-cpp<=0.5)
+if(NOT ${YAMLCPP_VERSION} VERSION_LESS "0.5")
 add_definitions(-DHAVE_NEW_YAMLCPP)
-endif(NOT ${YAML_CPP_VERSION} VERSION_LESS "0.5")
+endif(NOT ${YAMLCPP_VERSION} VERSION_LESS "0.5")
+link_directories(${YAMLCPP_LIBRARY_DIRS})
+
+
+
 find_package(RTAI REQUIRED)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -108,7 +112,7 @@ SET(LIBS ${catkin_LIBRARIES} ${YAMLCPP_LIBRARIES} ${CMAKE_DL_LIBS} ${RTAI_LIBRAR
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS} 
-  ${YAMLCPP_INCLUDE_DIR}
+  ${YAMLCPP_INCLUDE_DIRS}
   ${RTAI_INCLUDE_DIR}
 )
 
