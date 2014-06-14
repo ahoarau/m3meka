@@ -3,16 +3,11 @@ project(vehicles)
 set(LIBNAME "m3vehicles")
 
 
-
-#set(CMAKE_CXX_FLAGS "-Wall -std=c++0x")
-#set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
-
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 find_package(RTAI REQUIRED)
 #find_package(M3 COMPONENTS HARDWARE ROBOTS CHAINS TOOLBOX SHARED_MEM REQUIRED)
-find_package(Holomni REQUIRED)
+find_package(Holomni)
 find_package(M3rt REQUIRED)
 find_package(Boost REQUIRED)
 find_package(Eigen3 3.2 REQUIRED)
@@ -44,7 +39,7 @@ add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # 
 # End Protobuf stuff
 
 
-SET(LIBS ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3chains m3toolbox m3hardware ${HOLOMNI_LIBRARIES} m3base)
+SET(LIBS ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3chains m3toolbox m3hardware holomni_pcv m3base)
 
 
 set( ALL_SRCS 

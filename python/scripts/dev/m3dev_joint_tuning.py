@@ -204,7 +204,6 @@ class M3Proc:
     def step(self):
         self.proxy.step()
         self.status_dict=self.proxy.get_status_dict()
-        pprint(self.param_dict)
         self.proxy.set_param_from_dict(self.param_dict)
         idx=0
         current=0
