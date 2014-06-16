@@ -80,15 +80,10 @@ void M3MotorModel::ThermalInit(string config_filename)
 	    // Get Old Temps to init model
 	    string temp_filename = config_filename.substr(0, config_filename.length()-4);
 	    temp_filename += "_temps.yml";
-	    
-	    
-	    bool previous_temp_missing = false;	
-	    
-	    
 	    string s(temp_filename);
 	    
-            YAML::Node node;
-	    m3rt::GetYamlDoc(s.c_str(),node,&doc_path);
+        YAML::Node node;
+        bool previous_temp_missing = !(m3rt::GetYamlDoc(s.c_str(),node,&doc_path));
 	    
 	    /*try
 	    {
