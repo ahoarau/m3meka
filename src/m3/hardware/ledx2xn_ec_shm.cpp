@@ -161,8 +161,8 @@ bool M3LedX2XNEcShm::ReadConfig(const char * filename)
 	if (!M3CompShm::ReadConfig(filename))
 		return false;
 
-	YAML::Node doc;	
-	GetYamlDoc(filename, doc);	
+	//YAML::Node doc;	
+	//GetYamlDoc(filename, doc);	
 		
 	doc["led_x2xn_component"] >> led_x2xn_name;
 		

@@ -21,9 +21,9 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #define M3LED_X2XN_EC_SHM_H
 
 #include <m3rt/base/component_shm.h>
-#include "ledx2xn_ec_shm.pb.h"
-#include "ledx2xn_ec.pb.h"
-#include "ledx2xn_ec_shm_sds.h"
+#include "m3/hardware/ledx2xn_ec_shm.pb.h"
+#include "m3/hardware/ledx2xn_ec.pb.h"
+#include "m3/hardware/ledx2xn_ec_shm_sds.h"
 #include "m3/hardware/ledx2xn_ec.h"
 #include "m3/hardware/ledx2xn_ec_shm.h"
 

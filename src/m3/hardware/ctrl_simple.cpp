@@ -55,13 +55,13 @@ void operator >> (const YAML::Node& node, M3ParamPID* pid)
 
 bool M3CtrlSimple::ReadConfig(const char * filename)
 {
-	YAML::Node doc;
-	mReal val;
+	//YAML::Node doc;
+	//mReal val;
 	
 	if (!M3Component::ReadConfig(filename))
 		return false;
 
-	GetYamlDoc(filename, doc);	
+	//GetYamlDoc(filename, doc);	
 	
 	//Misc
 	doc["act_component"] >> act_name;

@@ -792,10 +792,10 @@ bool M3ActuatorEc::LinkDependentComponents()
 
 bool M3ActuatorEc::ReadConfig(const char * filename)
 {
-	YAML::Node doc;
+	//YAML::Node doc;
 	if (!M3ComponentEc::ReadConfig(filename))
 		return false;
-	GetYamlDoc(filename, doc);	
+	//GetYamlDoc(filename, doc);	
 	
 	doc["pwr_component"] >> pwr_name;
 	doc["chid"] >> chid;

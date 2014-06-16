@@ -23,7 +23,24 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #include "m3/toolbox/trajectory.pb.h"
 #include "m3/toolbox/toolbox.h"
 
+#ifdef __RTAI__
+#ifdef __cplusplus
+extern "C" {
+#endif 
+#include <rtai_registry.h>
+#include <rtai.h>
+#include <rtai_lxrt.h>
+#include <rtai_shm.h>
+#include <rtai_sched.h>
+#include <rtai_nam2num.h>
+#include <rtai_sem.h>
+#include <rtai_malloc.h> 
+#ifdef __cplusplus
+}  // extern "C"
+#endif 
 
+#endif
+#define RESERVED_VECTOR_SIZE 10000
 namespace m3
 {
 	using namespace std;
@@ -112,7 +129,13 @@ class JointSplineSegment
 class M3JointTrajectory
 {
 	public:
-		M3JointTrajectory();
+		M3JointTrajectory():vidx_last(-1),ndof(0),nactive(0),set_idle_q(false),current(NULL),reset(true){
+                        // A.H : Let's reserve some space for all the vectors (push back isn't realtime safe :/)
+                        splines.reserve(RESERVED_VECTOR_SIZE);
+                        vias.reserve(RESERVED_VECTOR_SIZE);
+                        active_dof.reserve(RESERVED_VECTOR_SIZE);
+                        spline_idx.reserve(RESERVED_VECTOR_SIZE);
+                }
 		~M3JointTrajectory();
 	public:
 		void Reset(vector<bool> active,int num_dof);

@@ -122,10 +122,10 @@ void M3PwrEc::SetPdoFromCommand(unsigned char * data)
 
 bool M3PwrEc::ReadConfig(const char * filename)
 {
-	YAML::Node doc;
+	//YAML::Node doc;
 	int val;
 	if (!M3ComponentEc::ReadConfig(filename)) return false;
-	GetYamlDoc(filename, doc);
+	//GetYamlDoc(filename, doc);
 	doc["param"]["config"] >> val;
 	param.set_config(val);
 	return true;

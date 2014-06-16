@@ -42,11 +42,11 @@ using namespace std;
 
 bool M3Joint::ReadConfig(const char * filename)
 {
-	YAML::Node doc;
+	//YAML::Node doc;
 	if (!M3Component::ReadConfig(filename))
 		return false;
 
-	GetYamlDoc(filename, doc);	
+	//GetYamlDoc(filename, doc);	
 	doc["actuator_component"] >> act_name;	
 	trans = new M3Transmission();	
 	trans->ReadConfig(doc["transmission"]);	

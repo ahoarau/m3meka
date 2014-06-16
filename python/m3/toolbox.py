@@ -32,15 +32,15 @@ from datetime import timedelta
 from m3.unit_conversion import *
 from threading import Thread
 import m3.component_base_pb2 as mbs
-#import roslib; roslib.load_manifest('m3_toolbox_ros')
-#import rospy
-#import rosbag
+
 from m3.toolbox_core import *
 
 
 def get_m3_animation_path():
         try:
-                return os.environ['M3_ROBOT']+'/animations/'
+                vpath = get_m3_robot_path()
+                path  = [p+'/animations/' for p in vpath]
+                return path
         except KeyError:
                 print 'SET YOUR M3_ROBOT ENVIRONMENT VARIABLE'
         return ''
@@ -54,8 +54,7 @@ def get_omnibase_pwr_component_name(name):
         except (IOError, EOFError):
                 print 'Config file not present:',get_component_config_filename(name),'for',name
                 return
-        jnt_array_name=config['joint_array_component']
-        return get_chain_pwr_component_name(jnt_array_name)
+        return config['pwr_component']
 
 def get_chain_pwr_component_name(name):		
         names=get_chain_joint_names(name)
@@ -183,56 +182,47 @@ def get_actuator_ec_component_name(name):
                 return None
 
 def get_joint_chain_name(name):
-        path=get_m3_config_path()
-        filename= path+'m3_config.yml'
-        f=file(filename,'r')
-        config= yaml.safe_load(f.read())
-
-        for cdir in config['rt_components'].keys():
-                for c in config['rt_components'][cdir].keys():
-                        if (c==name):
-                                for d in config['rt_components'][cdir].keys():
-                                        if config['rt_components'][cdir][d] == 'm3arm' or \
-                                           config['rt_components'][cdir][d] == 'm3torso' or \
-                                           config['rt_components'][cdir][d] == 'm3hand' or \
-                                           config['rt_components'][cdir][d] == 'm3head':
-                                                return d
+        config_all= get_m3_config()
+        for config in config_all:
+            for cdir in config['rt_components'].keys():
+                    for c in config['rt_components'][cdir].keys():
+                            if (c==name):
+                                    for d in config['rt_components'][cdir].keys():
+                                            if config['rt_components'][cdir][d] == 'm3arm' or \
+                                               config['rt_components'][cdir][d] == 'm3torso' or \
+                                               config['rt_components'][cdir][d] == 'm3hand' or \
+                                               config['rt_components'][cdir][d] == 'm3head':
+                                                    return d
         return ''
 
 def get_robot_name():
-        path=get_m3_config_path()
-        filename= path+'m3_config.yml'
-        f=file(filename,'r')
-        config= yaml.safe_load(f.read())
+        config_all= get_m3_config()
+        for config in config_all:
+            for cdir in config['rt_components'].keys():
+                    for c in config['rt_components'][cdir].keys():
+                            if config['rt_components'][cdir][c] == 'm3humanoid' or config['rt_components'][cdir][c] == 'm3humanoid_sea':
+                                    return c
+        return ''
 
-        for cdir in config['rt_components'].keys():
-                for c in config['rt_components'][cdir].keys():
-                        if config['rt_components'][cdir][c] == 'm3humanoid' or config['rt_components'][cdir][c] == 'm3humanoid_sea':
-                                return c
-        return ''
-        return ''
+def __get_hand_name(name):
+    assert name
+    config_all= get_m3_config()
+    hand_name = None
+    for config in config_all:
+        try:
+            hand_name = config[name]
+        except KeyError:
+            pass
+    if not hand_name:
+        print name,' not found in '+m3_config_filename
+    return hand_name
+
+
 def get_right_hand_name():
-    path=get_m3_config_path()
-    filename= path+'m3_config.yml'
-    f=file(filename,'r')
-    config= yaml.safe_load(f.read())
-    right_hand_name = ''
-    try:
-        right_hand_name = config['right_hand']
-    except Exception,e:
-        print 'Caught exception while trying to get right hand name : ',e
-    return right_hand_name
+    return __get_hand_name('right_hand')
+
 def get_left_hand_name():
-    path=get_m3_config_path()
-    filename= path+'m3_config.yml'
-    f=file(filename,'r')
-    config= yaml.safe_load(f.read())
-    left_hand_name = ''
-    try:
-        left_hand_name = config['left_hand']
-    except Exception,e:
-        print 'Caught exception while trying to get left hand name : ',e
-    return left_hand_name
+    return __get_hand_name('left_hand')
 
 """
 * Animation file reader for files provided by Andrea Thomaz
@@ -248,11 +238,11 @@ Note: the joint angles seem scale by a factor of 0.5, and the velocities are all
 """
 
 def get_animation_files():
-        path=get_m3_animation_path()
+        path=get_m3_animation_path()[-1]
         return glob.glob(path+'*.txt')
 
 def get_animation_names():
-        path=get_m3_animation_path()
+        path=get_m3_animation_path()[-1]
         full=glob.glob(path+'*.txt')
         names=[]
         for s in full:
@@ -307,12 +297,12 @@ def load_animation(filename):
         return animation
 
 def get_via_files():
-        path=get_m3_animation_path()
-        return glob.glob(path+'*.via')
+        path=get_m3_animation_path()[-1]
+        return [glob.glob(p+'*.via')[0] for p in path]
 
 def get_via_names():
-        path=get_m3_animation_path()
-        full=glob.glob(path+'*.via')
+        path=get_m3_animation_path()[-1]
+        full=[glob.glob(p+'*.via')[0] for p in path]
         names=[]
         for s in full:
                 names.append(s[s.rfind('/')+1:s.rfind('.')])

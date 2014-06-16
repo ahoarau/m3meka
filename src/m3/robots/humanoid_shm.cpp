@@ -494,8 +494,8 @@ bool M3HumanoidShm::ReadConfig ( const char * filename ) {
     if ( !M3CompShm::ReadConfig ( filename ) )
         return false;
 
-    YAML::Node doc;
-    GetYamlDoc ( filename, doc );
+    //YAML::Node doc;
+   // GetYamlDoc ( filename, doc );
 
     try {
         doc["humanoid_component"] >> bot_name;

@@ -172,8 +172,8 @@ bool M3JointZLiftShm::ReadConfig(const char * filename)
 	if (!M3CompShm::ReadConfig(filename))
 		return false;
 
-	YAML::Node doc;	
-	GetYamlDoc(filename, doc);	
+	//YAML::Node doc;	
+	//GetYamlDoc(filename, doc);	
 		
 	doc["zlift_component"] >> zlift_name;
 		

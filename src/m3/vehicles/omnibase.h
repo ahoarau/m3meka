@@ -22,8 +22,10 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "holomni_pcv/Pcv.h"
 
-#define DEG2RAD(a)	(mReal)2.0*M_PI*((mReal)a)/360.0
-#define RAD2DEG(a)	(mReal)360.0*((mReal)a)/(2.0*M_PI)
+#define DEG2RAD(a)     (mReal)2.0*M_PI*((mReal)a)/360.0
+
+
+#define RAD2DEG(a)     (mReal)360.0*((mReal)a)/(2.0*M_PI)
 
 
 #include "m3rt/base/component.h"

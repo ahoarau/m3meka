@@ -190,7 +190,6 @@ void M3JointArray::StepCommand()
 					joints[i]->SetDesiredControlMode(JOINT_MODE_TORQUE);
 					break;
 				case JOINT_ARRAY_MODE_THETA:
-
 					joints[i]->SetDesiredControlMode(JOINT_MODE_THETA);
 					break;
 				case JOINT_ARRAY_MODE_TORQUE_GC:
@@ -215,21 +214,17 @@ void M3JointArray::StepCommand()
 				case JOINT_ARRAY_MODE_THETADOT:
 					joints[i]->SetDesiredControlMode(JOINT_MODE_THETADOT);
 					break;	
-
 				case JOINT_ARRAY_MODE_SPLINED_TRAJ_GC:
-				{
 					joints[i]->SetDesiredControlMode(JOINT_MODE_THETA_GC);	
 					joints[i]->SetDesiredThetaDeg(traj_des(i));
 					break;
-				}
 				case JOINT_ARRAY_MODE_SPLINED_TRAJ:
-				{
 					joints[i]->SetDesiredControlMode(JOINT_MODE_THETA);	
 					joints[i]->SetDesiredThetaDeg(traj_des(i));
 					break;
-				}
 				default:
 					joints[i]->SetDesiredControlMode(JOINT_MODE_OFF);
+                                       break;
 			};
 		}
 	}
@@ -268,10 +263,11 @@ bool M3JointArray::ReadConfig(const char * filename)
 {
 	if (!M3Component::ReadConfig(filename))
 		return false;
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
+	//YAML::Node doc;
+        //m3rt::GetYamlDoc(filename,doc);
 	doc["ndof"] >> ndof;
-	for(YAML::Iterator it=doc["joint_components"].begin();it!=doc["joint_components"].end();++it) 
+	const YAML::Node& joint_components = doc["joint_components"];
+	for(YAML::Iterator it=joint_components.begin();it!=joint_components.end();++it) 
 	{
    		string key, value;
     		it.first() >> key;

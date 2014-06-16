@@ -21,13 +21,13 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #define M3_ACTUATOR_H
 
 #include "m3rt/base/component.h"
-#include "actuator.pb.h"
-#include "actuator_ec.pb.h"
+#include "m3/hardware/actuator.pb.h"
+#include "m3/hardware/actuator_ec.pb.h"
 #include "actuator_ec.h"
 #include "sensor.h"
 #include "motor.h"
-#include "../toolbox/toolbox.h"
-#include "../toolbox/dfilter.h"
+#include "m3/toolbox/toolbox.h"
+#include "m3/toolbox/dfilter.h"
 #include <google/protobuf/message.h>
 
 
@@ -51,6 +51,9 @@ class M3Actuator : public m3rt::M3Component
 		google::protobuf::Message * GetStatus(){return &status;}
 		google::protobuf::Message * GetParam(){return &param;}
 	public:
+		M3ActuatorParamFilter* ParamThetaDf(){return param.mutable_angle_df()->mutable_theta_df();}
+		M3ActuatorParamFilter* ParamThetaDotDf(){return param.mutable_angle_df()->mutable_thetadot_df();}
+		M3ActuatorParamFilter* ParamThetaDotDotDf(){return param.mutable_angle_df()->mutable_thetadotdot_df();}
 		M3ActuatorParamPID *	ParamPIDTorque(){return param.mutable_pid_torque();}
 		void SetDesiredPwm(int val){command.set_pwm_desired(val);}
 		void SetDesiredControlMode(ACTUATOR_MODE val){ command.set_ctrl_mode(val);}
@@ -117,6 +120,7 @@ class M3Actuator : public m3rt::M3Component
 		void Startup();
 		void Shutdown();
 		void StepStatus();
+		void StepFilterParam();
 		void StepCommand();
 		M3ActuatorStatus status;
 		M3ActuatorCommand command;

@@ -75,8 +75,8 @@ void M3LedX2XNEc::SetPdoFromCommand(unsigned char * data)
 
 bool M3LedX2XNEc::ReadConfig(const char * filename)
 {
-	YAML::Node doc;
-	GetYamlDoc(filename, doc);
+	//YAML::Node doc;
+	//GetYamlDoc(filename, doc);
 	if (!M3ComponentEc::ReadConfig(filename))
 		return false;
 	int val;
