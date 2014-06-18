@@ -85,6 +85,7 @@ message M3ActuatorParam {
     optional double					max_amp_temp		= 6;	//Safety thresh (C)
     optional M3ActuatorParamPID			pid_torque		= 7;	//mode
     optional M3ActuatorParamAngleDf			angle_df		= 8; //Filters on angle
+    optional M3ActuatorParamFilter			torquedot_df		= 9; //Filter on torque
     }
 
 message M3ActuatorCommand {

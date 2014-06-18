@@ -54,6 +54,7 @@ class M3Actuator : public m3rt::M3Component
 		M3ActuatorParamFilter* ParamThetaDf(){return param.mutable_angle_df()->mutable_theta_df();}
 		M3ActuatorParamFilter* ParamThetaDotDf(){return param.mutable_angle_df()->mutable_thetadot_df();}
 		M3ActuatorParamFilter* ParamThetaDotDotDf(){return param.mutable_angle_df()->mutable_thetadotdot_df();}
+		M3ActuatorParamFilter* ParamTorqueDotDf(){return param.mutable_torquedot_df();}
 		M3ActuatorParamPID *	ParamPIDTorque(){return param.mutable_pid_torque();}
 		void SetDesiredPwm(int val){command.set_pwm_desired(val);}
 		void SetDesiredControlMode(ACTUATOR_MODE val){ command.set_ctrl_mode(val);}

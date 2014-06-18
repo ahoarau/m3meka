@@ -73,36 +73,86 @@ bool M3SensorFilter::ReadConfig ( const YAML::Node & doc ) {
         try {
             x_df.ReadConfig ( doc["x_df"] );
             }
-        catch ( YAML::TypedKeyNotFound<string> e ) {}
+        catch ( YAML::TypedKeyNotFound<string> e ) {
+		M3_ERR("x_df not found in doc: %s\n",e.what());
+		return false;
+	}
         }
     if ( type==DF_CHAIN || type==DF_APERIODIC ) {
         try {
             x_df.ReadConfig ( doc["x_df"] );
             }
-        catch ( YAML::TypedKeyNotFound<string> e ) {}
+        catch ( YAML::TypedKeyNotFound<string> e ) {
+		M3_ERR("x_df not found in doc: %s\n",e.what());
+		return false;
+	}
         try {
             xdot_df.ReadConfig ( doc["xdot_df"] );
             }
-        catch ( YAML::TypedKeyNotFound<string> e ) {}
+        catch ( YAML::TypedKeyNotFound<string> e ) {
+		M3_ERR("xdot_df not found in doc: %s\n",e.what());
+		return false;
+	}
         try {
             xdotdot_df.ReadConfig ( doc["xdotdot_df"] );
             }
-        catch ( YAML::TypedKeyNotFound<string> e ) {}
+        catch ( YAML::TypedKeyNotFound<string> e ) {
+		M3_ERR("xdotdot_df not found in do: %s\n",e.what());
+		return false;
+	}
         }
     return true;
     }
 
 bool M3JointFilter::ReadConfig ( const YAML::Node & doc ) {
-    M3SensorFilter::ReadConfig ( doc );
+    string t;
+    doc["type"] >> t;
+    if ( t.compare ( "none" ) ==0 ) type=NONE;
+    if ( t.compare ( "df_chain" ) ==0 ) type=DF_CHAIN;
+    if ( t.compare ( "poly_least_squares" ) ==0 ) type=POLY_LEAST_SQUARES;
+    if ( t.compare ( "df_poly_least_squares" ) ==0 ) type=DF_POLY_LEAST_SQUARES;
+    if ( t.compare ( "df_aperiodic" ) ==0 ) type=DF_APERIODIC;
+
+    if ( type==POLY_LEAST_SQUARES||type==DF_POLY_LEAST_SQUARES ) {
+        int num_data_pts, order;
+        mReal weighting;
+        doc["pls"]["order"] >> order;
+        doc["pls"]["num_data_pts"] >> num_data_pts;
+        doc["pls"]["weighting"] >> weighting;
+        pls.Init ( order,num_data_pts,1.0/RT_TASK_FREQUENCY,weighting );
+        }
     if ( type==DF_POLY_LEAST_SQUARES ) {
-        x_df.ReadConfig ( doc["theta_df"] );
+        try {
+            x_df.ReadConfig ( doc["theta_df"] );
+            }
+        catch ( YAML::TypedKeyNotFound<string> e ) {
+		M3_ERR("theta_df not found in doc: %s\n",e.what());
+		return false;
+	}
         }
     if ( type==DF_CHAIN || type==DF_APERIODIC ) {
-        x_df.ReadConfig ( doc["theta_df"] );
-        xdot_df.ReadConfig ( doc["thetadot_df"] );
-        xdotdot_df.ReadConfig ( doc["thetadotdot_df"] );
+        try {
+            x_df.ReadConfig ( doc["theta_df"] );
+            }
+        catch ( YAML::TypedKeyNotFound<string> e ) {
+		M3_ERR("theta_df not found in doc: %s\n",e.what());
+		return false;
+	}
+        try {
+            xdot_df.ReadConfig ( doc["thetadot_df"] );
+            }
+        catch ( YAML::TypedKeyNotFound<string> e ) {
+		M3_ERR("thetadot_df not found in doc: %s\n",e.what());
+		return false;
+	}
+        try {
+            xdotdot_df.ReadConfig ( doc["thetadotdot_df"] );
+            }
+        catch ( YAML::TypedKeyNotFound<string> e ) {
+		M3_ERR("thetadotdot_df not found in do: %s\n",e.what());
+		return false;
+	}
         }
-
     return true;
     }
 
