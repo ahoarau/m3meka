@@ -121,7 +121,7 @@ void M3Dynamatics::Startup()
 	
 	SetPayload();
 	SetStateSafeOp();
-	//std::cout<<"kdlchain("<<m3chain->GetName()<<") njts:"<<kdlchain.getNrOfJoints()<<" nseg;"<<kdlchain.getNrOfSegments()<<std::endl;
+	std::cout<<"kdlchain("<<m3chain->GetName()<<") njts:"<<kdlchain.getNrOfJoints()<<" nseg;"<<kdlchain.getNrOfSegments()<<std::endl;
 }
 
 
@@ -137,7 +137,7 @@ void M3Dynamatics::StepCommand()
 }
 
 void M3Dynamatics::StepStatus()
-{	return;
+{	
 	if (IsStateError())
 		return;
 	tmp_cnt++;
@@ -170,10 +170,10 @@ void M3Dynamatics::StepStatus()
 	//idsolver->SetGrav(grav); // Useless in new KDL
 	
 	f_ext[kdlchain.getNrOfSegments()-1] = end_wrench;	
-	if(tmp_cnt % 50 ==0)
+	/*if(tmp_cnt % 50 ==0)
 	{
 	  printf("\nf_ext:%f,%f,%f,%f,%f,%f\n",end_wrench.force.x(),end_wrench.force.y(),end_wrench.force.z(),end_wrench.torque.x(),end_wrench.torque.y(),end_wrench.torque.z());
-	}
+	}*/
 	int result = idsolver->CartToJnt(q.q, qdot_id, qdotdot_id, f_ext, G);
 	
 	for (int i=0; i<G.rows(); i++)
@@ -181,10 +181,10 @@ void M3Dynamatics::StepStatus()
 	if (result==-1)
 		M3_ERR("ID solver returned error %d for M3Kinestatics component %s\n", result, GetName().c_str());
 	jjsolver->JntToJac(q.q, J);
-	printf("chain :[%s];q:[%dx%d]\n",m3chain->GetName().c_str(),q.q.rows(),q.qdot.columns());
+	/*printf("chain :[%s];q:[%dx%d]\n",m3chain->GetName().c_str(),q.q.rows(),q.qdot.columns());
 	for(size_t i=0;i<ndof+3;i++)
 	  printf("%f;",q.q(i));
-	printf("\n");
+	printf("\n");*/
 	fksolver_vel->JntToCart(q, end_2_base_framevel);
 	//fksolver_pos->JntToCart(q.q,T80);
 	end_twist = Twist(end_2_base_framevel.p.v, end_2_base_framevel.M.w);
