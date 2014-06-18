@@ -243,6 +243,7 @@ bool M3DFilter::ReadConfig ( const YAML::Node & doc ) {
             }
         if ( t.compare ( "identity" ) ==0 || t.compare ( "none" ) ==0 ) {
             type = IDENTITY;
+	    Nterms = 1;
             Identity_Filter();
             }
         if ( t.compare ( "average" ) ==0 ) {
@@ -367,6 +368,7 @@ void M3DFilter::Identity_Filter() {
     }
 
 mReal M3DFilter::Step ( mReal x_0 ) {
+	mReal yt=0.0;
     switch ( type ) {
         case BUTTERWORTH:
             return Step ( x_0,order+1 );
@@ -377,7 +379,7 @@ mReal M3DFilter::Step ( mReal x_0 ) {
         case LEAST_SQUARES_ESTIMATE:
             return Step ( x_0,Nterms );
         case IDENTITY:
-            return Step ( x_0,Nterms );
+	    return x_0;
         default:
             M3_ERR ( "M3DFilter Step error: Not a valid type.\n" );
             break;

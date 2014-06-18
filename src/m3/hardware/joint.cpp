@@ -215,8 +215,9 @@ void M3Joint::StepStatus()
 	status.set_theta(trans->GetThetaJointDeg());
 	status.set_thetadot(trans->GetThetaDotJointDeg());
 	status.set_thetadotdot(trans->GetThetaDotDotJointDeg());
-	status.set_torque(trans->GetTorqueJoint()); ;  // TODO: Make GetTorque nNm again
+	status.set_torque(trans->GetTorqueJoint());  // TODO: Make GetTorque nNm again
 	status.set_torquedot(trans->GetTorqueDotJoint());
+	status.set_torque_gravity(GetTorqueGravity());
 }
 
 
