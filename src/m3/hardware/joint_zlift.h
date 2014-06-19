@@ -31,8 +31,8 @@ namespace m3
 class M3JointZLift : public M3Joint
 {
 	public:
-		M3JointZLift():cb_payload_mass(0),cb_screw_pitch(0),cb_gearing(0),
-			cb_screw_efficiency(0),cb_mN_per_mNm(1.0),cb_mm_per_deg(1.0),M3Joint(){}
+		M3JointZLift():cb_payload_mass(28),cb_screw_pitch(20.0),cb_gearing(2.0),
+			cb_screw_efficiency(0.9),cb_mN_per_mNm(1.0),cb_mm_per_deg(1.0),M3Joint(){}
 		void SetDesiredPos(mReal val){command.set_q_desired(val/cb_mm_per_deg);} //mm
 		void SetDesiredPosDot(mReal val){command.set_qdot_desired(val/cb_mm_per_deg);} //mm/s
 		mReal GetForce(){return status.torque()*cb_mN_per_mNm;} //mN

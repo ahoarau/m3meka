@@ -28,6 +28,7 @@ import m3.unit_conversion as m3u
 import m3.component_factory as m3f
 import numpy as nu
 import m3.toolbox_head_s2 as m3th
+import m3.humanoid as m3h
 import m3.head_s2csp_ctrl as m3csp
 import math
 import random
@@ -47,7 +48,7 @@ class M3Proc:
 		if bot_name == "":
 			print 'Error: no robot components found:', bot_names
 			return
-		self.bot=m3f.create_component(bot_name)	
+		self.bot=m3h.M3Humanoid(bot_name)	
 		self.bot.initialize(self.proxy)
 		csp_name=self.proxy.get_available_components('m3head_s2csp_ctrl')
 		if len(csp_name)!=1:
@@ -103,7 +104,7 @@ class M3Proc:
 				self.ts_rand=time.time()
 		
 		target = [self.x[0],self.y[0],self.z[0]]
-		
+		self.bot.
 		print 'Target',target
 		
 		if self.mode[0]==0:

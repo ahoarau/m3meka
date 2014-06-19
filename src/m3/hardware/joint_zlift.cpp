@@ -37,9 +37,25 @@ bool M3JointZLift::ReadConfig(const char * filename)
 	doc["calib"]["cb_screw_pitch"] >>  cb_screw_pitch;
 	doc["calib"]["cb_screw_efficiency"] >>  cb_screw_efficiency;
 	cb_mm_per_deg = cb_screw_pitch/(cb_gearing*360.0);
-	cb_mN_per_mNm = 1/(cb_screw_pitch*cb_screw_efficiency/(2.0*M_PI*1000));
+	cb_mN_per_mNm = 1.0/(cb_screw_pitch*cb_screw_efficiency/(2.0*M_PI*1000));
+	cout<<cb_payload_mass<<":"<<cb_gearing<<":"<<cb_screw_pitch<<":"<<cb_screw_efficiency<<":"<<cb_mm_per_deg<<":"<<cb_mN_per_mNm<<endl;
 	return true;
 }
+/*void M3JointZLift::StepStatus()
+{
+	M3Joint::StepStatus();
+	if( tmp_cnt++ == 1000)
+	{
+		M3_DEBUG("-----------\n");
+		M3_DEBUG("pos: %f\n", GetThetaDeg());
+		M3_DEBUG("slew: %f\n", ((M3JointCommand*)GetCommand())->q_slew_rate());
+		M3_DEBUG("stiff: %f\n", ((M3JointCommand*)GetCommand())->q_stiffness());
+		M3_DEBUG("mode: %d\n", (int)((M3JointCommand*)GetCommand())->ctrl_mode());  
+		M3_DEBUG("-----------\n");
+		tmp_cnt = 0;
+	}
+}
+*/
 #define MN_PER_KG 9.80665*1000.0
 void M3JointZLift::StepCommand()
 {
@@ -49,16 +65,7 @@ void M3JointZLift::StepCommand()
 	  command.set_q_desired(GetThetaDeg());
 	M3Joint::StepCommand();
 	
-	/*if( tmp_cnt++ == 1000)
-	{
-	M3_DEBUG("-----------\n");
-	M3_DEBUG("theta: %f\n", ((M3JointCommand*)GetCommand())->q_desired());
-	M3_DEBUG("slew: %f\n", ((M3JointCommand*)GetCommand())->q_slew_rate());
-	M3_DEBUG("stiff: %f\n", ((M3JointCommand*)GetCommand())->q_stiffness());
-	M3_DEBUG("mode: %d\n", (int)((M3JointCommand*)GetCommand())->ctrl_mode());  
-	M3_DEBUG("-----------\n");
-	tmp_cnt = 0;
-	}*/
+
 }
 
 }

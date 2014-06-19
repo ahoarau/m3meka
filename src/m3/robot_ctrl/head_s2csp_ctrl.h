@@ -63,8 +63,8 @@ class M3HeadS2CSPCtrl : public m3rt::M3Component
 		string bot_name,head_name;
 		int tmp_cnt;	
 		
-		Frame wTe, eTw,wTh;
-		Vector xe, xw,xh;
+		Frame wTe,eTw,wTe_l,eTw_l,wTh;
+		Vector xe,xe_l,xw,xh;
 		vector<mReal> theta_des, theta_db, slew_des, origin;
 		vector<M3TimeSlew> target_slew;
 		vector<M3TimeAvg> joint_smooth;

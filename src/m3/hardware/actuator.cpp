@@ -122,16 +122,16 @@ bool M3Actuator::ReadConfig(const char * filename)
 		i_sense.ReadConfig( doc["calib"]["current"]);
                 try 
                 {
-			const YAML::Node& conf = doc["param"]["angle_df"];
-                        angle_df.ReadConfig(conf); // A.H : now allow to modify it online
+			//const YAML::Node& conf = doc["param"]["angle_df"];
+                        angle_df.ReadConfig(doc["param"]["angle_df"]); // A.H : now allow to modify it online
                 } catch(YAML::TypedKeyNotFound<string> e) 
                 {
                         angle_df.ReadConfig( doc["calib"]["angle_df"]);
                 }
                 try 
                 {
-			const YAML::Node& conf = doc["param"]["torquedot_df"];
-                        torquedot_df.ReadConfig(conf); // A.H : now allow to modify it online
+			//const YAML::Node& conf = doc["param"]["torquedot_df"];
+                        torquedot_df.ReadConfig(doc["param"]["torquedot_df"]); // A.H : now allow to modify it online
                 } catch(YAML::TypedKeyNotFound<string> e) 
                 {
                         torquedot_df.ReadConfig(doc["calib"]["torquedot_df"]);
@@ -229,19 +229,22 @@ void M3Actuator::StepFilterParam()
 {
 			//A.H: DFilter Params
 			// Set Order
-			if(ParamThetaDf()->order()) angle_df.GetXdf()->SetOrder(ParamThetaDf()->order());
-			if(ParamThetaDotDf()->order()) angle_df.GetXdotdf()->SetOrder(ParamThetaDotDf()->order());
-			if(ParamThetaDotDotDf()->order()) angle_df.GetXdotdotdf()->SetOrder(ParamThetaDotDotDf()->order());
+			if(ParamTorqueDotDf()->order()>0.0) torquedot_df.SetOrder(ParamTorqueDotDf()->order());
+			if(ParamThetaDf()->order()>0.0) angle_df.GetXdf()->SetOrder(ParamThetaDf()->order());
+			if(ParamThetaDotDf()->order()>0.0) angle_df.GetXdotdf()->SetOrder(ParamThetaDotDf()->order());
+			if(ParamThetaDotDotDf()->order()>0.0) angle_df.GetXdotdotdf()->SetOrder(ParamThetaDotDotDf()->order());
 			
 			// Set N
-			if(ParamThetaDf()->n()) angle_df.GetXdf()->SetN(ParamThetaDf()->n());
-			if(ParamThetaDotDf()->n()) angle_df.GetXdotdf()->SetN(ParamThetaDotDf()->n());
-			if(ParamThetaDotDotDf()->n()) angle_df.GetXdotdotdf()->SetN(ParamThetaDotDotDf()->n());
+			if(ParamTorqueDotDf()->n()>0.0) torquedot_df.SetN(ParamTorqueDotDf()->n());
+			if(ParamThetaDf()->n()>0.0) angle_df.GetXdf()->SetN(ParamThetaDf()->n());
+			if(ParamThetaDotDf()->n()>0.0) angle_df.GetXdotdf()->SetN(ParamThetaDotDf()->n());
+			if(ParamThetaDotDotDf()->n()>0.0) angle_df.GetXdotdotdf()->SetN(ParamThetaDotDotDf()->n());
 			
 			// Set Cutoff
-			if(ParamThetaDf()->cutoff_freq()) angle_df.GetXdf()->SetCutoff_freq(ParamThetaDf()->cutoff_freq());
-			if(ParamThetaDotDf()->cutoff_freq()) angle_df.GetXdotdf()->SetCutoff_freq(ParamThetaDotDf()->cutoff_freq());
-			if(ParamThetaDotDotDf()->cutoff_freq()) angle_df.GetXdotdotdf()->SetCutoff_freq(ParamThetaDotDotDf()->cutoff_freq());
+			if(ParamTorqueDotDf()->cutoff_freq()>0.0) torquedot_df.SetCutoff_freq(ParamTorqueDotDf()->cutoff_freq());
+			if(ParamThetaDf()->cutoff_freq()>0.0) angle_df.GetXdf()->SetCutoff_freq(ParamThetaDf()->cutoff_freq());
+			if(ParamThetaDotDf()->cutoff_freq()>0.0) angle_df.GetXdotdf()->SetCutoff_freq(ParamThetaDotDf()->cutoff_freq());
+			if(ParamThetaDotDotDf()->cutoff_freq()>0.0) angle_df.GetXdotdotdf()->SetCutoff_freq(ParamThetaDotDotDf()->cutoff_freq());
 }
 
 

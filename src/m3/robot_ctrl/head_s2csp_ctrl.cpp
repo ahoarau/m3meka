@@ -94,6 +94,7 @@ void M3HeadS2CSPCtrl::StepCommand()
 	mReal q3c=bot->GetThetaDeg(HEAD,3);
 	mReal q4c=bot->GetThetaDeg(HEAD,4);
 	mReal q5c=bot->GetThetaDeg(HEAD,5);
+	mReal q6c=bot->GetThetaDeg(HEAD,6);
 	
 	theta_des[2]=command.theta_des_j2();
 	
@@ -105,31 +106,37 @@ void M3HeadS2CSPCtrl::StepCommand()
 	wTh = bot->GetHeadBase2WorldTransform();
 	xw = wTh*xh;
 	wTe = bot->GetRightEye2WorldTransform();
-		
+	wTe_l = bot->GetLeftEye2WorldTransform();
+	
 	eTw = wTe.Inverse();
+	eTw_l = wTe_l.Inverse();
 	
 	xe = eTw*xw;
-
+	xe_l = eTw_l*xw;
+	
 	mReal tl= sqrt(xe[0]*xe[0]+ xe[1]*xe[1]+ xe[2]*xe[2]); //length to target in camera frame
 	//Hack to avoid singularities...need to redo w/o atan2 singularity in workspace
 	xe[0]=MAX(tl*0.1,xe[0]); //point must be well in front of camera, otherwise atan2 flips.
+	xe_l[0]=MAX(tl*0.1,xe_l[0]);
 	mReal eye_pan=q5c+RAD2DEG(atan2(xe[0],-1.0*xe[1]))-90.0; //angle that will pan the eye to target
+	mReal eye_pan_l = q6c+RAD2DEG(atan2(xe_l[0],-1.0*xe_l[1]))-90.0;
 	//if (tmp_cnt++%100==0)
 	//  M3_INFO("Atan2J4 %f %f: %f + %f TL %f\n",xe[0],-1.0*xe[1],RAD2DEG(atan2(xe[0],-1.0*xe[1])),q5c,tl);
 	theta_des[5]=eye_pan;
-	theta_des[6]=eye_pan;
+	theta_des[6]=eye_pan_l;
 	
 	
 	mReal eye_tilt=q4c+RAD2DEG(atan2(xe[2],xe[0])); //angle that will tilt the eye to target
 	theta_des[4]=eye_tilt;
 	
-
-	
 	mReal neck_pan;
 	if (ABS(q5c)<param.theta_db(1))
 		neck_pan=q1c;
-	else
-		neck_pan=q1c+q5c;
+	else {
+		mReal neck_pan_r = q1c+q5c;
+		mReal neck_pan_l = q1c+q6c;
+		neck_pan=(neck_pan_r+neck_pan_l)/2.0;
+	}
 	theta_des[1]=neck_pan;
 	
 	mReal head_pitch;
