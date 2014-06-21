@@ -20,9 +20,9 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef M3_PWR_EC_H
 #define M3_PWR_EC_H
 
-#include <m3rt/base/component.h>
-#include <m3rt/base/component_ec.h>
-#include <m3/hardware/pwr_ec.pb.h>
+#include "m3rt/base/component.h"
+#include "m3rt/base/component_ec.h"
+#include "m3/hardware/pwr_ec.pb.h"
 #include <google/protobuf/message.h>
 
 

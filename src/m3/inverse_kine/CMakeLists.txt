@@ -25,7 +25,7 @@ set(swig_module_tmp ${varik_base})
 set(swig_bridge_file_tmp "${swig_module_tmp}.i")
 set(swig_wrap_tmp "${swig_module_tmp}.cpp")
 set(swig_target_tmp "_${varik_base}_")
-message("Processing ${f} -> ${varik} -> ${varik_base} -> ${swig_bridge_file_tmp} -> ${swig_wrap_tmp} -> ${swig_module_tmp}")
+#message("Processing ${f} -> ${varik} -> ${varik_base} -> ${swig_bridge_file_tmp} -> ${swig_wrap_tmp} -> ${swig_module_tmp}")
 
 SET_SOURCE_FILES_PROPERTIES(${swig_bridge_file_tmp} PROPERTIES CPLUSPLUS ON)
 SWIG_ADD_MODULE(${swig_module_tmp} python ${swig_bridge_file_tmp} )
@@ -40,9 +40,9 @@ list(APPEND ALL_MODULES ${SWIG_MODULE_${swig_module_tmp}_REAL_NAME})
 list(APPEND ALL_PY ${swig_module_tmp})
 list(APPEND ALL_HDRS ${f})
 endforeach()
-message("All swig-compiled tar : ${ALL_TAR}")
-message("All swig-compiled modules : ${ALL_MODULES}")
-message("All swig headers : ${ALL_HDRS}")
+#message("All swig-compiled tar : ${ALL_TAR}")
+#message("All swig-compiled modules : ${ALL_MODULES}")
+#message("All swig headers : ${ALL_HDRS}")
 
 execute_process ( 
    COMMAND ${PYTHON_EXECUTABLE} -c 

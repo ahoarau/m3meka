@@ -27,8 +27,8 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdint.h>
 #include <cstdlib>
 #include <climits>
-#include <m3rt/base/m3rt_def.h>
-#include <m3rt/base/toolbox.h>
+#include "m3rt/base/m3rt_def.h"
+#include "m3rt/base/toolbox.h"
 #include <kdl/chain.hpp>
 #include <kdl/segment.hpp>
 #include <kdl/rotationalinertia.hpp>

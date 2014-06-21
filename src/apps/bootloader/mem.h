@@ -21,7 +21,7 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #define _mem_h
 
 #include "m3rt/bootloader/m3_bootloader.h"
-#include <m3rt/base/m3ec_def.h>
+#include "m3rt/base/m3ec_def.h>
 
 
 

@@ -20,10 +20,10 @@
  
 #include <cmath>
 
-#include <m3rt/base/m3rt_def.h>
-#include <m3rt/base/component_factory.h>
+#include "m3rt/base/m3rt_def.h"
+#include "m3rt/base/component_factory.h"
 
-#include "ctrl_simple.h"
+#include "m3/hardware/ctrl_simple.h"
 
 namespace m3{
 	

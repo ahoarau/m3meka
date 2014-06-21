@@ -18,8 +18,8 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
-#include <m3rt/base/component.h>
-#include <m3/shared_mem/torque_shm.h>
+#include "m3rt/base/component.h"
+#include "m3/shared_mem/torque_shm.h"
 ///////////////////////////////////////////////////////
 extern "C" 
 {

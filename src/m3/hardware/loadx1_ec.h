@@ -20,9 +20,9 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef M3_LOADX1_EC_H
 #define M3_LOADX1_EC_H
 
-#include <m3rt/base/component.h>
-#include <m3rt/base/component_ec.h>
-#include <m3/hardware/loadx1_ec.pb.h>
+#include "m3rt/base/component.h"
+#include "m3rt/base/component_ec.h"
+#include "m3/hardware/loadx1_ec.pb.h"
 #include "m3/hardware/pwr.h"
 #include "m3/toolbox/toolbox.h"
 #include <google/protobuf/message.h>

@@ -8,7 +8,7 @@ file(GLOB M3RTSCRIPTS
 "ros_dev/*.py"
 "tutorials/*.py"
 )
-message("Scripts:${M3RTSCRIPTS}")
+
 
 install (
 	FILES ${M3RTSCRIPTS} 

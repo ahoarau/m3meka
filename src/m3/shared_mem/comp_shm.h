@@ -19,9 +19,9 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef  M3RT_COMP_SHM_H
 #define  M3RT_COMP_SHM_H
-#include <m3rt/base/component.h>
-#include <m3rt/base/component_base.pb.h>
-#include <m3/toolbox/toolbox.h>
+#include "m3rt/base/component.h"
+#include "m3rt/base/component_base.pb.h"
+#include "m3/toolbox/toolbox.h"
 #ifdef __cplusplus
 extern "C" {
 #endif 

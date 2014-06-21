@@ -2,9 +2,9 @@
 
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
-#include <m3ctrl_msgs/M3JointCmd.h>
-#include <m3/hardware/joint_mode_ros.pb.h>
-#include <m3/hardware/smoothing_mode.pb.h>
+#include "m3ctrl_msgs/M3JointCmd.h"
+#include "m3/hardware/joint_mode_ros.pb.h>
+#include "m3/hardware/smoothing_mode.pb.h>
 
 
 

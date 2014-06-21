@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with M3.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <m3/hardware/loadx6_ec.h>
+#include "m3/hardware/loadx6_ec.h"
 
 
 namespace m3{

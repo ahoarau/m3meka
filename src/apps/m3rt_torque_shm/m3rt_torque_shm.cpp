@@ -22,8 +22,8 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #include <rtai_shm.h>
 #include <rtai.h>
 #include <rtai_sem.h>
-#include <m3rt/base/m3ec_def.h>
-#include <m3rt/base/m3rt_def.h>
+#include "m3rt/base/m3ec_def.h>
+#include "m3rt/base/m3rt_def.h>
 #include <rtai_nam2num.h>
 #include <rtai_registry.h>
 #include "m3/shared_mem/torque_shm_sds.h"

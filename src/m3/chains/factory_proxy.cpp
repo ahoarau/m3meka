@@ -18,15 +18,15 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
-#include <m3rt/base/component.h>
-#include <m3/chains/joint_array.h>
-#include <m3/chains/arm.h>
-#include <m3/chains/hand.h>
-#include <m3/chains/hand_ua.h>
-#include <m3/chains/gripper.h>
-#include <m3/chains/head.h>
-#include <m3/chains/torso.h>
-#include <m3/chains/dynamatics.h>
+#include "m3rt/base/component.h"
+#include "m3/chains/joint_array.h"
+#include "m3/chains/arm.h"
+#include "m3/chains/hand.h"
+#include "m3/chains/hand_ua.h"
+#include "m3/chains/gripper.h"
+#include "m3/chains/head.h"
+#include "m3/chains/torso.h"
+#include "m3/chains/dynamatics.h"
 
 
 ///////////////////////////////////////////////////////

@@ -20,10 +20,10 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef M3_LED_MATRIX_EC_H
 #define M3_LED_MATRIX_EC_H
 
-#include <m3rt/base/component.h>
-#include <m3rt/base/component_ec.h>
-#include <m3/hardware/led_matrix_ec.pb.h>
-#include <m3/toolbox/toolbox.h>
+#include "m3rt/base/component.h"
+#include "m3rt/base/component_ec.h"
+#include "m3/hardware/led_matrix_ec.pb.h"
+#include "m3/toolbox/toolbox.h"
 #include <google/protobuf/message.h>
 #include "m3/hardware/m3ec_pdo_v1_def.h"
 

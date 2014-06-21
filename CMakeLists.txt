@@ -1,21 +1,20 @@
 cmake_minimum_required(VERSION 2.8)
 project(m3meka)
 
-# Options
+# Tmp solution for the FindXXX.cmake 
+set(CMAKE_MODULE_PATH 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../meka-cmake-modules/Modules/"
+    ${CMAKE_MODULE_PATH})
 
-# Compile in c++11 (not compiling yet)
-OPTION(USE_C++11 "Use c++11 (not compiling yet 10 avril 2014)" 0)
+set(M3_SRC ${PROJECT_SOURCE_DIR}/src ${CMAKE_BINARY_DIR}/src)
+
+# Include dirs to look for
+include_directories(
+    ${M3_SRC}
+    ${CMAKE_BINARY_DIR}/src # The generated protofiles
+)
 
 
-if(USE_C++11)
-	set(CMAKE_CXX_FLAGS "-Wall -std=c++0x")
-	message("-- Using c++11")
-endif(USE_C++11)
-
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
-
-
-
-add_subdirectory(src/m3)
+add_subdirectory(src)
 add_subdirectory(python)
 

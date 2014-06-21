@@ -24,7 +24,7 @@
 
 
 #include <google/protobuf/message.h>
-#include <m3rt/base/component.h>
+#include "m3rt/base/component.h"
 #include "m3/toolbox/toolbox.h"
 #include "m3/toolbox/dfilter.h"
 #include "m3/hardware/ctrl_simple.pb.h"

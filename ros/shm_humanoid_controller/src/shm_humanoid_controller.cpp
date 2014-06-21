@@ -37,8 +37,8 @@ extern "C" {
 
 
 
-#include <m3rt/base/m3ec_def.h>
-#include <m3rt/base/m3rt_def.h>
+#include "m3rt/base/m3ec_def.h>
+#include "m3rt/base/m3rt_def.h>
 #include "m3/robots/humanoid_shm_sds.h"
 #include "m3/hardware/joint_mode_ros.pb.h"
 #include "m3/robots/chain_name.h"
@@ -49,11 +49,11 @@ extern "C" {
 #include <iostream>
 #include <fstream>
 #include "yaml-cpp/yaml.h"
-//#include <m3rt/base/toolbox.h>
+//#include "m3rt/base/toolbox.h>
 
 // Needed for ROS
 #include <ros/ros.h>
-#include <m3ctrl_msgs/M3JointCmd.h>
+#include "m3ctrl_msgs/M3JointCmd.h"
 #include <sensor_msgs/JointState.h>
 #include <tf/transform_broadcaster.h>
 

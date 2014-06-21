@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with M3.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <ledx2xn_ec_shm.h>
+#include "m3/hardware/ledx2xn_ec_shm.h"
 #include "m3rt/base/component_factory.h"
 
 

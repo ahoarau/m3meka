@@ -21,7 +21,7 @@
 #ifndef M3SERIALPDO_H_
 #define M3SERIALPDO_H_
 
-#include "serial_port.h"
+#include "m3/toolbox/serial_port.h"
 
 namespace m3
 {

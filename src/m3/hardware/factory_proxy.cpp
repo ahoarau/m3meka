@@ -18,34 +18,34 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 */
  
 #include <stdio.h>
-#include <m3rt/base/component.h>
-#include <m3/hardware/actuator_ec.h>
-#include <m3/hardware/actuator.h>
-#include <m3/hardware/pwr_ec.h>
-#include <m3/hardware/pwr.h>
-#include <m3/hardware/pwr_virtual.h>
-#include <m3/hardware/joint.h>
-#include <m3/hardware/joint_slave.h>
-#include <m3/hardware/joint_zlift.h>
-#include <m3/hardware/actuator_virtual.h>
-#include <m3/hardware/loadx1_ec.h>
-#include <m3/hardware/loadx1.h>
-#include <m3/hardware/loadx6_ec.h>
-#include <m3/hardware/loadx6.h>
-#include <m3/hardware/loadx6_virtual.h>
-#include <m3/hardware/tactile_pps22_ec.h>
-#include <m3/hardware/ledx2_ec.h>
-#include <m3/hardware/ledx2xn_ec.h>
-#include <m3/hardware/led_matrix_ec.h>
-#include <m3/hardware/robot_monitor.h>
-#include <m3/hardware/log_test.h>
-#include <m3/hardware/led_matrix_ec_shm.h>
-#include <m3/hardware/ledx2xn_ec_shm.h>
+#include "m3rt/base/component.h"
+#include "m3/hardware/actuator_ec.h"
+#include "m3/hardware/actuator.h"
+#include "m3/hardware/pwr_ec.h"
+#include "m3/hardware/pwr.h"
+#include "m3/hardware/pwr_virtual.h"
+#include "m3/hardware/joint.h"
+#include "m3/hardware/joint_slave.h"
+#include "m3/hardware/joint_zlift.h"
+#include "m3/hardware/actuator_virtual.h"
+#include "m3/hardware/loadx1_ec.h"
+#include "m3/hardware/loadx1.h"
+#include "m3/hardware/loadx6_ec.h"
+#include "m3/hardware/loadx6.h"
+#include "m3/hardware/loadx6_virtual.h"
+#include "m3/hardware/tactile_pps22_ec.h"
+#include "m3/hardware/ledx2_ec.h"
+#include "m3/hardware/ledx2xn_ec.h"
+#include "m3/hardware/led_matrix_ec.h"
+#include "m3/hardware/robot_monitor.h"
+#include "m3/hardware/log_test.h"
+#include "m3/hardware/led_matrix_ec_shm.h"
+#include "m3/hardware/ledx2xn_ec_shm.h"
 #ifdef __RTAI__
-//#include <m3/hardware/async_io.h>
+//#include "m3/hardware/async_io.h"
 #endif
-#include <m3/hardware/ctrl_simple.h>
-#include <m3/hardware/joint_zlift_shm.h>
+#include "m3/hardware/ctrl_simple.h"
+#include "m3/hardware/joint_zlift_shm.h"
 
 ///////////////////////////////////////////////////////
 extern "C" 

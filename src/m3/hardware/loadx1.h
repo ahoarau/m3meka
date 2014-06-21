@@ -22,7 +22,7 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "m3rt/base/component.h"
 #include "m3/hardware/loadx1.pb.h"
-#include <m3/hardware/loadx1_ec.pb.h>
+#include "m3/hardware/loadx1_ec.pb.h"
 #include "m3/hardware/loadx1_ec.h"
 #include "m3/hardware/sensor.h"
 #include "m3/toolbox/toolbox.h"

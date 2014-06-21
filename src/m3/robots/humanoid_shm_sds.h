@@ -20,8 +20,8 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef M3HUMANOID_SHM_SDS_H
 #define M3HUMANOID_SHM_SDS_H
 
-#include <m3rt/base/m3rt_def.h>
-#include <m3rt/base/m3ec_def.h>
+#include "m3rt/base/m3rt_def.h"
+#include "m3rt/base/m3ec_def.h"
 #include "m3/chains/joint_array_mode.pb.h"
 #include "m3/hardware/smoothing_mode.pb.h"
 //#include "m3/robots/humanoid.h" // pour passer tout l'humanoid dans la SHM a tester	

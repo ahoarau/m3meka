@@ -20,9 +20,9 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef M3_LEDX2XN_EC_H
 #define M3_LEDX2XN_EC_H
 
-#include <m3rt/base/component.h>
-#include <m3rt/base/component_ec.h>
-#include <m3/hardware/ledx2xn_ec.pb.h>
+#include "m3rt/base/component.h"
+#include "m3rt/base/component_ec.h"
+#include "m3/hardware/ledx2xn_ec.pb.h"
 #include <google/protobuf/message.h>
 #include "m3rt/base/m3ec_def.h"
 #include "m3/hardware/m3ec_pdo_v1_def.h"

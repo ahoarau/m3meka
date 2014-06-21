@@ -22,20 +22,17 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <google/protobuf/message.h>
 
-#include <m3/toolbox/toolbox.h>
-#include <m3/toolbox/log.pb.h>
-#include <m3rt/base/m3ec_def.h>
-#include <m3rt/base/component.h>
-#include <m3rt/base/component_ec.h>
+#include "m3/toolbox/toolbox.h"
+#include "m3/toolbox/log.pb.h"
+#include "m3rt/base/m3ec_def.h"
+#include "m3rt/base/component.h"
+#include "m3rt/base/component_ec.h"
 
 
 #define MAX_PAGE_QUEUE 300 //In case log service not stopped properly, force shutdown
 
 namespace m3
 {
-	using namespace std;	
-	using namespace m3rt;	
-
 	
 class M3MekaLog : public m3rt::M3Component
 {
@@ -65,14 +62,14 @@ class M3MekaLog : public m3rt::M3Component
 		M3StatusLogPage * GetNextPageToWrite();
 		void MarkPageEmpty();
 		void MarkPageFull();
-		vector<M3Component *> components;
-		vector<string> comp_names;
-		string GetNextFilename(int num_entry);
-		string log_name;
-		string path;
+		std::vector<M3Component *> components;
+		std::vector<string> comp_names;
+		std::string GetNextFilename(int num_entry);
+		std::string log_name;
+		std::string path;
 		M3StatusAll * entry;
-		vector<M3StatusLogPage*> pages;
-		vector<bool> is_page_full;		
+		std::vector<M3StatusLogPage*> pages;
+		std::vector<bool> is_page_full;		
 		int start_idx;
 		int downsample_cnt;
 		int downsample_rate;

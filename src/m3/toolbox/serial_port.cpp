@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "serial_port.h"
+#include "m3/toolbox/serial_port.h"
 
 #include <iostream>
 #include <algorithm>

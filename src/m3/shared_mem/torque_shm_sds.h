@@ -20,8 +20,8 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef M3_TORQUE_SHM_SDS_H
 #define M3_TORQUE_SHM_SDS_H
 
-#include <m3rt/base/m3rt_def.h>
-#include <m3rt/base/m3ec_def.h>
+#include "m3rt/base/m3rt_def.h"
+#include "m3rt/base/m3ec_def.h"
 #include "m3/chains/joint_array_mode.pb.h"
 
 #define MAX_NDOF 15  // per limb

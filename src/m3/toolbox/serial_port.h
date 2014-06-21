@@ -20,8 +20,8 @@
 #ifndef M3SerialPort_H_
 #define M3SerialPort_H_
 
-#include <m3rt/base/m3rt_def.h>
-#include <m3rt/base/toolbox.h>
+#include "m3rt/base/m3rt_def.h"
+#include "m3rt/base/toolbox.h"
 #include "m3rt/base/component.h"
 #define SERIAL_PORT_BUFFER_SIZE 4096
 #include <stack>

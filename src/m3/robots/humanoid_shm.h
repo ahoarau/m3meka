@@ -20,9 +20,9 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef M3HUMANOID_SHM_H
 #define M3HUMANOID_SHM_H
 
-#include <m3rt/base/component_shm.h>
-#include "humanoid_shm.pb.h"
-#include "humanoid_shm_sds.h"
+#include "m3rt/base/component_shm.h"
+#include "m3/robots/humanoid_shm.pb.h"
+#include "m3/robots/humanoid_shm_sds.h"
 #include "m3/robots/humanoid.h"
 #include "m3/hardware/loadx6.h"
 #include "m3/chains/hand.h"

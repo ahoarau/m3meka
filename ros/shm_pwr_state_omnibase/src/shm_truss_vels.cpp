@@ -24,8 +24,8 @@
 #include <rtai_shm.h>
 #include <rtai.h>
 #include <rtai_sem.h>
-#include <m3rt/base/m3ec_def.h>
-#include <m3rt/base/m3rt_def.h>
+#include "m3rt/base/m3ec_def.h>
+#include "m3rt/base/m3rt_def.h>
 #include <rtai_nam2num.h>
 #include <rtai_registry.h>
 #include "m3/vehicles/omnibase_shm_sds.h"

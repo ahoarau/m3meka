@@ -20,8 +20,8 @@
  
 #include <stdio.h>
 #include <signal.h>
-#include <m3rt/base/m3ec_def.h>
-#include <m3rt/base/m3rt_def.h>
+#include "m3rt/base/m3ec_def.h>
+#include "m3rt/base/m3rt_def.h>
 #include "m3/vehicles/omnibase_shm_sds.h"
 
 // Rtai

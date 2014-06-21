@@ -20,18 +20,17 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef M3OMNIBASE_SHM_H
 #define M3OMNIBASE_SHM_H
 
-#include <m3rt/base/component_shm.h>
-#include "omnibase_shm.pb.h"
-#include "omnibase_shm_sds.h"
+#include "m3rt/base/component_shm.h"
+#include "m3/vehicles/omnibase.pb.h"
+#include "m3/vehicles/omnibase_shm_sds.h"
 #include "m3/vehicles/omnibase.h"
-
-
+#include "m3/vehicles/omnibase_shm.pb.h"
 namespace m3{
 using namespace std;
 using namespace m3rt;
 
 
-class M3OmnibaseShm : public  m3::M3CompShm{
+class M3OmnibaseShm : public  M3CompShm{
 	public:
 		M3OmnibaseShm(): sds_status_size(0),sds_cmd_size(0),M3CompShm(),omnibase(NULL),pwr(NULL),
 				  max_linear_acceleration(0.), max_rotation_acceleration(0.), max_linear_velocity(0.), max_rotation_velocity(0.)

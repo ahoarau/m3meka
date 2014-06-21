@@ -18,10 +18,10 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
-#include <m3rt/base/component.h>
-#include <m3/robots/humanoid.h>
-#include <m3/robots/humanoid_shm.h>
-#include <m3/robots/haptic_demo.h>
+#include "m3rt/base/component.h"
+#include "m3/robots/humanoid.h"
+#include "m3/robots/humanoid_shm.h"
+#include "m3/robots/haptic_demo.h"
 ///////////////////////////////////////////////////////
 extern "C" 
 {

@@ -18,7 +18,7 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "m3/hardware/motor.h"
-#include "math.h"
+#include <math.h>
 #include <cmath>
 #include <Eigen/LU>
 #include <stdio.h>

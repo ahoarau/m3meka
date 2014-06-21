@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with M3.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <joint_zlift_shm.h>
+#include <m3/hardware/joint_zlift_shm.h>
 #include "m3rt/base/component_factory.h"
 
 

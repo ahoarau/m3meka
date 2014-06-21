@@ -2,29 +2,28 @@ cmake_minimum_required(VERSION 2.8)
 project(hardware)
 set(LIBNAME "m3hardware")
 
-#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-
 find_package(RTAI REQUIRED)
-#find_package(M3 COMPONENTS HARDWARE ROBOTS CHAINS TOOLBOX SHARED_MEM REQUIRED)
+find_package(M3 COMPONENTS TOOLBOX)
 find_package(M3rt REQUIRED)
 find_package(Boost REQUIRED)
 find_package(Eigen3 3.0 REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(OROCOS-KDL REQUIRED)
-SET(M3_INCLUDE_DIR 
-	${CMAKE_CURRENT_SOURCE_DIR}/../..
-	${CMAKE_CURRENT_SOURCE_DIR}/../chains
-	${CMAKE_CURRENT_SOURCE_DIR}/../toolbox
-)
+#SET(M3_INCLUDE_DIR 
+#	${CMAKE_CURRENT_SOURCE_DIR}/../..
+#	${CMAKE_CURRENT_SOURCE_DIR}/../chains
+#	${CMAKE_CURRENT_SOURCE_DIR}/../toolbox
+#)
 
-include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${M3_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${KDL_INCLUDE_DIRS})
+include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${M3_INCLUDE_DIR} ${KDL_INCLUDE_DIRS})
 
 
 # Start Protobuf stuff
 ## Cpp protobufs
 file(GLOB ProtoFiles "${CMAKE_CURRENT_SOURCE_DIR}/*.proto")
 SET(PROTOBUF_IMPORT_DIRS ${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})
-PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${CMAKE_CURRENT_SOURCE_DIR} ${ProtoFiles})
+message("PROTOBUF_IMPORT_DIRS ${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR}")
+PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles})
 set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
                             GENERATED TRUE)
 add_custom_target(${LIBNAME}_protobuf_tmp  ALL DEPENDS ${ProtoSources}) # Force the re-generation
@@ -95,7 +94,7 @@ loadx6_ec.h
 loadx6.h
 loadx6_virtual.h
 log_test.h
-m3ec_def.h
+m3ec_def_meka.h
 m3ec_pdo_v0_def.h
 m3ec_pdo_v1_def.h
 m3ec_pdo_v2_def.h

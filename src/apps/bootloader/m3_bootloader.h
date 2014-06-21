@@ -21,9 +21,9 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #define M3_BOOTLOADER_H
 
 
-#include <m3rt/base/m3ec_def.h>
-//#include <m3/hardware/m3ec_pdo_v1_def.h>
-#include <m3rt/base/m3rt_def.h>
+#include "m3rt/base/m3ec_def.h>
+//#include "m3/hardware/m3ec_pdo_v1_def.h>
+#include "m3rt/base/m3rt_def.h>
 
 
 #define BUFFER_SIZE         4096

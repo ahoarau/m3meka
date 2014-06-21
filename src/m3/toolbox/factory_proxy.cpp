@@ -18,8 +18,8 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 */
  
 #include <stdio.h>
-#include <m3/toolbox/monitor.h>
-#include <m3/toolbox/log.h>
+#include "m3/toolbox/monitor.h"
+#include "m3/toolbox/log.h"
 ///////////////////////////////////////////////////////
 extern "C" 
 {
