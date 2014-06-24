@@ -6,12 +6,13 @@ set(CMAKE_MODULE_PATH
     "${CMAKE_CURRENT_SOURCE_DIR}/../meka-cmake-modules/Modules/"
     ${CMAKE_MODULE_PATH})
 
-set(M3_SRC ${PROJECT_SOURCE_DIR}/src ${CMAKE_BINARY_DIR}/src)
+set(M3_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src 
+)
 
 # Include dirs to look for
 include_directories(
     ${M3_SRC}
-    ${CMAKE_BINARY_DIR}/src # The generated protofiles
+    ${CMAKE_CURRENT_BINARY_DIR}/src
 )
 
 

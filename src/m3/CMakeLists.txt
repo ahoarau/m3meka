@@ -11,8 +11,10 @@ vehicles
 )
 
 foreach(SUB ${SUBS})
-ADD_SUBDIRECTORY(${SUB})
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/${SUB})
 endforeach()
 
-
+foreach(SUB ${SUBS})
+ADD_SUBDIRECTORY(${SUB})
+endforeach()
 
