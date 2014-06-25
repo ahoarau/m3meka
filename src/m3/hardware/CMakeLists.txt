@@ -8,7 +8,7 @@ find_package(M3rt REQUIRED)
 find_package(Boost REQUIRED)
 find_package(Eigen3 3.0 REQUIRED)
 find_package(Protobuf REQUIRED)
-find_package(OROCOS-KDL REQUIRED)
+#find_package(OROCOS-KDL REQUIRED)
 #SET(M3_INCLUDE_DIR 
 #	${CMAKE_CURRENT_SOURCE_DIR}/../..
 #	${CMAKE_CURRENT_SOURCE_DIR}/../chains
