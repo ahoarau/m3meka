@@ -49,22 +49,22 @@ class M3LedMatrixEc(M3Component):
 	self.anim_name=None
 
     def set_slew_rate(self,val):
-	self.param.slew_rate=val
+	   self.param.slew_rate=val
     def enable_leds(self):
-	self.command.enable=True	
+	   self.command.enable=True	
 	
     def disable_leds(self):
-	self.command.enable=False
+	       self.command.enable=False
     
     def read_config(self):
-	M3Component.read_config(self)
+	       M3Component.read_config(self)
 	
     def set_rgb(self,rr,cc,rgb):
 	#Invert rows
-	if rr < self.num_row and cc<self.num_col:
-	    self.command.row[abs(self.ra-rr)].column[cc].r = rgb[0]
-	    self.command.row[abs(self.ra-rr)].column[cc].g = rgb[1]
-	    self.command.row[abs(self.ra-rr)].column[cc].b = rgb[2]
+    	if rr < self.num_row and cc<self.num_col:
+    	    self.command.row[abs(self.ra-rr)].column[cc].r = rgb[0]
+    	    self.command.row[abs(self.ra-rr)].column[cc].g = rgb[1]
+    	    self.command.row[abs(self.ra-rr)].column[cc].b = rgb[2]
     
     def set_image(self,img):
 	pix = img.load()
@@ -84,12 +84,12 @@ class M3LedMatrixEc(M3Component):
 		self.set_rgb(rr,cc,rgb)
 		
     def set_all_off(self):
-	for rr in range(self.num_row):
-	    for cc in range(self.num_col):
-		self.set_rgb(rr,cc,[0,0,0])
+    	for rr in range(self.num_row):
+    	    for cc in range(self.num_col):
+    		self.set_rgb(rr,cc,[0,0,0])
 		
     def get_animations(self):
-	return self.animations.keys()
+        return self.animations.keys()
     
     def start_animation(self,anim_name,cycle=False,persist=False):
 	"""
@@ -97,30 +97,30 @@ class M3LedMatrixEc(M3Component):
 	cycle: put animation on loop
 	persist: if not in loop, to hold the last frame indefinitely
 	"""
-	self.seq_id=0
-	self.anim_name=anim_name
-	self.cycle=cycle
-	self.persist=persist
-	self.time_start=None
-	self.active_seq=self.animations[self.anim_name]['sequence']
-	
+    	self.seq_id=0
+    	self.anim_name=anim_name
+    	self.cycle=cycle
+    	self.persist=persist
+    	self.time_start=None
+    	self.active_seq=self.animations[self.anim_name]['sequence']
+
     def load_animation(self, anim_name):
 	"""Call with each animation to load at startup"""
-	ani_path = m3t.get_m3_animation_path()
-	filename = ani_path + "mouth/" + anim_name + ".yml"
-	try:
-            f=file(filename,'r')
-            self.animations[anim_name]= yaml.safe_load(f.read())
-        except (IOError, EOFError):
-            print 'Animation file not present:',filename
-            return
-	for k in self.animations[anim_name]['sequence']:
-	    filename = ani_path + "/mouth/" + k['file']	
-	    try:
-		k['image']= Image.open(filename)
-	    except (IOError, EOFError):
-		print 'File',filename,'not found'
-		
+    	ani_paths = m3t.get_m3_animation_path()
+    	for ani_path in ani_paths:
+    	    filename = ani_path + "mouth/" + anim_name + ".yml"
+    	    try:
+                f=file(filename,'r')
+                self.animations[anim_name]= yaml.safe_load(f.read())
+            except (IOError, EOFError):
+                print 'Animation file not present:',filename
+        for k in self.animations[anim_name]['sequence']:
+            filename = ani_path + "/mouth/" + k['file']	
+            try:
+                k['image']= Image.open(filename)
+            except (IOError, EOFError):
+                print 'File',filename,'not found'
+            
     def convert_color(self,im,rgb):
 	im_YCbCr = im.convert("YCbCr")	
 	im_split = im_YCbCr.split()
@@ -134,16 +134,23 @@ class M3LedMatrixEc(M3Component):
 	return im_new_rgb
     
     def get_available_images(self):
-	return glob.glob(m3t.get_m3_animation_path() + "mouth/*.tiff")
+    	all_img= [glob.glob(p + "mouth/*.tiff") for p in m3t.get_m3_animation_path()]
+        return [item for sublist in all_img for item in sublist]
     
     def get_image(self,image_name):
-	filename = m3t.get_m3_animation_path() + "mouth/" + image_name + ".tiff"
-	try:
-	    img=Image.open(filename)
-	    return img
-	except (IOError, EOFError):
-	    print 'File',filename,'not found'
-	    return None
+    	images = self.get_available_images()
+        print 'images:',images
+    	try:
+            for image in images:
+                if image_name in image:
+        	       img=Image.open(image)
+        	       return img
+            else:
+                print 'File',image_name,'not found'
+                return None
+    	except (IOError, EOFError):
+    	    print 'File',filename,'not found'
+    	    return None
 	
     def load_command(self):
         """Called before every command msg sent from proxy"""

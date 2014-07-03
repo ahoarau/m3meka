@@ -50,8 +50,8 @@ class M3HeadToolboxS2:
 				  'EyePanRight':5,
 				  'EyePanLeft':6}
 
-		fcr=m3t.get_m3_ros_config_path()+'cameras/'+self.config['right_camera_calibration']+'.yml'
-		fcl=m3t.get_m3_ros_config_path()+'cameras/'+self.config['left_camera_calibration']+'.yml'
+		fcr=m3t.get_m3_ros_config_path()[-1]+'cameras/'+self.config['right_camera_calibration']+'.yml'
+		fcl=m3t.get_m3_ros_config_path()[-1]+'cameras/'+self.config['left_camera_calibration']+'.yml'
 		try:
 			f=file(fcr,'r')
 			cr= yaml.safe_load(f.read())
@@ -130,7 +130,7 @@ class M3HeadToolboxS2:
 class M3HeadToolboxS2ISS(M3HeadToolboxS2):
 	def __init__(self,name,bot):
 		M3HeadToolboxS2.__init__(self,name,bot)
-		fcm=m3t.get_m3_ros_config_path()+'cameras/'+self.config['middle_camera_calibration']+'.yml'
+		fcm=m3t.get_m3_ros_config_path()[-1]+'cameras/'+self.config['middle_camera_calibration']+'.yml'
 		try:
 			f=file(fcm,'r')
 			cm= yaml.safe_load(f.read())

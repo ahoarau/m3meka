@@ -87,7 +87,7 @@ class M3Proc:
             self.proxy.make_safe_operational(hum[0])
 	
         #Setup postures
-	self.posture_filename=m3t.get_m3_animation_path()+self.chain.name+'_postures.yml'
+	self.posture_filename=m3t.get_m3_animation_path()[-1]+self.chain.name+'_postures.yml'
 	f=file(self.posture_filename,'r')
 	self.data= yaml.safe_load(f.read())
 	self.param=self.data['param']

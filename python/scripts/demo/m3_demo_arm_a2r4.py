@@ -193,7 +193,7 @@ class M3Proc:
 
 		# ##### Load Via Trajectories ############################
 		self.via_files={'TrajA':'kha1.via'}
-		pt=m3t.get_m3_animation_path()
+		pt=m3t.get_m3_animation_path()[-1]
 		for k in self.via_files.keys():
 			fn=pt+self.via_files[k]
 			try:
@@ -205,7 +205,7 @@ class M3Proc:
 
 		# ##### Hand Trajectories ############################
 		if self.hand is not None:
-			pf=m3t.get_m3_animation_path()+hand_name+'_postures.yml'
+			pf=m3t.get_m3_animation_path()[-1]+hand_name+'_postures.yml'
 			f=file(pf,'r')
 			self.hand_data= yaml.safe_load(f.read())
 			f.close()

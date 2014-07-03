@@ -8,14 +8,14 @@ find_package(M3rt REQUIRED)
 find_package(Boost REQUIRED)
 find_package(Eigen3 3.0 REQUIRED)
 find_package(Protobuf REQUIRED)
-#find_package(OROCOS-KDL REQUIRED)
+find_package(orocos_kdl REQUIRED)
 #SET(M3_INCLUDE_DIR 
 #	${CMAKE_CURRENT_SOURCE_DIR}/../..
 #	${CMAKE_CURRENT_SOURCE_DIR}/../chains
 #	${CMAKE_CURRENT_SOURCE_DIR}/../toolbox
 #)
 
-include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${M3_INCLUDE_DIR} ${KDL_INCLUDE_DIRS})
+include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${M3_INCLUDE_DIR} ${orocos_kdl_INCLUDE_DIRS})
 
 
 # Start Protobuf stuff
@@ -35,7 +35,7 @@ PROTOBUF_GENERATE_PYTHON(PySources ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles})
 add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # force the generation
 # End Protobuf stuff
 
-SET(LIBS ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} m3toolbox orocos-kdl m3base)
+SET(LIBS ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} m3toolbox ${orocos_kdl_LIBRARIES} m3base)
 
 
 set( ALL_SRCS 

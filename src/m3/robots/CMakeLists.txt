@@ -9,7 +9,7 @@ find_package(M3rt REQUIRED)
 find_package(Boost REQUIRED)
 find_package(Eigen3 3.0 REQUIRED)
 find_package(Protobuf REQUIRED)
-#find_package(OROCOS-KDL REQUIRED)
+find_package(orocos_kdl REQUIRED)
 #SET(M3_INCLUDE_DIR 
 #	${CMAKE_CURRENT_SOURCE_DIR}/../..
 #	${CMAKE_CURRENT_SOURCE_DIR}/../chains
@@ -37,7 +37,7 @@ add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # 
 # End Protobuf stuff
 
 
-SET(LIBS ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3chains m3toolbox m3hardware orocos-kdl m3base)
+SET(LIBS ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3chains m3toolbox m3hardware ${orocos_kdl_LIBRARIES} m3base)
 
 
 set( ALL_SRCS 

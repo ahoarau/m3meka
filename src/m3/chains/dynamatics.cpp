@@ -163,7 +163,7 @@ void M3Dynamatics::StepStatus()
 
 	}	
 	SetPayload();
-	//idsolver->SetGrav(grav); // Useless in new KDL
+	//idsolver->SetGrav(grav);
 	
 	f_ext[kdlchain.getNrOfSegments()-1] = end_wrench;	
 
@@ -258,7 +258,7 @@ void M3Dynamatics::SetPayload()
 		PrettyPrint();
 		return;
 	}
-	ToTipSeg = &(kdlchain.segments[kdlchain.getNrOfSegments()-1]); // A.H : Get the last segment
+	ToTipSeg = kdlchain.getMutableSegment(kdlchain.getNrOfSegments()-1); // A.H : Get the last segment
 	
  	toTip = ToTipSeg->getFrameToTip();
 	

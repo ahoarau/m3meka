@@ -4,3 +4,7 @@ build
 *~
 # Kdevelop stuff
 *kdev4*
+# Eclipse files
+.project
+.pydevproject
+.settings
