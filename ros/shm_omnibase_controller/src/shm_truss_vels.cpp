@@ -21,8 +21,8 @@
 
 #include <stdio.h>
 #include <signal.h>
-#include "m3rt/base/m3ec_def.h>
-#include "m3rt/base/m3rt_def.h>
+#include "m3rt/base/m3ec_def.h"
+#include "m3rt/base/m3rt_def.h"
 #include "m3/vehicles/omnibase_shm_sds.h"
 
 // Rtai
@@ -41,7 +41,7 @@ extern "C" {
 
 // Needed for ROS
 #include <ros/ros.h>
-#include <shm_omnibase_controller/M3TrussVel.h>
+#include "shm_omnibase_controller/M3TrussVel.h"
 #include <tf/transform_broadcaster.h>
 
 

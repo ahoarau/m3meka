@@ -37,8 +37,9 @@ extern "C" {
 
 
 
-#include "m3rt/base/m3ec_def.h>
-#include "m3rt/base/m3rt_def.h>
+#include "m3rt/base/m3ec_def.h"
+#include "m3rt/base/m3rt_def.h"
+#include "m3rt/base/toolbox.h"
 #include "m3/robots/humanoid_shm_sds.h"
 #include "m3/hardware/joint_mode_ros.pb.h"
 #include "m3/robots/chain_name.h"
@@ -598,7 +599,7 @@ int main (int argc, char **argv)
 	int cntr=0;
 	
 	YAML::Node doc;
-	GetYamlDoc("shm_humanoid_config.yml", doc);
+	m3rt::GetYamlDoc("shm_humanoid_config.yml", doc);
 	//GetYamlDoc("m3_config.yml", doc);
 	
 	int ndof;
