@@ -129,7 +129,7 @@ class JointSplineSegment
 class M3JointTrajectory
 {
 	public:
-		M3JointTrajectory():vidx_last(-1),ndof(0),nactive(0),set_idle_q(false),current(NULL),reset(true){
+		M3JointTrajectory():vidx_last(-1),ndof(0),nactive(0),set_idle_q(false),current(NULL),reset(true),current_idx(0){
                         // A.H : Let's reserve some space for all the vectors (push back isn't realtime safe :/)
                         splines.reserve(RESERVED_VECTOR_SIZE);
                         vias.reserve(RESERVED_VECTOR_SIZE);
@@ -156,6 +156,7 @@ class M3JointTrajectory
 		bool reset;
 		mReal ts_start;
 		JointSplineSegment * current;
+		int current_idx;
 		int completed_spline_idx;
 		int tmp_cnt;
 		JntArray theta_rad, thetadot_rad, q_des_rad;

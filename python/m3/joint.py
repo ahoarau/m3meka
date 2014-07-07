@@ -98,7 +98,7 @@ class M3Joint(M3Component):
     def get_theta_deg(self): 
         return self.status.theta
     def get_theta_rad(self): 
-        return deg2rad(self.status.theta)
+        return nu.deg2rad(self.status.theta)
     def get_thetadot_rad(self): 
         return deg2rad(self.status.thetadot)
     def get_thetadot_deg(self): 

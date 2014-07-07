@@ -114,18 +114,20 @@ mReal M3MinJerkTrajectory::Step (int64_t timestamp, mReal theta_des, mReal theta
 
 M3JointTrajectory::~M3JointTrajectory()
 {
-	for (int i=0;i<splines.size();i++)
-		delete splines[i];
+	splines.clear();
+	//for (int i=0;i<splines.size();i++)
+		//delete splines[i];
 }
 
 void M3JointTrajectory::Reset(vector<bool> active,int num_dof)
 {
 	vidx_last=-1;
 	//M3_INFO("M3JointTrajectory::Reset %d splines active \n",splines.size());
-	for (int i=0;i<splines.size();i++)
+	// A.H : no new= no delete
+	/*for (int i=0;i<splines.size();i++)
 	{
 		delete splines[i];
-	}
+	}*/
 	splines.clear();
 	spline_idx.clear();
 	vias.clear();
@@ -185,7 +187,7 @@ void M3JointTrajectory::AddVia(const M3JointVia & v)
 			
 			new_via.set_qdot_avg(i,DEG2RAD(v.qdot_avg(i)));
 		}
-//M3_INFO("Added via %d: J0 %f\n",v.idx(),v.q_desired(0));
+		//m3rt::M3_INFO("Added via %d: J0 %f\n",v.idx(),v.q_desired(0));
 		vias.push_back(new_via);
 	}
 }
@@ -310,7 +312,7 @@ int M3JointTrajectory::Step(int64_t timestamp, JntArray & theta_deg, JntArray & 
 		{			
 			completed_spline_idx=spline_idx[0];
 			set_idle_q=true;			
-			delete splines[0];			
+			//delete splines[0];			
 			splines.erase(splines.begin());			
 			spline_idx.erase(spline_idx.begin());			
 			for(int i=0; i<ndof; i++)			
