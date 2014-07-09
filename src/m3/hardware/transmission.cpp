@@ -169,6 +169,20 @@ mReal M3Transmission::GetThetaDesActuatorDeg()
 			return 0.0;
 	}
 }
+mReal M3Transmission::GetThetaDotDesActuatorDeg()
+{
+	switch(type)
+	{
+		
+		case GEAR_TRANS:
+			return GetThetaDotDesJointDeg()*qj_to_qa[0];//joint->sensor->actuator
+		case DIFF_TRANS:
+			return GetThetaDotDesJointDeg()*qj_to_qa[0]+cpt->GetThetaDotDesJointDeg()*qj_to_qa[1];
+			//return GetThetaDesJointDeg()*qj_to_qa[0]+cpt->GetThetaJointDeg()*qj_to_qa[1];
+		default: 
+			return 0.0;
+	}
+}
 //////////////////////////////////////////////////////
 //Input joint-referenced desired angle
 //Ouput sensor-referenced desired angle

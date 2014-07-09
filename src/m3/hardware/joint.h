@@ -119,6 +119,7 @@ class M3Joint: public m3rt::M3Component
 		M3PID pid_tq_grav_model;		
 		M3PID pid_theta;
 		M3PID pid_theta_gc;
+		M3PID pid_thetadot_gc;
 		M3TimeSlew q_slew;
 		M3TimeSlew q_on_slew;
 		M3TimeSlew tq_on_slew;

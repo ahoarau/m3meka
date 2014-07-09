@@ -52,7 +52,7 @@ namespace m3
 class M3Transmission
 {
 	public:
-		M3Transmission():type(0),cpj(0),act(0),qj_des(0),tqj_des(0),cpt(0){}
+		M3Transmission():type(0),cpj(0),act(0),qj_des(0),tqj_des(0),qdotj_des(0),cpt(0){}
 		mReal GetThetaJointDeg();
 		mReal GetThetaDotJointDeg();		
 		mReal GetThetaDotDotJointDeg();
@@ -76,11 +76,19 @@ class M3Transmission
 		mReal GetThetaDesActuatorDeg();
 		mReal GetThetaDesJointDeg(){return qj_des;};
 		
+		
+		//A.H: Added ThetaDot
+		mReal GetThetaDotDesActuatorDeg();
+		mReal GetThetaDotDesJointDeg(){return qdotj_des;};
+		
+		
 		//mReal GetTorqueDesSensor();
 		mReal GetTorqueDesActuator();
 		mReal GetTorqueDesJoint(){return tqj_des;}
 		
 		void SetThetaDesJointDeg(mReal q_joint){qj_des=q_joint;}
+		//A.H: Added ThetaDot
+		void SetThetaDotDesJointDeg(mReal qdot_joint){qdotj_des=qdot_joint;}
 		void SetTorqueDesJoint(mReal tq_joint){tqj_des=tq_joint;}
 		
 		virtual bool LinkDependentComponents(m3rt::M3ComponentFactory * f); 
@@ -96,7 +104,7 @@ class M3Transmission
 		vector<mReal> qj_to_qa; 	//angle joint-to-actuator ratios
 		vector<mReal> tqs_to_tqj;	//torque sensor-to-joint ratios
 		vector<mReal> tqj_to_tqa;	//torque joint-to-actuator ratios
-		mReal qj_des, tqj_des;
+		mReal qj_des, tqj_des,qdotj_des;
 };
 
 

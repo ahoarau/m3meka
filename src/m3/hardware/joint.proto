@@ -33,7 +33,8 @@ enum JOINT_MODE{
 	JOINT_MODE_THETA_GC_MJ = 7;	//Minimum Jerk gravity compensated joint angle control
 	JOINT_MODE_POSE = 8;	//Gravity comp with only D term on 
 	JOINT_MODE_TORQUE_GRAV_MODEL = 9; //Tracks torque from GC model instead of actual torque
-	JOINT_MODE_THETADOT = 10; //Tracks Velocity
+	JOINT_MODE_THETADOT_GC = 10; //Tracks Velocity w gravity comp
+	JOINT_MODE_THETADOT = 11; //Tracks Velocity
 }
 
 message M3JointStatus{
@@ -55,7 +56,6 @@ message M3JointStatus{
 }
 
 message M3JointParam{
-	
 	optional double		kq_p = 1;					//P gain, gc joint angle control (THETA_GC Mode)
 	optional double		kq_i = 2;					//I gain, gc joint angle  control (THETA_GC Mode)
 	optional double		kq_d = 3;					//D gain, gc joint angle  control (THETA_GC Mode)
@@ -78,6 +78,11 @@ message M3JointParam{
 	optional double		kq_d_tq_gm = 20;
 	optional double		kq_i_limit_tq_gm = 21;
 	optional double		kq_i_range_tq_gm = 22;
+	optional double		kqdot_p = 23;					//P gain, gc joint angle control (THETADOT_GC Mode)
+	optional double		kqdot_i = 24;					//I gain, gc joint angle  control (THETADOT_GC Mode)
+	optional double		kqdot_d = 25;					//D gain, gc joint angle  control (THETADOT_GC Mode)
+	optional double		kqdot_i_limit = 26;				//Integral limit, gravity compensated joint angle  control (THETADOT_GC Mode)
+	optional double		kqdot_i_range = 27;
 }
 		
 message M3JointCommand{

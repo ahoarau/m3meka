@@ -228,7 +228,6 @@ void M3CtrlSimple::StepCommand()
 			//PID
 			if (act->GetAmpControlInput() != ACTUATOR_INPUT_CURRENT)
 				break;
-			
 			desired_current = pid_torque.Step(GetJointTorque(),
 						  GetJointTorqueDot(),
 						  desired_torque,

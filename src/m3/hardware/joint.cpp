@@ -51,6 +51,27 @@ bool M3Joint::ReadConfig(const char * filename)
 	trans = new M3Transmission();	
 	trans->ReadConfig(doc["transmission"]);	
 	mReal val;
+	// A.H: Added Velocity control PID params
+	try 
+	{
+	doc["param"]["kqdot_p"] >> val;
+	param.set_kqdot_p(val);
+	doc["param"]["kqdot_i"] >> val;
+	param.set_kqdot_i(val);
+	doc["param"]["kqdot_i_range"] >> val;
+	param.set_kqdot_i_range(val);
+	doc["param"]["kqdot_d"] >> val;
+	param.set_kqdot_d(val);
+	doc["param"]["kqdot_i_limit"] >> val;
+	param.set_kqdot_i_limit(val);
+	} catch(YAML::TypedKeyNotFound<string> e) 
+	{
+		param.set_kqdot_p(0.0);
+		param.set_kqdot_i(0.0);
+		param.set_kqdot_i_range(0.0);
+		param.set_kqdot_d(0.0);
+		param.set_kqdot_i_limit(0.0);
+	} 
 	doc["param"]["kq_p"] >> val;
 	param.set_kq_p(val);
 	doc["param"]["kq_i"] >> val;
@@ -86,8 +107,8 @@ bool M3Joint::ReadConfig(const char * filename)
 	
 	try 
 	{
-	    doc["param"]["kq_p_tq_gm"] >> val;
-	    param.set_kq_p_tq_gm(val);
+	doc["param"]["kq_p_tq_gm"] >> val;
+	param.set_kq_p_tq_gm(val);
 	} catch(YAML::TypedKeyNotFound<string> e) 
 	{
 		param.set_kq_p_tq_gm(0.0);
@@ -95,8 +116,8 @@ bool M3Joint::ReadConfig(const char * filename)
 	
 	try 
 	{
-	    doc["param"]["kq_i_tq_gm"] >> val;
-	    param.set_kq_i_tq_gm(val);
+	doc["param"]["kq_i_tq_gm"] >> val;
+	param.set_kq_i_tq_gm(val);
 	} catch(YAML::TypedKeyNotFound<string> e) 
 	{
 		param.set_kq_i_tq_gm(0.0);
@@ -104,8 +125,8 @@ bool M3Joint::ReadConfig(const char * filename)
 	
 	try 
 	{
-	    doc["param"]["kq_d_tq_gm"] >> val;
-	    param.set_kq_d_tq_gm(val);
+	doc["param"]["kq_d_tq_gm"] >> val;
+	param.set_kq_d_tq_gm(val);
 	} catch(YAML::TypedKeyNotFound<string> e) 
 	{
 		param.set_kq_d_tq_gm(0.0);
@@ -113,8 +134,8 @@ bool M3Joint::ReadConfig(const char * filename)
 	
 	try 
 	{
-	    doc["param"]["kq_i_limit_tq_gm"] >> val;
-	    param.set_kq_i_limit_tq_gm(val);
+	doc["param"]["kq_i_limit_tq_gm"] >> val;
+	param.set_kq_i_limit_tq_gm(val);
 	} catch(YAML::TypedKeyNotFound<string> e) 
 	{
 		param.set_kq_i_limit_tq_gm(0.0);
@@ -122,8 +143,8 @@ bool M3Joint::ReadConfig(const char * filename)
 	
 	try 
 	{
-	    doc["param"]["kq_i_range_tq_gm"] >> val;
-	    param.set_kq_i_range_tq_gm(val);
+	doc["param"]["kq_i_range_tq_gm"] >> val;
+	param.set_kq_i_range_tq_gm(val);
 	} catch(YAML::TypedKeyNotFound<string> e) 
 	{
 		param.set_kq_i_range_tq_gm(0.0);
@@ -131,8 +152,8 @@ bool M3Joint::ReadConfig(const char * filename)
 	
 	try 
 	{
-	    doc["param"]["kq_d_pose"] >> val;
-	    param.set_kq_d_pose(val);
+	doc["param"]["kq_d_pose"] >> val;
+	param.set_kq_d_pose(val);
 	} catch(YAML::TypedKeyNotFound<string> e) 
 	{
 		param.set_kq_d_pose(param.kq_d());
@@ -173,11 +194,11 @@ bool M3Joint::LinkDependentComponents()
 	
 	if (IsVersion(IQ))
 	{
-	  ctrl_simple=(M3CtrlSimple*) factory->GetComponent(ctrl_simple_name);
-	  if (ctrl_simple==NULL)
-	  {
-		  M3_INFO("M3CtrlSimple component %s not found for component %s\n",ctrl_simple_name.c_str(),GetName().c_str());		
-	  }
+	ctrl_simple=(M3CtrlSimple*) factory->GetComponent(ctrl_simple_name);
+	if (ctrl_simple==NULL)
+	{
+		M3_INFO("M3CtrlSimple component %s not found for component %s\n",ctrl_simple_name.c_str(),GetName().c_str());		
+	}
 	}
 	return true;
 }
@@ -217,7 +238,7 @@ void M3Joint::StepStatus()
 	status.set_thetadotdot(trans->GetThetaDotDotJointDeg());
 	status.set_torque(trans->GetTorqueJoint());  // TODO: Make GetTorque nNm again
 	status.set_torquedot(trans->GetTorqueDotJoint());
-	status.set_torque_gravity(GetTorqueGravity());
+	//status.set_torque_gravity(GetTorqueGravity());
 }
 
 
@@ -333,18 +354,18 @@ void M3Joint::StepCommand()
 	if(IsStateError())
 	{
 		if (IsVersion(IQ))
-		  ctrl_simple->SetDesiredControlMode(CTRL_MODE_OFF);
+		ctrl_simple->SetDesiredControlMode(CTRL_MODE_OFF);
 		else
-		  act->SetDesiredControlMode(ACTUATOR_MODE_OFF);
-		  
+		act->SetDesiredControlMode(ACTUATOR_MODE_OFF);
+		
 		return;
 	}
 	
 	/*tmp_cnt++;
 	if (tmp_cnt == 100)
 	{
-	    M3_DEBUG("th_in: %f\n", command.q_desired());
-	    
+	M3_DEBUG("th_in: %f\n", command.q_desired());
+	
 
 	}*/
 	
@@ -352,13 +373,13 @@ void M3Joint::StepCommand()
 	
 	if (command.ctrl_mode() == JOINT_MODE_THETA && command.smoothing_mode() == SMOOTHING_MODE_MIN_JERK)
 	{
-	  command.set_ctrl_mode(JOINT_MODE_THETA_MJ);
-	  	
+	command.set_ctrl_mode(JOINT_MODE_THETA_MJ);
+		
 	}
 	
 	if (command.ctrl_mode() == JOINT_MODE_THETA_GC && command.smoothing_mode() == SMOOTHING_MODE_MIN_JERK)
 	{
-	  command.set_ctrl_mode(JOINT_MODE_THETA_GC_MJ);	  
+	command.set_ctrl_mode(JOINT_MODE_THETA_GC_MJ);	  
 	}
 	
 	//Avoid pops
@@ -370,23 +391,23 @@ void M3Joint::StepCommand()
 		q_slew.Reset(GetThetaDeg());
 		jerk_joint.Startup(GetTimestamp(), GetThetaDeg());
 		if (IsVersion(IQ)) 
-		  tq_switch=GetTorque()*1000;  // TODO: Make GetTorque nNm again
+		tq_switch=GetTorque()*1000;  // TODO: Make GetTorque nNm again
 		else
-		  tq_switch=GetTorque(); 
+		tq_switch=GetTorque(); 
 		q_switch=GetThetaDeg();
 		pwm_switch=GetPwmCmd();
 		if (IsVersion(IQ)) { 
-		  ctrl_simple->ResetIntegrators();
+		ctrl_simple->ResetIntegrators();
 		}
 	}
 	if (IsVersion(IQ)) { 
-	  if (!act->IsMotorPowerSlewedOn())
-	      ctrl_simple->ResetIntegrators();	 
+	if (!act->IsMotorPowerSlewedOn())
+	ctrl_simple->ResetIntegrators();	 
 	}
 	
 	
 	if (IsVersion(IQ)) { 
-	  
+	
 		ctrl_simple->SetDesiredControlMode(CTRL_MODE_OFF);
 		
 		switch(command.ctrl_mode())
@@ -398,7 +419,7 @@ void M3Joint::StepCommand()
 				if (!IsEncoderCalibrated())
 				{
 				// M3_INFO("Not calib %s\n",GetName().c_str());
-				  break;
+				break;
 				}
 				CalcThetaDesiredSmooth();
 				mReal des=trans->GetThetaDesActuatorDeg();
@@ -415,7 +436,7 @@ void M3Joint::StepCommand()
 			case JOINT_MODE_POSE:
 			{
 				if (!IsEncoderCalibrated())
-				  break;
+				break;
 				mReal stiffness,gravity,tq_des;
 				CalcThetaDesiredSmooth();
 				mReal des=trans->GetThetaDesJointDeg();
@@ -423,23 +444,23 @@ void M3Joint::StepCommand()
 				//Do PID in joint space
 				if (command.ctrl_mode() == JOINT_MODE_POSE)
 				{
-				  tq_des =pid_theta_gc.Step(trans->GetThetaJointDeg(),
-						  trans->GetThetaDotJointDeg(),
-						  des,
-						  0.0,
-						  0.0,
-						  param.kq_d_pose(),
-						  0.0,
-						  0.0);
+				tq_des =pid_theta_gc.Step(trans->GetThetaJointDeg(),
+						trans->GetThetaDotJointDeg(),
+						des,
+						0.0,
+						0.0,
+						param.kq_d_pose(),
+						0.0,
+						0.0);
 				} else {
-				  tq_des =pid_theta_gc.Step(trans->GetThetaJointDeg(),
-						  trans->GetThetaDotJointDeg(),
-						  des,
-						  param.kq_p(),
-						  param.kq_i(),
-						  param.kq_d(),
-						  param.kq_i_limit(),
-						  param.kq_i_range());
+				tq_des =pid_theta_gc.Step(trans->GetThetaJointDeg(),
+						trans->GetThetaDotJointDeg(),
+						des,
+						param.kq_p(),
+						param.kq_i(),
+						param.kq_d(),
+						param.kq_i_limit(),
+						param.kq_i_range());
 				}
 				/*if (pnt_cnt%200==0) {		
 					M3_DEBUG("actuator: %s\n", GetName().c_str());
@@ -465,8 +486,8 @@ void M3Joint::StepCommand()
 			}
 			case JOINT_MODE_TORQUE_GC:			
 			{
-			      if (!IsEncoderCalibrated())
-				  break;
+			if (!IsEncoderCalibrated())
+				break;
 				mReal tq_on, tq_out,gravity;
 				mReal tq_des=command.tq_desired();
 				StepBrake(tq_des,trans->GetTorqueJoint());
@@ -475,7 +496,88 @@ void M3Joint::StepCommand()
 				tq_on=tq_on_slew.Step(1.0,1.0/MODE_TQ_ON_SLEW_TIME);
 				tq_out=tq_on*(tq_des-gravity)+(1.0-tq_on)*tq_switch;
 				//Send out
+				/*if (pnt_cnt%200==0) {		
+					M3_DEBUG("actuator: %s tq_gravity: %f\n", GetName().c_str(),gravity);
+					M3_DEBUG("tq_des: %f tqout_des: %f\n",tq_des,tq_out);
+				}*/
 				trans->SetTorqueDesJoint(tq_out/1000.0);				
+				
+				ctrl_simple->SetDesiredControlMode(CTRL_MODE_TORQUE);
+				ctrl_simple->SetDesiredTorque(trans->GetTorqueDesActuator());
+				
+				break;
+			}
+			case JOINT_MODE_THETADOT_GC:			
+			{
+				if (!IsEncoderCalibrated())
+				break;
+				mReal stiffness,gravity,tq_des;
+				//CalcThetaDesiredSmooth();
+				trans->SetThetaDotDesJointDeg(command.qdot_desired());
+				mReal des=trans->GetThetaDotDesJointDeg();
+				//StepBrake(des,trans->GetThetaDotJointDeg());
+				tq_des =pid_thetadot_gc.Step(trans->GetThetaDotJointDeg(),
+						trans->GetThetaDotDotJointDeg(),
+						des,
+						param.kqdot_p(),
+						param.kqdot_i(),
+						param.kqdot_d(),
+						param.kqdot_i_limit(),
+						param.kqdot_i_range());
+				StepBrake(tq_des,trans->GetTorqueJoint());
+				stiffness=CLAMP(command.q_stiffness(),0.0,1.0);
+				gravity=GetTorqueGravity()*param.kq_g();
+				//Ramp in from torque at switch-over point
+				mReal tq_on, tq_out;
+				tq_on=tq_on_slew.Step(1.0,1.0/MODE_TQ_ON_SLEW_TIME); 
+				tq_out=tq_on*(stiffness*tq_des-gravity)+(1.0-tq_on)*tq_switch;
+				//tq_out = tq_switch;
+				//tq_out = stiffness*tq_des-gravity;
+				//Send out
+				if (pnt_cnt%200==0) {		
+					M3_DEBUG("actuator: %s\n", GetName().c_str());
+					M3_DEBUG("tq_des: %f tqout_des: %f v: %f\n",tq_des,tq_out,trans->GetThetaDotJointDeg());
+					M3_DEBUG("des: %f Tjoint: %f desac: %f\n\n",des,trans->GetTorqueJoint(),trans->GetTorqueDesActuator());
+				}
+				trans->SetTorqueDesJoint(tq_out/1000.0);	//TODO: convert back to mNm	
+				
+				ctrl_simple->SetDesiredControlMode(CTRL_MODE_TORQUE);
+				ctrl_simple->SetDesiredTorque(trans->GetTorqueDesActuator());
+				
+				break;
+			}
+			case JOINT_MODE_THETADOT:			
+			{
+				if (!IsEncoderCalibrated())
+				break;
+				mReal stiffness,gravity,tq_des;
+				//CalcThetaDesiredSmooth();
+				trans->SetThetaDotDesJointDeg(command.qdot_desired());
+				mReal des=trans->GetThetaDotDesJointDeg();
+				//StepBrake(des,trans->GetThetaDotJointDeg());
+				tq_des =pid_thetadot_gc.Step(trans->GetThetaDotJointDeg(),
+						trans->GetThetaDotDotJointDeg(),
+						des,
+						param.kqdot_p(),
+						param.kqdot_i(),
+						param.kqdot_d(),
+						param.kqdot_i_limit(),
+						param.kqdot_i_range());
+				StepBrake(tq_des,trans->GetTorqueJoint());
+				stiffness=CLAMP(command.q_stiffness(),0.0,1.0);
+				//Ramp in from torque at switch-over point
+				mReal tq_on, tq_out;
+				tq_on=tq_on_slew.Step(1.0,1.0/MODE_TQ_ON_SLEW_TIME); 
+				tq_out=tq_on*(stiffness*tq_des)+(1.0-tq_on)*tq_switch;
+				//tq_out = tq_switch;
+				//tq_out = stiffness*tq_des-gravity;
+				//Send out
+				if (pnt_cnt%200==0) {		
+					M3_DEBUG("actuator: %s\n", GetName().c_str());
+					M3_DEBUG("tq_des: %f tqout_des: %f v: %f\n",tq_des,tq_out,trans->GetThetaDotJointDeg());
+					M3_DEBUG("des: %f Tjoint: %f desac: %f\n\n",des,trans->GetTorqueJoint(),trans->GetTorqueDesActuator());
+				}
+				trans->SetTorqueDesJoint(tq_out/1000.0);	//TODO: convert back to mNm	
 				
 				ctrl_simple->SetDesiredControlMode(CTRL_MODE_TORQUE);
 				ctrl_simple->SetDesiredTorque(trans->GetTorqueDesActuator());
@@ -501,20 +603,20 @@ void M3Joint::StepCommand()
 			case JOINT_MODE_TORQUE_GRAV_MODEL:
 			{
 				if (!IsEncoderCalibrated())
-				  break;
+				break;
 				
 				mReal tq_des;				
 								
 				//Do PID in torque grav model space
 				
-				  tq_des =pid_tq_grav_model.Step(GetTorqueGravity(),
-						  trans->GetThetaDotJointDeg(),
-						  -command.tq_desired(),
-						  param.kq_p_tq_gm(),
-						  param.kq_i_tq_gm(),
-						  param.kq_d_tq_gm(),
-						  param.kq_i_limit_tq_gm(),
-						  param.kq_i_range_tq_gm());
+				tq_des =pid_tq_grav_model.Step(GetTorqueGravity(),
+						trans->GetThetaDotJointDeg(),
+						-command.tq_desired(),
+						param.kq_p_tq_gm(),
+						param.kq_i_tq_gm(),
+						param.kq_d_tq_gm(),
+						param.kq_i_limit_tq_gm(),
+						param.kq_i_range_tq_gm());
 				
 				
 				
@@ -531,16 +633,16 @@ void M3Joint::StepCommand()
 				
 				/*if (tmp_cnt++ == 1000)
 				{
-				    M3_DEBUG("------------------------\n");
-				    M3_DEBUG("%s\n", GetName().c_str());
-				    M3_DEBUG("tq_gc: %f\n", GetTorqueGravity());
-				    //M3_DEBUG("tq_dot: %f\n", -trans->GetTorqueDotJoint());				    
-				    M3_DEBUG("tq_des: %f\n", tq_des);
-				    M3_DEBUG("tq_on: %f\n", tq_on);
-				    //M3_DEBUG("tq_switch: %f\n", tq_switch);
-				    M3_DEBUG("tq_out: %f\n", tq_out);				    
-				    M3_DEBUG("tq_act: %f\n", trans->GetTorqueDesActuator());
-				    tmp_cnt = 0;
+				M3_DEBUG("------------------------\n");
+				M3_DEBUG("%s\n", GetName().c_str());
+				M3_DEBUG("tq_gc: %f\n", GetTorqueGravity());
+				//M3_DEBUG("tq_dot: %f\n", -trans->GetTorqueDotJoint());				    
+				M3_DEBUG("tq_des: %f\n", tq_des);
+				M3_DEBUG("tq_on: %f\n", tq_on);
+				//M3_DEBUG("tq_switch: %f\n", tq_switch);
+				M3_DEBUG("tq_out: %f\n", tq_out);				    
+				M3_DEBUG("tq_act: %f\n", trans->GetTorqueDesActuator());
+				tmp_cnt = 0;
 				}*/
 				
 				break;
@@ -573,9 +675,9 @@ void M3Joint::StepCommand()
 				//Send out
 				act->SetDesiredControlMode(ACTUATOR_MODE_PWM);
 				if (disable_pwm_ramp)
-				  act->SetDesiredPwm(command.pwm_desired());
+				act->SetDesiredPwm(command.pwm_desired());
 				else
-				  act->SetDesiredPwm((int)pwm_out);;
+				act->SetDesiredPwm((int)pwm_out);;
 				break;
 			}
 			case JOINT_MODE_THETA:
@@ -619,7 +721,7 @@ void M3Joint::StepCommand()
 			case JOINT_MODE_THETA_GC_MJ:
 			{
 				if (!IsEncoderCalibrated())
-				  break;
+				break;
 				mReal stiffness,gravity,tq_des;
 				CalcThetaDesiredSmooth();
 				mReal des=trans->GetThetaDesJointDeg();
@@ -648,8 +750,8 @@ void M3Joint::StepCommand()
 			}
 			case JOINT_MODE_TORQUE_GC:			
 			{
-			      if (!IsEncoderCalibrated())
-				  break;
+			if (!IsEncoderCalibrated())
+				break;
 				mReal tq_on, tq_out,gravity;
 				mReal tq_des=command.tq_desired();
 				StepBrake(tq_des,trans->GetTorqueJoint());
@@ -680,12 +782,12 @@ void M3Joint::StepCommand()
 				
 				/*if (tmp_cnt++ == 100)
 				{
-				    M3_DEBUG("tq_des: %f\n", tq_des);
-				    M3_DEBUG("tq_on: %f\n", tq_on);
-				    M3_DEBUG("tq_switch: %f\n", tq_switch);
-				    M3_DEBUG("tq_out: %f\n", tq_out);				    
-				    M3_DEBUG("tq_act: %f\n", trans->GetTorqueDesActuator());
-				    tmp_cnt = 0;
+				M3_DEBUG("tq_des: %f\n", tq_des);
+				M3_DEBUG("tq_on: %f\n", tq_on);
+				M3_DEBUG("tq_switch: %f\n", tq_switch);
+				M3_DEBUG("tq_out: %f\n", tq_out);				    
+				M3_DEBUG("tq_act: %f\n", trans->GetTorqueDesActuator());
+				tmp_cnt = 0;
 				}*/
 				break;
 			}
@@ -702,9 +804,9 @@ void M3Joint::StepCommand()
 	
 	/*if (tmp_cnt == 100)
 	{
-	    M3_DEBUG("tq_out: %f\n", ((M3ActuatorCommand*)act->GetCommand())->tq_desired() );
-	    
-	    tmp_cnt = 0;
+	M3_DEBUG("tq_out: %f\n", ((M3ActuatorCommand*)act->GetCommand())->tq_desired() );
+	
+	tmp_cnt = 0;
 	}*/
 	
 }

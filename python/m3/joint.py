@@ -73,6 +73,10 @@ class M3Joint(M3Component):
         self.command.ctrl_mode=jpb.JOINT_MODE_THETA
     def set_mode_theta_gc(self):
         self.command.ctrl_mode=jpb.JOINT_MODE_THETA_GC
+    def set_mode_thetadot_gc(self):
+        self.command.ctrl_mode=jpb.JOINT_MODE_THETADOT_GC
+    def set_mode_thetadot(self):
+        self.command.ctrl_mode=jpb.JOINT_MODE_THETADOT
     def set_mode_theta_mj(self):
         self.command.ctrl_mode=jpb.JOINT_MODE_THETA_MJ
     def set_mode_theta_gc_mj(self):
@@ -91,6 +95,8 @@ class M3Joint(M3Component):
         return C2F(self.status.amp_temp)
     def get_torque_mNm(self): 
         return self.status.torque
+    def get_torquedot_mNm(self): 
+        return self.status.torquedot
     def get_torque_gravity_mNm(self): 
         return self.status.torque_gravity
     def get_current_mA(self): 

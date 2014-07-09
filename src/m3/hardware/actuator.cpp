@@ -303,7 +303,7 @@ void M3Actuator::StepStatus()
 		status.set_thetadotdot(angle_df.GetThetaDotDot());
 		
 		//Torque
-		tq_sense.Step(ecs->adc_torque()/torque_shift);
+		tq_sense.Step(static_cast<mReal>(ecs->adc_torque())/torque_shift);
 		status.set_torque(tq_sense.GetTorque_mNm());
 		status.set_torquedot(torquedot_df.Step(status.torque()));
 		
