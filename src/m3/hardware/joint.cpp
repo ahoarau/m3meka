@@ -265,6 +265,7 @@ void M3Joint::CalcThetaDesiredSmooth()
 	
 	//Set result
 	trans->SetThetaDesJointDeg(q_des_jt);
+	//trans->SetThetaDotDesJointDeg(act->GetThetaDotDeg());
 }
 
 //Set the brake command and possibly modify the controller desired to be safe
@@ -465,6 +466,7 @@ void M3Joint::StepCommand()
 				/*if (pnt_cnt%200==0) {		
 					M3_DEBUG("actuator: %s\n", GetName().c_str());
 					M3_DEBUG("tq_des: %f\n",tq_des);
+					M3_DEBUG("th: %f -> %f  thdot: %f\n",trans->GetThetaJointDeg(),des,trans->GetThetaDotJointDeg());
 					M3_DEBUG("des: %f\n\n",des);
 				}*/
 				stiffness=CLAMP(command.q_stiffness(),0.0,1.0);
@@ -507,6 +509,7 @@ void M3Joint::StepCommand()
 				
 				break;
 			}
+			
 			case JOINT_MODE_THETADOT_GC:			
 			{
 				if (!IsEncoderCalibrated())
@@ -534,11 +537,11 @@ void M3Joint::StepCommand()
 				//tq_out = tq_switch;
 				//tq_out = stiffness*tq_des-gravity;
 				//Send out
-				if (pnt_cnt%200==0) {		
+				/*if (pnt_cnt%200==0) {		
 					M3_DEBUG("actuator: %s\n", GetName().c_str());
 					M3_DEBUG("tq_des: %f tqout_des: %f v: %f\n",tq_des,tq_out,trans->GetThetaDotJointDeg());
 					M3_DEBUG("des: %f Tjoint: %f desac: %f\n\n",des,trans->GetTorqueJoint(),trans->GetTorqueDesActuator());
-				}
+				}*/
 				trans->SetTorqueDesJoint(tq_out/1000.0);	//TODO: convert back to mNm	
 				
 				ctrl_simple->SetDesiredControlMode(CTRL_MODE_TORQUE);
@@ -546,6 +549,7 @@ void M3Joint::StepCommand()
 				
 				break;
 			}
+
 			case JOINT_MODE_THETADOT:			
 			{
 				if (!IsEncoderCalibrated())
@@ -569,14 +573,12 @@ void M3Joint::StepCommand()
 				mReal tq_on, tq_out;
 				tq_on=tq_on_slew.Step(1.0,1.0/MODE_TQ_ON_SLEW_TIME); 
 				tq_out=tq_on*(stiffness*tq_des)+(1.0-tq_on)*tq_switch;
-				//tq_out = tq_switch;
-				//tq_out = stiffness*tq_des-gravity;
 				//Send out
-				if (pnt_cnt%200==0) {		
+				/*if (pnt_cnt%200==0) {		
 					M3_DEBUG("actuator: %s\n", GetName().c_str());
 					M3_DEBUG("tq_des: %f tqout_des: %f v: %f\n",tq_des,tq_out,trans->GetThetaDotJointDeg());
 					M3_DEBUG("des: %f Tjoint: %f desac: %f\n\n",des,trans->GetTorqueJoint(),trans->GetTorqueDesActuator());
-				}
+				}*/
 				trans->SetTorqueDesJoint(tq_out/1000.0);	//TODO: convert back to mNm	
 				
 				ctrl_simple->SetDesiredControlMode(CTRL_MODE_TORQUE);
@@ -628,7 +630,7 @@ void M3Joint::StepCommand()
 				//Send out
 				trans->SetTorqueDesJoint(tq_out/1000.0);	//TODO: convert back to mNm	
 				
-				ctrl_simple->SetDesiredControlMode(CTRL_MODE_TORQUE);
+				ctrl_simple->SetDesiredControlMode(CTRL_MODE_CURRENT);
 				ctrl_simple->SetDesiredTorque(trans->GetTorqueDesActuator());
 				
 				/*if (tmp_cnt++ == 1000)
@@ -648,13 +650,13 @@ void M3Joint::StepCommand()
 				break;
 			}
 			case JOINT_MODE_OFF:
-			case JOINT_MODE_PWM: // no longer used 
+			case JOINT_MODE_PWM:
 			default:
 				ctrl_simple->SetDesiredControlMode(CTRL_MODE_OFF);
 				//act->SetDesiredControlMode(ACTUATOR_MODE_OFF);
 				mReal des; //dummy
 				StepBrake(des,0);
-				break;
+				break;	
 		};
 	} else { // Legacy, no supported on BMW,MAX2 versions 2.0
 	

@@ -201,7 +201,7 @@ class M3Proc:
         self.gui.add('M3GuiToggle', 'ScopeTheta',      (self,'do_scope_theta'),[],[['On','Off']],m3g.M3GuiWrite)
         self.gui.add('M3GuiToggle', 'ScopeThetaDot',      (self,'do_scope_thetadot'),[],[['On','Off']],m3g.M3GuiWrite)
         self.gui.add('M3GuiToggle', 'ScopeThetaDotDot',      (self,'do_scope_thetadotdot'),[],[['On','Off']],m3g.M3GuiWrite)
-        self.gui.add('M3GuiSliders','StepPeriod (ms) ', (self,'step_period'),range(len(self.joint)),[0,4000],m3g.M3GuiWrite)     
+        self.gui.add('M3GuiSliders','StepPeriod (ms) ', (self,'step_period'),range(len(self.joint)),[0,8000],m3g.M3GuiWrite)     
         self.gui.add('M3GuiToggle', 'CycleTheta',      (self,'cycle_theta'),[],[['On','Off']],m3g.M3GuiWrite)
         self.gui.add('M3GuiToggle', 'CycleThetaDot',      (self,'cycle_thetadot'),[],[['On','Off']],m3g.M3GuiWrite)
         self.gui.add('M3GuiToggle', 'CycleTorque',      (self,'cycle_torque'),[],[['On','Off']],m3g.M3GuiWrite)
