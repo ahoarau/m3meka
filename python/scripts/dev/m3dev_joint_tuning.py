@@ -161,11 +161,11 @@ class M3Proc:
         self.scope_torquedot=[]
         
         for i,name in zip(xrange(len(joint_names)),joint_names):
-            self.scope_torque.append(       m3t.M3Scope2(xwidth=100,yrange=None,title='Torque')     )
-            self.scope_theta.append(        m3t.M3Scope2(xwidth=100,yrange=None,title='Theta')      )
-            self.scope_thetadot.append(     m3t.M3Scope2(xwidth=100,yrange=None,title='ThetaDot')   )
-            self.scope_thetadotdot.append(  m3t.M3Scope2(xwidth=100,yrange=None,title='ThetaDotDot'))
-            self.scope_torquedot.append(    m3t.M3Scope2(xwidth=100,yrange=None,title='TorqueDot')  )
+            self.scope_torque.append(       m3t.M3ScopeN(xwidth=100,yrange=None,title='Torque')     )
+            self.scope_theta.append(        m3t.M3ScopeN(xwidth=100,yrange=None,title='Theta')      )
+            self.scope_thetadot.append(     m3t.M3ScopeN(xwidth=100,yrange=None,title='ThetaDot')   )
+            self.scope_thetadotdot.append(  m3t.M3ScopeN(xwidth=100,yrange=None,title='ThetaDotDot'))
+            self.scope_torquedot.append(    m3t.M3ScopeN(xwidth=100,yrange=None,title='TorqueDot')  )
             
         #Create gui
         self.mode=[0]*len(self.joint)
@@ -290,25 +290,28 @@ class M3Proc:
             c.set_theta_deg(td)
             c.set_thetadot_deg(tddot)
             c.set_torque_mNm(tqd)
-            for scope_theta in self.scope_theta:
-                if self.do_scope_theta and self.scope_theta is not None:
-                     scope_theta.plot(c.get_theta_deg(),td)
-                     
-            for scope_thetadot in self.scope_thetadot:
-                if self.do_scope_thetadot and self.scope_thetadot is not None:
-                     scope_thetadot.plot(c.get_thetadot_deg(),tddot)
-
-            for scope_thetadotdot in self.scope_thetadotdot:
-                if self.do_scope_thetadotdot and self.scope_thetadotdot is not None:
-                     scope_thetadotdot.plot(c.get_thetadotdot_deg())
-
-            for scope_torque in self.scope_torque:
-                if self.do_scope_torque and self.scope_torque is not None:
-                     scope_torque.plot(c.get_torque_mNm()*1000.0,tqd)
+            try:
+                for scope_theta in self.scope_theta:
+                    if self.do_scope_theta and self.scope_theta is not None:
+                         scope_theta.plot(c.get_theta_deg(),td)
+                         
+                for scope_thetadot in self.scope_thetadot:
+                    if self.do_scope_thetadot and self.scope_thetadot is not None:
+                         scope_thetadot.plot(c.get_thetadot_deg(),tddot)
     
-            for scope_torquedot in self.scope_torquedot:
-                if self.do_scope_torquedot and self.scope_torquedot is not None:
-                     scope_torquedot.plot(c.get_torquedot_mNm())
+                for scope_thetadotdot in self.scope_thetadotdot:
+                    if self.do_scope_thetadotdot and self.scope_thetadotdot is not None:
+                         scope_thetadotdot.plot(c.get_thetadotdot_deg())
+    
+                for scope_torque in self.scope_torque:
+                    if self.do_scope_torque and self.scope_torque is not None:
+                         scope_torque.plot(c.get_torque_mNm()*1000.0,tqd)
+        
+                for scope_torquedot in self.scope_torquedot:
+                    if self.do_scope_torquedot and self.scope_torquedot is not None:
+                         scope_torquedot.plot(c.get_torquedot_mNm())
+            except Exception,e:
+                print e
 
             current=current+c.get_current_mA()
             c.set_control_mode(self.mode[idx])
