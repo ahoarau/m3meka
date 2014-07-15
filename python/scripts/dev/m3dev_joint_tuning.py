@@ -270,10 +270,10 @@ class M3Proc:
 
             if self.cycle_theta:
                 dt=time.time()-self.step_start
-                if((self.step_period[idx]/1000.0)>0):
-                    td=self.theta_desire_b[idx]*math.sin(dt/(self.step_period[idx]/1000.0))
-                #if math.fmod(dt,self.step_period[idx]/1000.0)>self.step_period[idx]/2000.0:
-                #    td=self.theta_desire_b[idx]
+                #if((self.step_period[idx]/1000.0)>0):
+                #    td=self.theta_desire_b[idx]*math.sin(dt/(self.step_period[idx]/1000.0))
+                if math.fmod(dt,self.step_period[idx]/1000.0)>self.step_period[idx]/2000.0:
+                    td=self.theta_desire_b[idx]
                     
             if self.cycle_thetadot:
                 dt=time.time()-self.step_start
