@@ -1,3 +1,0 @@
-Ros control component for meka robot. Works in progress...
-
-Author: Gennaro Raiola
