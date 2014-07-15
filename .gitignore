@@ -14,3 +14,4 @@ build
 # CMake tmp
 *.txt.user
 *.so
+*.so

@@ -1388,7 +1388,22 @@ void M3Humanoid::SetModeThetaGc(M3Chain chain,unsigned int  idx)
    if (idx < cmd->ctrl_mode_size())
      cmd->set_ctrl_mode(idx, JOINT_ARRAY_MODE_THETA_GC);
 }
-
+void M3Humanoid::SetModeThetaDotGc(M3Chain chain,unsigned int  idx)
+{
+  M3BaseHumanoidCommand * cmd = GetCmd(chain);
+   if (cmd == NULL)
+     return;
+   if (idx < cmd->ctrl_mode_size())
+     cmd->set_ctrl_mode(idx, JOINT_ARRAY_MODE_THETADOT_GC);
+}
+void M3Humanoid::SetModeThetaDot(M3Chain chain,unsigned int  idx)
+{
+  M3BaseHumanoidCommand * cmd = GetCmd(chain);
+   if (cmd == NULL)
+     return;
+   if (idx < cmd->ctrl_mode_size())
+     cmd->set_ctrl_mode(idx, JOINT_ARRAY_MODE_THETADOT);
+}
 void M3Humanoid::SetModeTheta(M3Chain chain,unsigned int  idx)
 {
   M3BaseHumanoidCommand * cmd = GetCmd(chain);

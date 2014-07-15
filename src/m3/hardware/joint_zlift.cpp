@@ -38,7 +38,7 @@ bool M3JointZLift::ReadConfig(const char * filename)
 	doc["calib"]["cb_screw_efficiency"] >>  cb_screw_efficiency;
 	cb_mm_per_deg = cb_screw_pitch/(cb_gearing*360.0);
 	cb_mN_per_mNm = 1.0/(cb_screw_pitch*cb_screw_efficiency/(2.0*M_PI*1000));
-	cout<<cb_payload_mass<<":"<<cb_gearing<<":"<<cb_screw_pitch<<":"<<cb_screw_efficiency<<":"<<cb_mm_per_deg<<":"<<cb_mN_per_mNm<<endl;
+	//cout<<cb_payload_mass<<":"<<cb_gearing<<":"<<cb_screw_pitch<<":"<<cb_screw_efficiency<<":"<<cb_mm_per_deg<<":"<<cb_mN_per_mNm<<endl;
 	return true;
 }
 /*void M3JointZLift::StepStatus()

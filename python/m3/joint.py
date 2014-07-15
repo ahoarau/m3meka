@@ -34,7 +34,6 @@ class M3Joint(M3Component):
         self.command=jpb.M3JointCommand()
         self.param=jpb.M3JointParam()
         self.read_config()
-
     #Utility API
     def set_pwm(self,p):
         """Desired joint PWM"""
@@ -56,7 +55,7 @@ class M3Joint(M3Component):
     def set_slew_rate(self,qd):
         self.command.q_slew_rate=qd
     def set_slew_rate_proportion(self,qd):
-	self.command.q_slew_rate=qd*self.param.max_q_slew_rate
+	    self.command.q_slew_rate=qd*self.param.max_q_slew_rate
     def set_thetadot_rad(self,qd):
         self.command.qdot_desired=rad2deg(qd)
     def set_control_mode(self,m):    

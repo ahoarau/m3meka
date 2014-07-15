@@ -241,6 +241,20 @@ class M3Humanoid : public M3Robot
 		* \param idx an integer specifying which joint command to modify
 		*		
 		*/
+		void SetModeThetaDotGc(M3Chain chain,unsigned int  idx);
+		
+		/** \brief Sets joint controller mode for chain and joint index to joint velocity control with gravity compensation.
+		* \param chain desired joint group (RIGHT_ARM, LEFT_ARM, TORSO, or HEAD)
+		* \param idx an integer specifying which joint command to modify
+		*		
+		*/
+		void SetModeThetaDot(M3Chain chain,unsigned int  idx);
+		
+		/** \brief Sets joint controller mode for chain and joint index to joint velocity control.
+		* \param chain desired joint group (RIGHT_ARM, LEFT_ARM, TORSO, or HEAD)
+		* \param idx an integer specifying which joint command to modify
+		*		
+		*/
 		void SetModeThetaGc(M3Chain chain,unsigned int  idx);
 		
 		/** \brief Sets joint controller mode for chain and joint index to joint angle control.
