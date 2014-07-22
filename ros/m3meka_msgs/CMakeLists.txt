@@ -6,6 +6,7 @@ find_package(catkin REQUIRED COMPONENTS
    rospy
    std_msgs
    message_generation
+   m3_msgs
 )
 
 
@@ -32,7 +33,7 @@ add_service_files(
 generate_messages(   
   DEPENDENCIES  
   std_msgs 
-  m3_msgs 
+  m3_msgs
 )  
 
 catkin_package(
