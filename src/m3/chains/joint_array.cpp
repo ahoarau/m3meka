@@ -246,7 +246,6 @@ void M3JointArray::StepStatus()
 			status.set_current(i,joints[i]->GetCurrent());
 			status.set_torque(i,joints[i]->GetTorque());
 			status.set_torquedot(i,joints[i]->GetTorqueDot());
-			status.set_torquedot(i,joints[i]->GetTorqueDot());
 			status.set_theta(i,joints[i]->GetThetaDeg());
 			status.set_thetadot(i,joints[i]->GetThetaDotDeg());
 			status.set_thetadotdot(i,joints[i]->GetThetaDotDotDeg());

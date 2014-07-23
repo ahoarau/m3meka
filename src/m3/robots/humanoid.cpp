@@ -87,7 +87,30 @@ bool M3Humanoid::LinkDependentComponents()
 					head_name.c_str());
 
 	}
-	
+	if (right_hand_name.size()!=0)
+	{	
+		
+		
+		right_hand=(M3Hand*)factory->GetComponent(right_hand_name);
+		if (right_hand!=NULL)
+			nl++;
+		else
+			M3_WARN("M3RightHand component %s declared for head but could not be linked\n",
+					right_hand_name.c_str());
+
+	}
+	if (left_hand_name.size()!=0)
+	{	
+		
+		
+		left_hand=(M3Hand*)factory->GetComponent(left_hand_name);
+		if (left_hand!=NULL)
+			nl++;
+		else
+			M3_WARN("M3LeftHand component %s declared for head but could not be linked\n",
+					left_hand_name.c_str());
+
+	}
 	if (nl>0)
 		return true;
 
@@ -158,6 +181,48 @@ void M3Humanoid::Startup()
 			command.mutable_right_arm()->add_smoothing_mode(SMOOTHING_MODE_OFF);
 		}
 		torque_shm_right_arm.resize(right_arm->GetNumDof());
+	}
+	if(right_hand)
+	{
+		for (int i=0; i<right_hand->GetNumDof(); i++)
+		{			
+			status.mutable_right_hand()->add_torque(0);
+			status.mutable_right_hand()->add_torquedot(0);			
+			status.mutable_right_hand()->add_theta(0);
+			status.mutable_right_hand()->add_thetadot(0);
+			status.mutable_right_hand()->add_thetadotdot(0);
+			status.mutable_right_hand()->add_pwm_cmd(0);
+			command.mutable_right_hand()->add_q_desired(0);	
+			command.mutable_right_hand()->add_qdot_desired(0);			
+			command.mutable_right_hand()->add_tq_desired(0);
+			command.mutable_right_hand()->add_q_stiffness(0);
+			command.mutable_right_hand()->add_q_slew_rate(0);
+			command.mutable_right_hand()->add_pwm_desired(0);
+			command.mutable_right_hand()->add_ctrl_mode(JOINT_ARRAY_MODE_OFF);			
+			command.mutable_right_hand()->add_smoothing_mode(SMOOTHING_MODE_OFF);
+		}
+		torque_shm_right_hand.resize(right_hand->GetNumDof());
+	}
+	if(left_hand)
+	{
+		for (int i=0; i<left_hand->GetNumDof(); i++)
+		{			
+			status.mutable_left_hand()->add_torque(0);
+			status.mutable_left_hand()->add_torquedot(0);			
+			status.mutable_left_hand()->add_theta(0);
+			status.mutable_left_hand()->add_thetadot(0);
+			status.mutable_left_hand()->add_thetadotdot(0);
+			status.mutable_left_hand()->add_pwm_cmd(0);
+			command.mutable_left_hand()->add_q_desired(0);	
+			command.mutable_left_hand()->add_qdot_desired(0);			
+			command.mutable_left_hand()->add_tq_desired(0);
+			command.mutable_left_hand()->add_q_stiffness(0);
+			command.mutable_left_hand()->add_q_slew_rate(0);
+			command.mutable_left_hand()->add_pwm_desired(0);
+			command.mutable_left_hand()->add_ctrl_mode(JOINT_ARRAY_MODE_OFF);			
+			command.mutable_left_hand()->add_smoothing_mode(SMOOTHING_MODE_OFF);
+		}
+		torque_shm_left_hand.resize(left_hand->GetNumDof());
 	}
 	if(left_arm && left_arm->GetDynamatics())
 	{					 
@@ -356,7 +421,74 @@ void M3Humanoid::StepCommand()
 		return;		
 
 	pwr->SetMotorEnable(command.enable_motor());
-	
+	if(right_hand)
+	{
+		for (int i=0; i<right_hand->GetNumDof(); i++)
+		{
+		    if (command.right_hand().ctrl_mode(i) == JOINT_ARRAY_MODE_TORQUE_SHM || force_shm_r_hand)
+		    {
+			if (enable_shm_r_hand)
+			{
+			  ((M3JointArrayCommand*)right_hand->GetCommand())->set_tq_desired(i, torque_shm_right_hand(i));	
+			  ((M3JointArrayCommand*)right_hand->GetCommand())->set_ctrl_mode(i, JOINT_ARRAY_MODE_TORQUE);			
+			} else {
+			  ((M3JointArrayCommand*)right_hand->GetCommand())->set_tq_desired(i, 0);	
+			  ((M3JointArrayCommand*)right_hand->GetCommand())->set_ctrl_mode(i, JOINT_ARRAY_MODE_OFF);	
+			}
+		    } else {
+			((M3JointArrayCommand*)right_hand->GetCommand())->set_tq_desired(i, command.right_hand().tq_desired(i));						
+			((M3JointArrayCommand*)right_hand->GetCommand())->set_ctrl_mode(i, command.right_hand().ctrl_mode(i));	
+						
+		    }		    
+		    ((M3JointArrayCommand*)right_hand->GetCommand())->set_smoothing_mode(i, command.right_hand().smoothing_mode(i));
+		    ((M3JointArrayCommand*)right_hand->GetCommand())->set_q_stiffness(i, command.right_hand().q_stiffness(i));		    
+		    ((M3JointArrayCommand*)right_hand->GetCommand())->set_q_desired(i, command.right_hand().q_desired(i));			
+		    ((M3JointArrayCommand*)right_hand->GetCommand())->set_qdot_desired(i, command.right_hand().qdot_desired(i));
+		    ((M3JointArrayCommand*)right_hand->GetCommand())->set_q_slew_rate(i, command.right_hand().q_slew_rate(i));
+		    ((M3JointArrayCommand*)right_hand->GetCommand())->set_pwm_desired(i, command.right_hand().pwm_desired(i));
+		}
+		for (int i=0;i<command.right_hand().vias_size();i++)
+		{
+			M3JointVia * via;			
+			via = ((M3JointArrayCommand*)right_hand->GetCommand())->add_vias();
+			*via = command.right_hand().vias(i);
+		}
+		command.mutable_right_hand()->clear_vias();
+	}
+	if(left_hand)
+	{
+		for (int i=0; i<left_hand->GetNumDof(); i++)
+		{
+		    if (command.left_hand().ctrl_mode(i) == JOINT_ARRAY_MODE_TORQUE_SHM || force_shm_l_hand)
+		    {
+			if (enable_shm_l_hand)
+			{
+			  ((M3JointArrayCommand*)left_hand->GetCommand())->set_tq_desired(i, torque_shm_left_hand(i));	
+			  ((M3JointArrayCommand*)left_hand->GetCommand())->set_ctrl_mode(i, JOINT_ARRAY_MODE_TORQUE);			
+			} else {
+			  ((M3JointArrayCommand*)left_hand->GetCommand())->set_tq_desired(i, 0);	
+			  ((M3JointArrayCommand*)left_hand->GetCommand())->set_ctrl_mode(i, JOINT_ARRAY_MODE_OFF);	
+			}
+		    } else {
+			((M3JointArrayCommand*)left_hand->GetCommand())->set_tq_desired(i, command.left_hand().tq_desired(i));						
+			((M3JointArrayCommand*)left_hand->GetCommand())->set_ctrl_mode(i, command.left_hand().ctrl_mode(i));	
+						
+		    }		    
+		    ((M3JointArrayCommand*)left_hand->GetCommand())->set_smoothing_mode(i, command.left_hand().smoothing_mode(i));
+		    ((M3JointArrayCommand*)left_hand->GetCommand())->set_q_stiffness(i, command.left_hand().q_stiffness(i));		    
+		    ((M3JointArrayCommand*)left_hand->GetCommand())->set_q_desired(i, command.left_hand().q_desired(i));			
+		    ((M3JointArrayCommand*)left_hand->GetCommand())->set_qdot_desired(i, command.left_hand().qdot_desired(i));
+		    ((M3JointArrayCommand*)left_hand->GetCommand())->set_q_slew_rate(i, command.left_hand().q_slew_rate(i));
+		    ((M3JointArrayCommand*)left_hand->GetCommand())->set_pwm_desired(i, command.left_hand().pwm_desired(i));
+		}
+		for (int i=0;i<command.left_hand().vias_size();i++)
+		{
+			M3JointVia * via;			
+			via = ((M3JointArrayCommand*)left_hand->GetCommand())->add_vias();
+			*via = command.left_hand().vias(i);
+		}
+		command.mutable_left_hand()->clear_vias();
+	}
 	if(torso)
 	{
 		for (int i=0; i<torso->GetNumDof(); i++)
@@ -735,7 +867,32 @@ void M3Humanoid::StepStatus()
 			((M3DynamaticsParam*)head->GetDynamatics()->GetParam())->set_payload_mass(param.head().payload_mass());
 		}
 	}
-		
+	if(right_hand)
+	{
+		for (int i=0; i<right_hand->GetNumDof(); i++)
+		{			
+			status.mutable_right_hand()->set_torque(i,((M3JointArrayStatus*)right_hand->GetStatus())->torque(i));
+			status.mutable_right_hand()->set_torquedot(i,((M3JointArrayStatus*)right_hand->GetStatus())->torquedot(i));
+			status.mutable_right_hand()->set_theta(i,((M3JointArrayStatus*)right_hand->GetStatus())->theta(i));
+			status.mutable_right_hand()->set_thetadot(i,((M3JointArrayStatus*)right_hand->GetStatus())->thetadot(i));
+			status.mutable_right_hand()->set_thetadotdot(i,((M3JointArrayStatus*)right_hand->GetStatus())->thetadotdot(i));
+			status.mutable_right_hand()->set_pwm_cmd(i,((M3JointArrayStatus*)right_hand->GetStatus())->pwm_cmd(i));
+		}
+		status.mutable_right_hand()->set_completed_spline_idx(((M3JointArrayStatus*)right_hand->GetStatus())->completed_spline_idx());
+	}
+	if(left_hand)
+	{
+		for (int i=0; i<left_hand->GetNumDof(); i++)
+		{			
+			status.mutable_left_hand()->set_torque(i,((M3JointArrayStatus*)left_hand->GetStatus())->torque(i));
+			status.mutable_left_hand()->set_torquedot(i,((M3JointArrayStatus*)left_hand->GetStatus())->torquedot(i));
+			status.mutable_left_hand()->set_theta(i,((M3JointArrayStatus*)left_hand->GetStatus())->theta(i));
+			status.mutable_left_hand()->set_thetadot(i,((M3JointArrayStatus*)left_hand->GetStatus())->thetadot(i));
+			status.mutable_left_hand()->set_thetadotdot(i,((M3JointArrayStatus*)left_hand->GetStatus())->thetadotdot(i));
+			status.mutable_left_hand()->set_pwm_cmd(i,((M3JointArrayStatus*)left_hand->GetStatus())->pwm_cmd(i));
+		}
+		status.mutable_left_hand()->set_completed_spline_idx(((M3JointArrayStatus*)left_hand->GetStatus())->completed_spline_idx());
+	}
 	if(head && head->GetDynamatics())
 	{	
 		for (int i=0; i<head->GetDynamatics()->GetNumDof(); i++)		
@@ -914,6 +1071,8 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	const YAML::Node * la_node;
 	const YAML::Node * t_node;
 	const YAML::Node * h_node;
+	const YAML::Node * lh_node;
+	const YAML::Node * rh_node;
 		
 	try {
 		ra_node = &(doc["chains"]["right_arm"]);
@@ -938,15 +1097,29 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	} catch(YAML::KeyNotFound& e) {		
 		h_node = NULL;
 	}
+	try {
+		rh_node = &(doc["chains"]["right_hand"]);
+	} catch(YAML::KeyNotFound& e) {		
+		rh_node = NULL;
+	}
+	try {
+		lh_node = &(doc["chains"]["left_hand"]);
+	} catch(YAML::KeyNotFound& e) {		
+		lh_node = NULL;
+	}
 	
 	vector<mReal> ra_rot;
 	vector<mReal> la_rot;
 	vector<mReal> t_rot;
 	vector<mReal> h_rot;
+	vector<mReal> rh_rot;
+	vector<mReal> lh_rot;
 	vector<mReal> ra_trans;
 	vector<mReal> la_trans;
 	vector<mReal> t_trans;
 	vector<mReal> h_trans;
+	/*vector<mReal> rh_trans;
+	vector<mReal> lh_trans;*/
 
 	if (ra_node)
 	{	
@@ -1008,6 +1181,30 @@ bool M3Humanoid::ReadConfig(const char * filename)
 		}
 
 	}
+	if (rh_node)
+	{	
+		(*rh_node)["chain_component"] >> right_hand_name;
+		//rh_rot = YamlReadVectorM((*rh_node)["base_rotation_in_parent"]);
+		//rh_trans = YamlReadVectorM((*rh_node)["base_translation_in_parent"]);
+		try {
+		  (*rh_node)["force_shm_mode"] >>force_shm_r_hand;
+		} catch(YAML::KeyNotFound& e) {		
+			force_shm_r_hand = false;
+		}
+
+	}
+	if (lh_node)
+	{	
+		(*lh_node)["chain_component"] >> left_hand_name;
+		//lh_rot = YamlReadVectorM((*lh_node)["base_rotation_in_parent"]);
+		//lh_trans = YamlReadVectorM((*lh_node)["base_translation_in_parent"]);
+		try {
+		  (*lh_node)["force_shm_mode"] >>force_shm_l_hand;
+		} catch(YAML::KeyNotFound& e) {		
+			force_shm_l_hand = false;
+		}
+
+	}
 	
 	try{
 	  doc["startup_motor_pwr_on"]>>startup_motor_pwr_on;
@@ -1027,6 +1224,10 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	Vector t_vec_kdl;
 	Rotation h_rot_kdl;
 	Vector h_vec_kdl;
+	/*Rotation rh_rot_kdl;
+	Vector rh_vec_kdl;
+	Rotation lh_rot_kdl;
+	Vector lh_vec_kdl;*/
 
 	
 	for(int i=0;i<ra_rot.size();i++) ra_rot_kdl.data[i] = ra_rot[i];
@@ -1037,6 +1238,10 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	for(int i=0;i<t_trans.size();i++) t_vec_kdl[i] = t_trans[i];
 	for(int i=0;i<h_rot.size();i++) h_rot_kdl.data[i] = h_rot[i];
 	for(int i=0;i<h_trans.size();i++) h_vec_kdl[i] = h_trans[i];
+	/*for(int i=0;i<rh_rot.size();i++) rh_rot_kdl.data[i] = rh_rot[i];
+	for(int i=0;i<rh_trans.size();i++) rh_vec_kdl[i] = rh_trans[i];
+	for(int i=0;i<lh_rot.size();i++) lh_rot_kdl.data[i] = lh_rot[i];
+	for(int i=0;i<lh_trans.size();i++) lh_vec_kdl[i] = lh_trans[i];*/
 
 	right_arm_offset=Frame(ra_rot_kdl, ra_vec_kdl);
 	left_arm_offset=Frame(la_rot_kdl, la_vec_kdl);
@@ -1062,7 +1267,11 @@ M3BaseHumanoidCommand * M3Humanoid::GetCmd(M3Chain chain)
     case TORSO:
       return command.mutable_torso();
     case HEAD:
-      return command.mutable_head();      
+      return command.mutable_head();
+    case LEFT_HAND:
+	    return command.mutable_left_hand();
+    case RIGHT_HAND:
+	    return command.mutable_right_hand();
   }
   return NULL;
 }
@@ -1078,7 +1287,11 @@ const M3BaseHumanoidStatus * M3Humanoid::GetStatus(M3Chain chain)
     case TORSO:
       return &status.torso();
     case HEAD:
-      return &status.head();      
+      return &status.head();  
+    case LEFT_HAND:
+	    return &status.left_hand();
+    case RIGHT_HAND:
+	    return &status.right_hand();
   }
   return NULL;
 
@@ -1096,6 +1309,10 @@ M3BaseHumanoidParam * M3Humanoid::GetParam(M3Chain chain)
       return param.mutable_torso();
     case HEAD:
       return param.mutable_head();      
+    case LEFT_HAND:
+      return param.mutable_left_hand();
+    case RIGHT_HAND:
+      return param.mutable_right_hand();
   }
   return NULL;
 
@@ -1276,7 +1493,15 @@ void M3Humanoid::SetTorqueSharedMem_mNm(M3Chain chain,unsigned int idx, mReal to
     case TORSO:
       if (idx < torque_shm_torso.rows())
 	torque_shm_torso(idx) = torque;
-      break;    
+      break;
+   case RIGHT_HAND:
+      if (idx < torque_shm_right_hand.rows())
+	torque_shm_right_hand(idx) = torque;
+      break;
+   case LEFT_HAND:
+      if (idx < torque_shm_left_hand.rows())
+	torque_shm_left_hand(idx) = torque;
+      break;
   }
 }
 
@@ -1325,7 +1550,13 @@ void M3Humanoid::SetSlewRateProportional(M3Chain chain,unsigned int idx, mReal s
       break;
     case HEAD:
       max_slew = ((M3JointParam*)head->GetJoint(idx)->GetParam())->max_q_slew_rate();
-      break;            
+      break;   
+    case LEFT_HAND:
+      max_slew = ((M3JointParam*)left_hand->GetJoint(idx)->GetParam())->max_q_slew_rate();
+      break;
+    case RIGHT_HAND:
+      max_slew = ((M3JointParam*)right_hand->GetJoint(idx)->GetParam())->max_q_slew_rate();
+      break;
   }
   
   M3BaseHumanoidCommand * cmd = GetCmd(chain);
@@ -1513,6 +1744,14 @@ int M3Humanoid::GetNdof(M3Chain chain)
       case HEAD:
 	if (head)
 	  return head->GetNumDof();      
+	break;
+      case LEFT_HAND:
+	if (left_hand)
+	  return left_hand->GetNumDof();      
+	break;
+      case RIGHT_HAND:
+	if (right_hand)
+	  return right_hand->GetNumDof();      
 	break;
     }
     return 0;

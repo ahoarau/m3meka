@@ -54,6 +54,7 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #include "m3/chains/arm.h"
 #include "m3/chains/head.h"
 #include "m3/robots/robot.h"
+#include "m3/chains/hand.h"
 #include "m3/robots/chain_name.h"
 #include "m3/hardware/loadx6.h"
 #include <google/protobuf/message.h>
@@ -71,7 +72,7 @@ class M3Humanoid : public M3Robot
 		/// Create an M3Humanoid
 		M3Humanoid() : m3::M3Robot(), head(NULL), torso(NULL), right_arm(NULL), left_arm(NULL), force_shm_r_arm(false), 
 		  force_shm_l_arm(false), force_shm_torso(false), force_shm_head(false), enable_shm_r_arm(false), enable_shm_l_arm(false), enable_shm_torso(false), enable_shm_head(false),
-		    startup_motor_pwr_on(false), right_load_x6(NULL)
+		    startup_motor_pwr_on(false), right_load_x6(NULL) ,right_hand(NULL),left_hand(NULL)
 		{
 		  head_base_2_world_frame=Frame::Identity();
 		}
@@ -346,6 +347,12 @@ class M3Humanoid : public M3Robot
 		void DisableAngleShmHead(){enable_shm_head = false;}
 		void EnableAngleShmHead(){enable_shm_head = true;}
 		
+		void DisableAngleShmRightHand(){enable_shm_r_hand = false;}
+		void EnableAngleShmRightHand(){enable_shm_r_hand = true;}
+		
+		void DisableAngleShmLeftHand(){enable_shm_l_hand = false;}
+		void EnableAngleShmLeftHand(){enable_shm_l_hand = true;}
+		
 		google::protobuf::Message * GetCommand(){return &command;}
 		google::protobuf::Message * GetStatus(){return &status;}
 		google::protobuf::Message * GetParam(){return &param;}
@@ -368,19 +375,25 @@ class M3Humanoid : public M3Robot
 		M3HumanoidCommand command;
 		M3HumanoidParam param;
 		void TestAPI();
+		
 		Vector grav_end_torso;
 		Frame torso_end_frame;
 		Frame right_arm_end_frame;
 		Frame left_arm_end_frame;	
 		Frame head_end_frame;
+		
 		Twist torso_twist;
 		Twist right_arm_twist;
 		Twist left_arm_twist;
 		Twist head_twist;
+		
 		string torso_name;
 		string right_arm_name;
 		string left_arm_name;
-		string head_name;		
+		string head_name;
+		string right_hand_name;
+		string left_hand_name;
+		
 		Frame torso_offset;
 		Frame right_arm_offset;
 		Frame left_arm_offset;
@@ -390,7 +403,11 @@ class M3Humanoid : public M3Robot
 		M3Torso * torso;
 		M3Head * head;
 		M3Arm * right_arm;
-		M3Arm * left_arm;		
+		M3Arm * left_arm;
+		// A.H : Add right and left hand for ros_control
+		M3Hand * right_hand;
+		M3Hand * left_hand;
+		
 		Wrench torso_wrench;		
 		Frame right_eye_2_world_frame;
 		Frame left_eye_2_world_frame;
@@ -401,16 +418,22 @@ class M3Humanoid : public M3Robot
 		Jacobian J_head;
 		JntArray torque_shm_right_arm;
 		JntArray torque_shm_left_arm;
+		JntArray torque_shm_right_hand;
+		JntArray torque_shm_left_hand;
 		JntArray torque_shm_torso;
 		JntArray angle_shm_head;
 		JntArray slew_rate_shm_head;
 		int tmp_cnt;
 		bool force_shm_r_arm;
 		bool force_shm_l_arm;
+		bool force_shm_r_hand;
+		bool force_shm_l_hand;
 		bool force_shm_torso;
 		bool force_shm_head;
 		bool enable_shm_r_arm;
 		bool enable_shm_l_arm;
+		bool enable_shm_r_hand;
+		bool enable_shm_l_hand;
 		bool enable_shm_torso;
 		bool enable_shm_head;
 		bool startup_motor_pwr_on;

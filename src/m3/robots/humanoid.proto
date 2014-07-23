@@ -29,12 +29,14 @@ message M3HumanoidStatus
 	optional M3BaseHumanoidStatus	right_arm=2;				//
 	optional M3BaseHumanoidStatus	left_arm=3;				//	
 	optional M3BaseHumanoidStatus	torso=4;				//
-	optional M3BaseHumanoidStatus	head=5;				//	
-	repeated double			right_eye_rot=6;//3x1 position of End frame in Base coords (x,y,z)
-	repeated double			left_eye_rot=7;// 3x3 Rotation Mtx
-	repeated double			right_eye_pos=8;//3x1 position of End frame in Base coords (x,y,z)
-	repeated double			left_eye_pos=9;// 3x3 Rotation Mtx
-	optional bool			motor_enabled=10;			//On-Off	
+	optional M3BaseHumanoidStatus	head=5;				//
+	optional M3BaseHumanoidStatus	right_hand=6;
+	optional M3BaseHumanoidStatus	left_hand=7;	
+	repeated double			right_eye_rot=8;//3x1 position of End frame in Base coords (x,y,z)
+	repeated double			left_eye_rot=9;// 3x3 Rotation Mtx
+	repeated double			right_eye_pos=10;//3x1 position of End frame in Base coords (x,y,z)
+	repeated double			left_eye_pos=11;// 3x3 Rotation Mtx
+	optional bool			motor_enabled=12;			//On-Off	
 }
 
 
@@ -43,7 +45,9 @@ message M3HumanoidCommand{
 	optional M3BaseHumanoidCommand	left_arm=2;
 	optional M3BaseHumanoidCommand	torso=3;
 	optional M3BaseHumanoidCommand	head=4;	
-	optional bool			enable_motor=5;				//Turn motor power on/off
+	optional M3BaseHumanoidCommand	right_hand=5;
+	optional M3BaseHumanoidCommand	left_hand=6;
+	optional bool			enable_motor=7;				//Turn motor power on/off
 }
 
 message M3HumanoidParam{	
@@ -51,6 +55,8 @@ message M3HumanoidParam{
 	optional M3BaseHumanoidParam	left_arm=2;
 	optional M3BaseHumanoidParam	torso=3;	
 	optional M3BaseHumanoidParam	head=4;	
+	optional M3BaseHumanoidParam	right_hand=5;	
+	optional M3BaseHumanoidParam	left_hand=6;	
 }
 
 message M3BaseHumanoidStatus
