@@ -2,25 +2,14 @@ cmake_minimum_required(VERSION 2.8)
 project(toolbox)
 set(LIBNAME "m3toolbox")
 
-
-find_package(M3rt)
 find_package(M3 COMPONENTS HARDWARE ROBOTS CHAINS TOOLBOX SHARED_MEM)
-find_package(Eigen3 3 REQUIRED)
+find_package(M3rt)
+include_directories(${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})
+
+## First generate the python 
 find_package(Protobuf REQUIRED)
-
-include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${M3_INCLUDE_DIR})
-
-
-# Start Protobuf stuff
-## Cpp protobufs
-file(GLOB ProtoFiles "${CMAKE_CURRENT_SOURCE_DIR}/*.proto")
 SET(PROTOBUF_IMPORT_DIRS ${PROTOBUF_IMPORT_DIRS} ${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})
-SET("PROTOBUF_IMPORT_DIRS ${PROTOBUF_IMPORT_DIRS} ")
-
-PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles})
-set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
-                            GENERATED TRUE)
-add_custom_target(${LIBNAME}_protobuf_tmp  ALL DEPENDS ${ProtoSources}) # Force the re-generation
+file(GLOB ProtoFiles "${CMAKE_CURRENT_SOURCE_DIR}/*.proto")
 ## Python protobufs
 find_package(PythonLibs 2.7 REQUIRED)
 find_package(PythonInterp REQUIRED) 
@@ -28,6 +17,23 @@ find_package(PythonInterp REQUIRED)
 PROTOBUF_GENERATE_PYTHON(PySources ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles}) 
 add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # force the generation
 # End Protobuf stuff
+
+
+if(RTAI)
+find_package(RTAI REQUIRED)
+add_definitions(-D__RTAI__)
+find_package(Eigen3 3 REQUIRED)
+
+include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${M3_INCLUDE_DIR})
+
+
+# Start Protobuf stuff
+## Cpp protobufs
+PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles})
+set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
+                            GENERATED TRUE)
+add_custom_target(${LIBNAME}_protobuf_tmp  ALL DEPENDS ${ProtoSources}) # Force the re-generation
+
 
 SET(LIBS ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3base)
 
@@ -69,6 +75,7 @@ set_target_properties(${LIBNAME} PROPERTIES COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}
 ## Installing
 install(TARGETS ${LIBNAME} DESTINATION lib)
 install(FILES ${ALL_HDRS} DESTINATION include/m3/${PROJECT_NAME})
+endif(RTAI)
 
 execute_process ( 
    COMMAND ${PYTHON_EXECUTABLE} -c 

@@ -1,41 +1,46 @@
 cmake_minimum_required(VERSION 2.8)
 project(chains)
 set(LIBNAME "m3chains")
-
-find_package(RTAI REQUIRED)
+# M3
 find_package(M3 COMPONENTS HARDWARE TOOLBOX)
-find_package(M3rt REQUIRED)
-find_package(Boost REQUIRED)
-find_package(Eigen3 3 REQUIRED)
+find_package(M3rt)
+include_directories(${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})
+
+## First generate the python 
 find_package(Protobuf REQUIRED)
-find_package(orocos_kdl REQUIRED)
-
-#SET(M3_INCLUDE_DIR 
-#	${CMAKE_CURRENT_BINARY_DIR}/../toolbox
-#	${CMAKE_CURRENT_BINARY_DIR}/../hardware
-#)
-
-include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${M3_INCLUDE_DIR} ${orocos_kdl_INCLUDE_DIRS})
-
-
-# Start Protobuf stuff
-file(GLOB ProtoFiles "${CMAKE_CURRENT_SOURCE_DIR}/*.proto")
 SET(PROTOBUF_IMPORT_DIRS ${PROTOBUF_IMPORT_DIRS} ${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})
-PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles})
-set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
-                            GENERATED TRUE)
-add_custom_target(${LIBNAME}_protobuf_tmp  ALL DEPENDS ${ProtoSources}) # Force the re-generation
+file(GLOB ProtoFiles "${CMAKE_CURRENT_SOURCE_DIR}/*.proto")
 ## Python protobufs
 find_package(PythonLibs 2.7 REQUIRED)
 find_package(PythonInterp REQUIRED) 
 ## Generate and copy the python protobuf
-SET(PROTOBUF_IMPORT_DIRS ${PROTOBUF_IMPORT_DIRS} ${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})
 PROTOBUF_GENERATE_PYTHON(PySources ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles}) 
 add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # force the generation
 # End Protobuf stuff
 
 
-SET(LIBS ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3hardware m3toolbox m3base ${orocos_kdl_LIBRARIES})
+if(RTAI)
+find_package(RTAI REQUIRED)
+add_definitions(-D__RTAI__)
+
+
+find_package(Boost REQUIRED)
+find_package(Eigen3 3 REQUIRED)
+find_package(orocos_kdl REQUIRED)
+
+
+include_directories( ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${orocos_kdl_INCLUDE_DIRS})
+# Start Protobuf stuff
+PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles})
+set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
+                            GENERATED TRUE)
+add_custom_target(${LIBNAME}_protobuf_tmp  ALL DEPENDS ${ProtoSources}) # Force the re-generation
+
+
+
+
+
+SET(LIBS ${LIBS} ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3hardware m3toolbox m3base ${orocos_kdl_LIBRARIES})
 
 
 set( ALL_SRCS 
@@ -53,15 +58,11 @@ torso.cpp
 set( ALL_HDRS 
 arm.h
 dynamatics.h
-#dynamatics.pb.h
 gripper.h
 hand.h
 hand_ua.h
-#hand_ua.pb.h
 head.h
 joint_array.h
-#joint_array_mode.pb.h
-#joint_array.pb.h
 joint_chain.h
 torso.h
 )
@@ -83,6 +84,7 @@ set_target_properties(${LIBNAME} PROPERTIES COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}
 ## Installing
 install(TARGETS ${LIBNAME} DESTINATION lib)
 install(FILES ${ALL_HDRS} DESTINATION include/m3/${PROJECT_NAME})
+endif(RTAI)
 
 execute_process ( 
    COMMAND ${PYTHON_EXECUTABLE} -c 
