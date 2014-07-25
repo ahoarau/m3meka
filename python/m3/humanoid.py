@@ -111,6 +111,8 @@ class M3Humanoid(M3Robot):
                         
         self.right_arm = ChainAttributes()
         self.left_arm = ChainAttributes()
+        self.right_hand = ChainAttributes()
+        self.left_hand = ChainAttributes()
         self.torso = ChainAttributes()
         self.head = ChainAttributes()
         self.available_chains = []
@@ -118,6 +120,8 @@ class M3Humanoid(M3Robot):
         
         self.right_arm.theta_sim = [0]*self.right_arm.ndof
         self.left_arm.theta_sim = [0]*self.left_arm.ndof
+        self.right_hand.theta_sim = [0]*self.right_hand.ndof
+        self.left_hand.theta_sim = [0]*self.left_hand.ndof
         self.head.theta_sim = [0]*self.head.ndof
         self.torso.theta_sim = [0]*self.torso.ndof
         
@@ -981,7 +985,7 @@ class M3Humanoid(M3Robot):
         left_arm_model = None
                 
         try:
-            f=file(self.config_name,'r')
+            f=open(self.config_name,'r')
             self.config= yaml.safe_load(f.read())
         except (IOError, EOFError):
             print 'Config file not present:',self.config_name
@@ -1008,6 +1012,21 @@ class M3Humanoid(M3Robot):
             self.available_chains.append('head')
             self.head.chain_name = self.config['chains']['head']['chain_component']
             self.__set_base_offset_tool_transforms('head', self.config['chains']['head'])
+            
+        if self.config['chains'].has_key('left_hand'):
+            self.available_chains.append('left_hand')
+            self.left_hand.chain_name = self.config['chains']['left_hand']['chain_component']
+            try:
+                self.__set_base_offset_tool_transforms('left_hand', self.config['chains']['left_hand'])
+            except:
+                pass
+        if self.config['chains'].has_key('right_hand'):
+            self.available_chains.append('right_hand')
+            self.right_hand.chain_name = self.config['chains']['right_hand']['chain_component']
+            try:
+                self.__set_base_offset_tool_transforms('right_hand', self.config['chains']['right_hand'])
+            except:
+                pass
             
         # Now configure
         if self.right_arm.chain_name is not None:
@@ -1060,6 +1079,30 @@ class M3Humanoid(M3Robot):
             self.__make_kdl_chain('head')
             self.__set_joints_max_min_deg('head')
             
+        if self.left_hand.chain_name is not None:
+            self.left_hand.ndof = self.__get_ndof_from_config('left_hand')            
+            self.left_hand.max_slew_rates = self.__get_max_slew_rates_from_config('left_hand')        
+            self.__grow_command_message('left_hand')
+            try: # Dynamatics stuff
+                self.__set_params_from_config('left_hand')
+                self.__load_dh_from_kinefile('left_hand')
+                self.__make_kdl_chain('left_hand')
+            except:
+                pass
+            self.__set_joints_max_min_deg('left_hand')
+            
+        if self.right_hand.chain_name is not None:
+            self.right_hand.ndof = self.__get_ndof_from_config('right_hand')            
+            self.right_hand.max_slew_rates = self.__get_max_slew_rates_from_config('right_hand')       
+            self.__grow_command_message('right_hand') 
+            try:  # Dynamatics stuff
+                self.__set_params_from_config('right_hand')
+                self.__load_dh_from_kinefile('right_hand')
+                self.__make_kdl_chain('right_hand')
+            except:
+                pass
+            self.__set_joints_max_min_deg('right_hand')
+            
 
     def get_joints_max_deg(self, chain):
         chain_attr = getattr(self, chain)
@@ -1082,7 +1125,7 @@ class M3Humanoid(M3Robot):
         file_name = m3t.get_component_config_filename(chain_attr.chain_name)
         
         try:
-            f=file(file_name,'r')
+            f=open(file_name,'r')
             config= yaml.safe_load(f.read())
         except (IOError, EOFError):
             print 'Config file not present:',file_name
@@ -1095,7 +1138,7 @@ class M3Humanoid(M3Robot):
             joint_name = config['joint_components'][k]
             joint_file_name = m3t.get_component_config_filename(joint_name)
             try:
-                jf=file(joint_file_name,'r')
+                jf=open(joint_file_name,'r')
                 joint_config= yaml.safe_load(jf.read())
             except (IOError, EOFError):
                 print 'Config file not present:', joint_file_name
@@ -1110,7 +1153,7 @@ class M3Humanoid(M3Robot):
         file_name = m3t.get_component_config_filename(chain_attr.chain_name)
         
         try:
-            f=file(file_name,'r')
+            f=open(file_name,'r')
             config= yaml.safe_load(f.read())
         except (IOError, EOFError):
             print 'Config file not present:',file_name
@@ -1122,7 +1165,7 @@ class M3Humanoid(M3Robot):
             joint_name = config['joint_components'][k]
             joint_file_name = m3t.get_component_config_filename(joint_name)
             try:
-                jf=file(joint_file_name,'r')
+                jf=open(joint_file_name,'r')
                 joint_config= yaml.safe_load(jf.read())
             except (IOError, EOFError):
                 print 'Config file not present:', joint_file_name
@@ -1542,7 +1585,7 @@ class M3Humanoid(M3Robot):
         file_name = m3t.get_component_config_filename(chain_attr.chain_name)
         
         try:
-            f=file(file_name,'r')
+            f=open(file_name,'r')
             config= yaml.safe_load(f.read())
         except (IOError, EOFError):
             print 'Config file not present:',file_name
@@ -1556,7 +1599,7 @@ class M3Humanoid(M3Robot):
         file_name = m3t.get_component_config_filename(chain_attr.chain_name)                
         
         try:
-            f=file(file_name,'r')
+            f=open(file_name,'r')
             config= yaml.safe_load(f.read())
         except (IOError, EOFError):
             print 'Config file not present:',file_name
@@ -1571,7 +1614,7 @@ class M3Humanoid(M3Robot):
         file_name = m3t.get_component_config_filename(name)
         
         try:
-            f=file(file_name,'r')
+            f=open(file_name,'r')
             config= yaml.safe_load(f.read())
         except (IOError, EOFError):
             print 'Config file not present:',file_name
@@ -1589,7 +1632,7 @@ class M3Humanoid(M3Robot):
         file_name = m3t.get_component_config_filename(chain_attr.chain_name)
         
         try:
-            f=file(file_name,'r')
+            f=open(file_name,'r')
             config= yaml.safe_load(f.read())
         except (IOError, EOFError):
             print 'Config file not present:',file_name
@@ -1604,7 +1647,7 @@ class M3Humanoid(M3Robot):
         file_name = m3t.get_component_config_filename(name)
         
         try:
-            f=file(file_name,'r')
+            f=open(file_name,'r')
             config= yaml.safe_load(f.read())
         except (IOError, EOFError):
             print 'Config file not present:',file_name
