@@ -2,14 +2,30 @@ cmake_minimum_required(VERSION 2.8)
 project(vehicles)
 set(LIBNAME "m3vehicles")
 
-
-find_package(RTAI REQUIRED)
-find_package(Holomni)
 find_package(M3 COMPONENTS HARDWARE CHAINS TOOLBOX VEHICLE)
 find_package(M3rt)
+include_directories(${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})
+
+## First generate the python 
+find_package(Protobuf REQUIRED)
+SET(PROTOBUF_IMPORT_DIRS ${PROTOBUF_IMPORT_DIRS} ${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})
+
+file(GLOB ProtoFiles "${CMAKE_CURRENT_SOURCE_DIR}/*.proto")
+## Python protobufs
+find_package(PythonLibs 2.7 REQUIRED)
+find_package(PythonInterp REQUIRED) 
+## Generate and copy the python protobuf
+PROTOBUF_GENERATE_PYTHON(PySources ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles}) 
+add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # force the generation
+# End Protobuf stuff
+
+if(RTAI)
+find_package(RTAI REQUIRED)
+add_definitions(-D__RTAI__)
 find_package(Boost REQUIRED)
 find_package(Eigen3 3 REQUIRED)
-find_package(Protobuf REQUIRED)
+find_package(Holomni)
+include_directories(${HOLOMNI_INCLUDE_DIR})
 
 #SET(M3_INCLUDE_DIR 
 #	${CMAKE_CURRENT_SOURCE_DIR}/../..
@@ -23,19 +39,11 @@ include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DI
 
 # Start Protobuf stuff
 ## Cpp protobufs
-file(GLOB ProtoFiles "${CMAKE_CURRENT_SOURCE_DIR}/*.proto")
-SET(PROTOBUF_IMPORT_DIRS ${PROTOBUF_IMPORT_DIRS} ${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})
 PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles})
 set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
                             GENERATED TRUE)
 add_custom_target(${LIBNAME}_protobuf_tmp  ALL DEPENDS ${ProtoSources}) # Force the re-generation
-## Python protobufs
-find_package(PythonLibs 2.7 REQUIRED)
-find_package(PythonInterp REQUIRED) 
-## Generate and copy the python protobuf
-PROTOBUF_GENERATE_PYTHON(PySources ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles}) 
-add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # force the generation
-# End Protobuf stuff
+
 
 
 SET(LIBS ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3chains m3toolbox m3hardware holomni_pcv m3base)
@@ -73,7 +81,7 @@ target_link_libraries(${LIBNAME} ${LIBS})
 install(TARGETS ${LIBNAME} DESTINATION lib)
 install(FILES ${ALL_HDRS} DESTINATION include/m3/${PROJECT_NAME})
 
-
+endif(RTAI)
 
 execute_process ( 
    COMMAND ${PYTHON_EXECUTABLE} -c 
