@@ -38,7 +38,7 @@ class M3JointChain;
 class M3Dynamatics : public m3rt::M3Component
 {
 	public:
-		M3Dynamatics() : M3Component(DYNAMATICS_PRIORITY), m3chain(NULL),fksolver_vel(NULL), idsolver(NULL), jjsolver(NULL) ,tmp_cnt(0),ToTipSeg(NULL)
+		M3Dynamatics() : M3Component(DYNAMATICS_PRIORITY), m3chain(NULL),fksolver_vel(NULL), idsolver(NULL), jjsolver(NULL) ,tmp_cnt(0)
 		{
 			RegisterVersion("default",DEFAULT);	//RBL
 			RegisterVersion("iss",ISS);		//ISS. Safe as DEFAULT
@@ -115,7 +115,7 @@ class M3Dynamatics : public m3rt::M3Component
 		bool use_velocities;
 		bool use_accelerations;
 		// A.H : pre allocate in setpayload()
-		Segment* ToTipSeg;
+		//Segment* ToTipSeg;
 		RigidBodyInertia rb_inertia;
 		RotationalInertia rot_inertia;
 		Vector com;

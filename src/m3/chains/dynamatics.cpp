@@ -99,12 +99,37 @@ void M3Dynamatics::Startup()
 			// because frames define the joint placement for the NEXT segment, we need to use Inertial values for previous segment
 			Vector vcog = Vector(cx[i-1] ,cy[i-1], cz[i-1]);					
 			RotationalInertia ri = RotationalInertia(Ixx[i-1], Iyy[i-1], Izz[i-1], Ixy[i-1], Ixz[i-1], Iyz[i-1]);
-			kdlchain.addSegment(Segment(Joint(Joint::RotZ), frame, frame.Inverse()*RigidBodyInertia(m[i-1],vcog, ri)));
+			if(i!=ndof)
+			{
+				kdlchain.addSegment(Segment(Joint(Joint::RotZ), frame, frame.Inverse()*RigidBodyInertia(m[i-1],vcog, ri)));
+			}else
+			{
+				Segment ToTipSeg(Joint(Joint::RotZ), frame);
+				mReal payload_mass = GetPayloadMass();
+				com = frame*GetPayloadCom(); // tranforming from wrist to last joint's frame where we defined it's COM...
+				rb_inertia = (frame*RigidBodyInertia(0.,Vector(0.,0.,0.),GetPayloadInertia()));
+				rot_inertia = rb_inertia.getRotationalInertia();
+				z_m = m[i-1]; //Mass of the last link
+				if (payload_mass+z_m>0.001) // we add the payload mass
+				{
+
+					ecom = (payload_mass*com+z_com*z_m)/(payload_mass+z_m);		
+					ToTipSeg.setInertia(frame.Inverse()*RigidBodyInertia(payload_mass+z_m, ecom, rot_inertia + z_I));
+				}
+				else
+				{
+					ecom = (com+z_com);		
+					ToTipSeg.setInertia(frame.Inverse()*RigidBodyInertia(payload_mass+z_m, ecom, rot_inertia + z_I));
+				}
+				kdlchain.addSegment(ToTipSeg);
+			}
+				
 		}
 	}
-	
-	//Store no-load payload for last link
+	// HACK : Temporary fix to use the reguler ros-kdl
+	//ToTipSeg = kdlchain.getSegment(kdlchain.getNrOfSegments()-1); // A.H : Get the last segment
 	Frame toTip = kdlchain.getSegment(kdlchain.getNrOfSegments()-1).getFrameToTip();
+
 	RigidBodyInertia z_I_rigid = toTip*kdlchain.getSegment(kdlchain.getNrOfSegments()-1).getInertia();
 	z_com = z_I_rigid.getCOG();
 	z_I = z_I_rigid.getRotationalInertia();
@@ -258,9 +283,10 @@ void M3Dynamatics::SetPayload()
 		PrettyPrint();
 		return;
 	}
-	ToTipSeg = kdlchain.getMutableSegment(kdlchain.getNrOfSegments()-1); // A.H : Get the last segment
-	
- 	toTip = ToTipSeg->getFrameToTip();
+	// HACK: temporary remove for regular kdl
+	//ToTipSeg = kdlchain.getMutableSegment(kdlchain.getNrOfSegments()-1); // A.H : Get the last segment
+/*
+ 	toTip = kdlchain.getSegment(kdlchain.getNrOfSegments()-1).getFrameToTip();
 	
 	// REPLACED Segment * end_eff = kdlchain.getMutableSegment(kdlchain.getNrOfSegments()-1);
 	
@@ -278,9 +304,10 @@ void M3Dynamatics::SetPayload()
 	{
 		ecom = (com+z_com);		
 		ToTipSeg->setInertia(toTip.Inverse()*RigidBodyInertia(m+z_m, ecom, rot_inertia + z_I));
-	}
+	}*/
 	// Should not be needed anymore as we modify the segment directly 
-	idsolver->chain = kdlchain;
+	// HACK: temporary remove for regular kdl
+	//idsolver->chain = kdlchain;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

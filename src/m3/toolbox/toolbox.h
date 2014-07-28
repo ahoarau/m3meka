@@ -29,20 +29,20 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #include <climits>
 #include "m3rt/base/m3rt_def.h"
 #include "m3rt/base/toolbox.h"
-#include </usr/local/include/kdl/chain.hpp>
-#include </usr/local/include/kdl/segment.hpp>
-#include </usr/local/include/kdl/rotationalinertia.hpp>
-#include </usr/local/include/kdl/chainfksolvervel_recursive.hpp>
-#include </usr/local/include/kdl/chainfksolverpos_recursive.hpp>
-#include </usr/local/include/kdl/frames.hpp>
-#include </usr/local/include/kdl/framevel.hpp>
-#include </usr/local/include/kdl/jacobian.hpp>
-#include </usr/local/include/kdl/chainjnttojacsolver.hpp>
-#include </usr/local/include/kdl/rigidbodyinertia.hpp>
-#include </usr/local/include/kdl/jntarray.hpp>
-#include </usr/local/include/kdl/jntarrayvel.hpp>
-#include </usr/local/include/kdl/chainidsolver_recursive_newton_euler.hpp>
-#include </usr/local/include/kdl/frames_io.hpp>
+#include <kdl/chain.hpp>
+#include <kdl/segment.hpp>
+#include <kdl/rotationalinertia.hpp>
+#include <kdl/chainfksolvervel_recursive.hpp>
+#include <kdl/chainfksolverpos_recursive.hpp>
+#include <kdl/frames.hpp>
+#include <kdl/framevel.hpp>
+#include <kdl/jacobian.hpp>
+#include <kdl/chainjnttojacsolver.hpp>
+#include <kdl/rigidbodyinertia.hpp>
+#include <kdl/jntarray.hpp>
+#include <kdl/jntarrayvel.hpp>
+#include <kdl/chainidsolver_recursive_newton_euler.hpp>
+#include <kdl/frames_io.hpp>
 
 namespace m3
 {
