@@ -22,7 +22,10 @@
 #ifndef M3_CTRL_SIMPLE_H
 #define M3_CTRL_SIMPLE_H
 
-
+#include <cmath>
+#include "m3rt/base/toolbox.h"
+#include "m3rt/base/m3rt_def.h"
+#include "m3rt/base/component_factory.h"
 #include <google/protobuf/message.h>
 #include "m3rt/base/component.h"
 #include "m3/toolbox/toolbox.h"
@@ -36,7 +39,6 @@ namespace m3
 	using namespace std;
 	using namespace m3rt;
 	
-
 class M3CtrlSimple: public  m3rt::M3Component
 {
 	public:
@@ -108,6 +110,38 @@ class M3CtrlSimple: public  m3rt::M3Component
 		CTRL_SIMPLE_MODE ctrl_mode_last;
 		
 		int pnt_cnt;
+private:
+	void NodeToTrajParam(const YAML::Node& node, M3ParamTrajectory* traj)
+{
+#ifndef YAMLCPP_05
+	mReal tmp;
+	node["freq"] >> tmp; 		traj->set_freq(tmp);
+	node["amp"] >> tmp;			traj->set_amp(tmp);
+	node["zero"] >> tmp;		traj->set_zero(tmp);
+#else
+	traj->set_freq(node["freq"].as<mReal>());
+	traj->set_amp(node["amp"].as<mReal>());
+	traj->set_zero(node["zero"].as<mReal>());
+#endif
+}
+void NodeToPIDParam(const YAML::Node& node, M3ParamPID* pid)
+{
+#ifndef YAMLCPP_05
+
+	mReal val;
+	node["k_p"] >> val;			pid->set_k_p(val);
+	node["k_i"] >> val;			pid->set_k_i(val);
+	node["k_d"] >> val;			pid->set_k_d(val);
+	node["k_i_limit"] >> val;	pid->set_k_i_limit(val);
+	node["k_i_range"] >> val;	pid->set_k_i_range(val);
+#else
+	pid->set_k_p(node["k_p"].as<mReal>());
+	pid->set_k_i(node["k_i"].as<mReal>());
+	pid->set_k_d(node["k_d"].as<mReal>());
+	pid->set_k_i_limit(node["k_i_limit"].as<mReal>());
+	pid->set_k_i_range(node["k_i_range"].as<mReal>());
+#endif
+}
 };
 
 }

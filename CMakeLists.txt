@@ -34,7 +34,7 @@ include_directories(
 add_subdirectory(src)
 add_subdirectory(python)
 
-configure_file(setup.bash.in ${CMAKE_CURRENT_BINARY_DIR}/setup.bash)
+#configure_file(setup.bash.in ${CMAKE_CURRENT_BINARY_DIR}/setup.bash)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup.bash DESTINATION ${CMAKE_INSTALL_PREFIX}/share/m3)
  
 IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")

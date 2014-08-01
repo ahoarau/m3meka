@@ -269,11 +269,19 @@ bool M3JointArray::ReadConfig(const char * filename)
         //m3rt::GetYamlDoc(filename,doc);
 	doc["ndof"] >> ndof;
 	const YAML::Node& joint_components = doc["joint_components"];
+#ifndef YAMLCPP_05
 	for(YAML::Iterator it=joint_components.begin();it!=joint_components.end();++it) 
 	{
    		string key, value;
     		it.first() >> key;
     		it.second() >> value;
+#else
+	for(YAML::const_iterator it=joint_components.begin();it!=joint_components.end();++it) 
+	{
+   		string key, value;
+    		it->first >> key;
+    		it->second >> value;	
+#endif
 		int id=atoi(key.substr(1).c_str()); //"J0" gives 0, etc
 		if (joint_names.size() <= (id+1))
 		{

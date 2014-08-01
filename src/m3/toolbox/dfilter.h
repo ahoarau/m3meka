@@ -22,7 +22,6 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #define M3_DFILTER_H
 
 #include "m3rt/base/toolbox.h"
-#include "yaml-cpp/yaml.h"
 #include <math.h>
 #include <Eigen/Eigen>
 #include <Eigen/Core>

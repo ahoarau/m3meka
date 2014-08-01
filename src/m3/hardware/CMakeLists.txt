@@ -16,7 +16,20 @@ find_package(PythonInterp REQUIRED)
 ## Generate and copy the python protobuf
 PROTOBUF_GENERATE_PYTHON(PySources ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles}) 
 add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # force the generation
-# End Protobuf stuff
+#End Protobuf stuff
+
+
+## YAML CPP 
+find_package(PkgConfig REQUIRED)
+#find_package(YamlCpp  REQUIRED)
+pkg_check_modules(YAMLCPP REQUIRED yaml-cpp)
+if(NOT ${YAMLCPP_VERSION} VERSION_LESS "0.5")
+set_property(
+   DIRECTORY
+   PROPERTY COMPILE_DEFINITIONS YAMLCPP_05
+   )
+endif(NOT ${YAMLCPP_VERSION} VERSION_LESS "0.5")
+link_directories(${YAMLCPP_LIBRARY_DIRS})
 
 if(RTAI)
 find_package(RTAI REQUIRED)

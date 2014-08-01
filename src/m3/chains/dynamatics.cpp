@@ -390,6 +390,7 @@ bool M3Dynamatics::ReadConfig(const char * filename)
 			cy.push_back(rtemp);
 			links[i]["cz"] >> rtemp;
 			cz.push_back(rtemp);
+#ifndef YAMLCPP_05
 			if(const YAML::Node *pName = links[i].FindValue("Ixx")) {
     				*pName >> rtemp;
 			} else {
@@ -426,6 +427,14 @@ bool M3Dynamatics::ReadConfig(const char * filename)
     				rtemp = 0.0;
 			}
 			Izz.push_back(rtemp);
+#else
+		 Ixx.push_back(links[i]["Ixx"].as<mReal>(0.0));
+		 Ixy.push_back(links[i]["Ixy"].as<mReal>(0.0));
+		 Ixz.push_back(links[i]["Ixz"].as<mReal>(0.0));
+		 Iyy.push_back(links[i]["Iyy"].as<mReal>(0.0));
+		 Iyz.push_back(links[i]["Iyz"].as<mReal>(0.0));
+		 Izz.push_back(links[i]["Izz"].as<mReal>(0.0));
+#endif
 		}
 	}
 

@@ -10,6 +10,7 @@
 
 namespace m3 {
 using namespace std;
+using namespace m3rt;
 using namespace Eigen;
 
 void M3SensorFilter::Step ( mReal qraw, mReal qdotraw ) {
@@ -51,7 +52,7 @@ void M3SensorFilter::Reset() {
     xdot_df.Clear();
     xdotdot_df.Clear();
     }
-
+    
 bool M3SensorFilter::ReadConfig ( const YAML::Node & doc ) {
     string t;
     doc["type"] >> t;
