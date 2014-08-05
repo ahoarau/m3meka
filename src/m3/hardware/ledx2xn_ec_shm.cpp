@@ -142,7 +142,7 @@ bool M3LedX2XNEcShm::LinkDependentComponents()
 	
 	if (led_x2xn_name.size()!=0)
 	{		
-		led_x2xn = (M3LedX2XNEc*)factory->GetComponent(led_x2xn_name);
+		led_x2xn = dynamic_cast<M3LedX2XNEc*>(factory->GetComponent(led_x2xn_name));
 		if (led_x2xn==NULL)
 		{
 			M3_ERR("M3LedX2XNEc component %s declared for M3LedX2XNEcShm but could not be linked\n",

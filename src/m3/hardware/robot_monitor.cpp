@@ -172,7 +172,7 @@ bool M3RobotMonitor::ReadConfig(const char * filename)
 	try 
 	{
 	    YAML::Iterator it=doc["volt_components"].begin();
-	}catch(YAML::TypedKeyNotFound<string> e) 
+	}catch(...) 
 	{
 	  has_volt = false;
 	}
@@ -215,7 +215,7 @@ bool M3RobotMonitor::ReadConfig(const char * filename)
 	try 
 	{
 	    YAML::Iterator it=doc["temp_components"].begin();
-	}catch(YAML::TypedKeyNotFound<string> e) 
+	}catch(...) 
 	{
 	  has_temp = false;
 	}

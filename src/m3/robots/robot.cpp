@@ -31,7 +31,7 @@ bool M3Robot::LinkDependentComponents()
 {
 	if (pwr_name.size()!=0)
 	{		
-		pwr=(M3Pwr*)factory->GetComponent(pwr_name);
+		pwr=dynamic_cast<M3Pwr*>(factory->GetComponent(pwr_name));
 		if (pwr==NULL)
 		{
 			M3_ERR("M3Pwr component %s could not be linked for M3Robot\n",

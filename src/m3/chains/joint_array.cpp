@@ -41,7 +41,7 @@ bool M3JointArray::LinkDependentComponents()
 	{
 		if(joint_names[i].size())
 		{
-			joints[i]=(M3Joint*)factory->GetComponent(joint_names[i]);			
+			joints[i]=dynamic_cast<M3Joint*>(factory->GetComponent(joint_names[i]));			
 			if (joints[i]!=NULL)
 				nl++;
 		}
@@ -279,8 +279,8 @@ bool M3JointArray::ReadConfig(const char * filename)
 	for(YAML::const_iterator it=joint_components.begin();it!=joint_components.end();++it) 
 	{
    		string key, value;
-    		it->first >> key;
-    		it->second >> value;	
+		key = 	it->first.as<std::string>();
+		value = it->second	.as<std::string>();
 #endif
 		int id=atoi(key.substr(1).c_str()); //"J0" gives 0, etc
 		if (joint_names.size() <= (id+1))

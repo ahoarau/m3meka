@@ -104,7 +104,7 @@ void M3MotorModel::ThermalInit(string config_filename)
 		
 		      node["previous_winding_temp"] >> previous_winding_temp;
 		      
-	      } catch(YAML::TypedKeyNotFound<string> e) 
+	      } catch(...) 
 	      {		
 		      previous_winding_temp=0.0;
 	      } 
@@ -113,7 +113,7 @@ void M3MotorModel::ThermalInit(string config_filename)
 	      {
 		      node["previous_case_temp"] >> previous_case_temp;
 		      
-	      } catch(YAML::TypedKeyNotFound<string> e) 
+	      } catch(...) 
 	      {		
 		      previous_case_temp=0.0;
 	      } 
@@ -123,7 +123,7 @@ void M3MotorModel::ThermalInit(string config_filename)
 	      {
 		      node["previous_temp_timestamp"] >> previous_temp_timestamp;
 		      
-	      } catch(YAML::TypedKeyNotFound<string> e) 
+	      } catch(...) 
 	      {
 		      //M3_WARN("Missing version key in config file for motor %s. Defaulting to type MODEL_V0\n",name.c_str());
 		      previous_temp_timestamp="";
@@ -253,7 +253,7 @@ void M3MotorModel::ReadConfig(const YAML::Node & doc, string config_filename)
 		if (t.compare("model_v0")==0){model_type=MODEL_V0;}
 		if (t.compare("model_v1")==0){model_type=MODEL_V1;}
 		if (t.compare("model_v2")==0){model_type=MODEL_V2;}
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		//M3_WARN("Missing version key in config file for motor %s. Defaulting to type MODEL_V0\n",name.c_str());
 		model_type=MODEL_V0;
@@ -302,28 +302,28 @@ void M3MotorModel::ReadConfig(const YAML::Node & doc, string config_filename)
 		try 
 		{
 			doc["alpha_cu"]>>alpha_cu;
-		} catch(YAML::TypedKeyNotFound<string> e) 
+		} catch(...) 
 		{
 			alpha_cu=.00393; //copper constant
 		} 
 		try 
 		{
 			doc["safe_thermal_pct"]>>safe_thermal_pct;
-		} catch(YAML::TypedKeyNotFound<string> e) 
+		} catch(...) 
 		{
 			safe_thermal_pct=0.80;
 		} 
 		try 
 		{
 			doc["safe_pwm_pct"]>>safe_pwm_pct;
-		} catch(YAML::TypedKeyNotFound<string> e) 
+		} catch(...) 
 		{
 			safe_pwm_pct=0.90;
 		} 
 		try 
 		{
 			doc["i_scale"]>>i_scale;
-		} catch(YAML::TypedKeyNotFound<string> e) 
+		} catch(...) 
 		{
 			i_scale=1.0;
 		} 
@@ -358,7 +358,7 @@ void M3MotorModel::ReadConfig(const YAML::Node & doc, string config_filename)
 	  try 
 	{
 		doc["use_old_temp_values"] >> use_old_temp_values;	
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		//M3_WARN("Missing version key in config file for motor %s. Defaulting to type MODEL_V0\n",name.c_str());
 		use_old_temp_values = false;

@@ -4,7 +4,7 @@ set(LIBNAME "m3toolbox")
 
 find_package(M3 COMPONENTS HARDWARE ROBOTS CHAINS TOOLBOX SHARED_MEM)
 find_package(M3rt)
-include_directories(${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})
+include_directories(${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR} ${M3RT_SRC})
 
 ## First generate the python 
 find_package(Protobuf REQUIRED)
@@ -37,7 +37,6 @@ find_package(Eigen3 3 REQUIRED)
 
 include_directories( ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR})
 
-
 # Start Protobuf stuff
 ## Cpp protobufs
 PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles})
@@ -45,8 +44,12 @@ set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
                             GENERATED TRUE)
 add_custom_target(${LIBNAME}_protobuf_tmp  ALL DEPENDS ${ProtoSources}) # Force the re-generation
 
+# OROCOS KDL
+find_package(orocos_kdl REQUIRED)
+include_directories(${orocos_kdl_INCLUDE_DIRS})
 
-SET(LIBS ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3base)
+SET(LIBS ${RTAI_LIBRARIES} pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3base ${orocos_kdl_LIBRARIES})
+
 
 
 set( ALL_SRCS 
@@ -81,7 +84,7 @@ ${ProtoFiles}
 ## Building
 add_library(${LIBNAME} SHARED ${ALL_SRCS})
 target_link_libraries(${LIBNAME} ${LIBS})
-set_target_properties(${LIBNAME} PROPERTIES COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}/src")
+#set_target_properties(${LIBNAME} PROPERTIES COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}/src")
 
 ## Installing
 install(TARGETS ${LIBNAME} DESTINATION lib)

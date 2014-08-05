@@ -35,11 +35,7 @@ bool M3CtrlSimple::ReadConfig(const char * filename)
 	//GetYamlDoc(filename, doc);	
 	
 	//Misc
-#ifndef YAMLCPP_05
 	doc["act_component"] >> act_name;
-#else
-	act_name = doc["act_component"].as<string>();
-#endif
 	NodeToTrajParam(doc["param"]["traj_current"],ParamTrajCurrent());
 	NodeToTrajParam(doc["param"]["traj_theta"],ParamTrajTheta());
 	NodeToTrajParam(doc["param"]["traj_torque"], ParamTrajTorque());
@@ -51,7 +47,7 @@ bool M3CtrlSimple::ReadConfig(const char * filename)
 
 bool M3CtrlSimple::LinkDependentComponents()
 {
-	act = (M3Actuator*) factory->GetComponent(act_name);
+	act = dynamic_cast<M3Actuator*>(factory->GetComponent(act_name));
 	if (act==NULL)
 	{
 		M3_INFO("M3Actuator component %s not found for component %s\n",act_name.c_str(),GetName().c_str());

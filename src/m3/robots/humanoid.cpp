@@ -1211,17 +1211,17 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	{	
 		YAML::Node ra_node = doc["chains"]["right_arm"];
 		(ra_node)["chain_component"] >> right_arm_name;		
-		ra_rot = YamlReadVectorM((ra_node)["base_rotation_in_parent"]);		
-		ra_trans = YamlReadVectorM((ra_node)["base_translation_in_parent"]);
+		(ra_node)["base_rotation_in_parent"] >> ra_rot;		
+		(ra_node)["base_translation_in_parent"] >> ra_trans;
 		try {
 		  (ra_node)["force_shm_mode"] >> force_shm_r_arm;
-		} catch(YAML::KeyNotFound& e) {		
+		} catch(YAML::Exception& e) {		
 			force_shm_r_arm = false;
 		}
 		try{
 		  (ra_node)["use_loadx6_instead_of_payload"]>>right_use_loadx6_instead_of_payload;
 		}
-		catch(YAML::KeyNotFound& e)
+		catch(YAML::Exception& e)
 		{
 		  right_use_loadx6_instead_of_payload = false;
 		}
@@ -1229,7 +1229,7 @@ bool M3Humanoid::ReadConfig(const char * filename)
 		try{
 		  (ra_node)["load_x6_component"]>>right_load_x6_component;
 		}
-		catch(YAML::KeyNotFound& e)
+		catch(YAML::Exception& e)
 		{
 		  right_load_x6_component = "";
 		}
@@ -1238,11 +1238,11 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	{	
 		YAML::Node la_node = doc["chains"]["left_arm"];
 		(la_node)["chain_component"] >> left_arm_name;
-		la_rot = YamlReadVectorM((la_node)["base_rotation_in_parent"]);
-		la_trans = YamlReadVectorM((la_node)["base_translation_in_parent"]);
+		(la_node)["base_rotation_in_parent"] >> la_rot;
+		(la_node)["base_translation_in_parent"] >> la_trans;
 		try {
 		  (la_node)["force_shm_mode"] >> force_shm_l_arm;
-		} catch(YAML::KeyNotFound& e) {		
+		} catch(YAML::Exception& e) {		
 			force_shm_l_arm = false;
 		}		
 	}
@@ -1250,11 +1250,11 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	{	
 		YAML::Node t_node = doc["chains"]["torso"];
 		(t_node)["chain_component"] >> torso_name;
-		t_rot = YamlReadVectorM((t_node)["base_rotation_in_parent"]);
-		t_trans = YamlReadVectorM((t_node)["base_translation_in_parent"]);
+		(t_node)["base_rotation_in_parent"] >> t_rot;
+		(t_node)["base_translation_in_parent"] >> t_trans;
 		try {
 		  (t_node)["force_shm_mode"] >>force_shm_torso;
-		} catch(YAML::KeyNotFound& e) {		
+		} catch(YAML::Exception& e) {		
 			force_shm_torso = false;
 		}
 	}
@@ -1262,11 +1262,11 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	{	
 		YAML::Node h_node = doc["chains"]["head"];	
 		(h_node)["chain_component"] >> head_name;
-		h_rot = YamlReadVectorM((h_node)["base_rotation_in_parent"]);
-		h_trans = YamlReadVectorM((h_node)["base_translation_in_parent"]);
+		(h_node)["base_rotation_in_parent"] >> h_rot;
+		(h_node)["base_translation_in_parent"] >> h_trans;
 		try {
 		  (h_node)["force_shm_mode"] >>force_shm_head;
-		} catch(YAML::KeyNotFound& e) {		
+		} catch(YAML::Exception& e) {		
 			force_shm_head = false;
 		}
 
@@ -1275,11 +1275,11 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	{	
 		YAML::Node rh_node = doc["chains"]["right_hand"];
 		(rh_node)["chain_component"] >> right_hand_name;
-		//rh_rot = YamlReadVectorM((rh_node)["base_rotation_in_parent"]);
-		//rh_trans = YamlReadVectorM((rh_node)["base_translation_in_parent"]);
+		//(rh_node)["base_rotation_in_parent"] >> rh_rot;
+		//(rh_node)["base_translation_in_parent"] >> rh_trans;
 		try {
 		  (rh_node)["force_shm_mode"] >>force_shm_r_hand;
-		} catch(YAML::KeyNotFound& e) {		
+		} catch(YAML::Exception& e) {		
 			force_shm_r_hand = false;
 		}
 
@@ -1288,11 +1288,11 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	{	
 		YAML::Node lh_node = doc["chains"]["left_hand"];	
 		(lh_node)["chain_component"] >> left_hand_name;
-		//lh_rot = YamlReadVectorM((lh_node)["base_rotation_in_parent"]);
-		//lh_trans = YamlReadVectorM((lh_node)["base_translation_in_parent"]);
+		//(lh_node)["base_rotation_in_parent"] >> lh_rot;
+		//(lh_node)["base_translation_in_parent"] >> lh_trans;
 		try {
 		  (lh_node)["force_shm_mode"] >>force_shm_l_hand;
-		} catch(YAML::KeyNotFound& e) {		
+		} catch(YAML::Exception& e) {		
 			force_shm_l_hand = false;
 		}
 
@@ -1301,7 +1301,7 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	try{
 	  doc["startup_motor_pwr_on"]>>startup_motor_pwr_on;
 	}
-	catch(YAML::KeyNotFound& e)
+	catch(...)
 	{
 	  startup_motor_pwr_on=false;
 	}

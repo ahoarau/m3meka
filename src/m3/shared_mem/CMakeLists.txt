@@ -36,6 +36,10 @@ add_definitions(-D__RTAI__)
 find_package(Boost REQUIRED)
 find_package(Eigen3 3.0 REQUIRED)
 find_package(Protobuf REQUIRED)
+
+find_package(orocos_kdl REQUIRED)
+include_directories(${orocos_kdl_INCLUDE_DIRS})
+
 #SET(M3_INCLUDE_DIR 
 #	${CMAKE_CURRENT_SOURCE_DIR}/../..
 #	${CMAKE_CURRENT_SOURCE_DIR}/../chains

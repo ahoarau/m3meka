@@ -53,7 +53,7 @@ void M3HandUA::StepCommand()
 	
 bool M3HandUA::LinkDependentComponents()
 {	
-	hand = (M3Hand*)factory->GetComponent(hand_name);
+	hand = dynamic_cast<M3Hand*>(factory->GetComponent(hand_name));
 	if (hand == NULL)
 	{
 	  M3_ERR("M3Hand %s not found for %s. \n", hand_name.c_str(),GetName().c_str()); 

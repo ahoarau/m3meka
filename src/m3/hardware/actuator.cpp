@@ -89,7 +89,7 @@ bool M3Actuator::ReadConfig(const char * filename)
 		{
 			doc["safe_pwm_limit"] >> val;
 			safe_pwm_limit = (bool) val;
-		} catch(YAML::TypedKeyNotFound<string> e) 
+		} catch(...) 
 		{
 			safe_pwm_limit = (bool) 0;
 		} 
@@ -97,7 +97,7 @@ bool M3Actuator::ReadConfig(const char * filename)
 		{
 			doc["use_i_torque_ctrl"] >> val;
 			use_i_torque_ctrl = (bool) val;
-		} catch(YAML::TypedKeyNotFound<string> e) 
+		} catch(...) 
 		{
 			use_i_torque_ctrl = (bool) 0;
 		} 
@@ -111,7 +111,7 @@ bool M3Actuator::ReadConfig(const char * filename)
 		{
 			doc["param"]["max_i"] >> mval;
 			param.set_max_i(mval);
-		} catch(YAML::TypedKeyNotFound<string> e) 
+		} catch(...) 
 		{
 			param.set_max_i(0.0);
 		} 
@@ -120,27 +120,27 @@ bool M3Actuator::ReadConfig(const char * filename)
 		tq_sense.ReadConfig(doc["calib"]["torque"]);
 		at_sense.ReadConfig(doc["calib"]["amp_temp"]);
 		i_sense.ReadConfig( doc["calib"]["current"]);
-                try 
-                {
-			//const YAML::Node& conf = doc["param"]["angle_df"];
-                        angle_df.ReadConfig(doc["param"]["angle_df"]); // A.H : now allow to modify it online
-                } catch(YAML::TypedKeyNotFound<string> e) 
-                {
-                        angle_df.ReadConfig( doc["calib"]["angle_df"]);
+                if(!angle_df.ReadConfig(doc["param"]["angle_df"])) // A.H : now allow to modify it online
+				{
+                        if(!angle_df.ReadConfig( doc["calib"]["angle_df"])){
+							M3_ERR("AngleDF config error (keys missing)\n");
+							return false;
+							
+						}
                 }
-                try 
+                if(!torquedot_df.ReadConfig(doc["param"]["torquedot_df"])) // A.H : now allow to modify it online
                 {
-			//const YAML::Node& conf = doc["param"]["torquedot_df"];
-                        torquedot_df.ReadConfig(doc["param"]["torquedot_df"]); // A.H : now allow to modify it online
-                } catch(YAML::TypedKeyNotFound<string> e) 
-                {
-                        torquedot_df.ReadConfig(doc["calib"]["torquedot_df"]);
+					if(!torquedot_df.ReadConfig(doc["calib"]["torquedot_df"])){
+						M3_ERR("TorquedotDF config error (keys missing)\n");
+						return false;
+						
+					}
                 }
 		try 
 		{
 			doc["param"]["max_overload_time"] >> mval;
 			param.set_max_overload_time(mval);
-		} catch(YAML::TypedKeyNotFound<string> e) 
+		} catch(...) 
 		{
 			param.set_max_overload_time(1.0);
 		} 
@@ -148,21 +148,21 @@ bool M3Actuator::ReadConfig(const char * filename)
 		{		  
 			doc["encoder_calib_req"] >> val;
 			encoder_calib_req = bool(val);
-		} catch(YAML::TypedKeyNotFound<string> e) 
+		} catch(...) 
 		{
 			encoder_calib_req=0;
 		} 
 		try 
 		{		  
 			doc["disable_vertx_check_tq"] >> disable_vertx_check_tq;
-		} catch(YAML::TypedKeyNotFound<string> e) 
+		} catch(...) 
 		{
 			disable_vertx_check_tq=false;
 		} 
 		try 
 		{		  
 			doc["disable_vertx_check_angle"] >> disable_vertx_check_angle;
-		} catch(YAML::TypedKeyNotFound<string> e) 
+		} catch(...) 
 		{
 			disable_vertx_check_angle=false;
 		} 
@@ -171,7 +171,7 @@ bool M3Actuator::ReadConfig(const char * filename)
 		try 
 		{		  
 			doc["vertx_timeout_limit_ms"] >> vertx_timeout_limit_ms;
-		} catch(YAML::TypedKeyNotFound<string> e) 
+		} catch(...) 
 		{
 			vertx_timeout_limit_ms=int(SENSOR_FAULT_LIMIT*1000.0);
 		} 
@@ -197,7 +197,7 @@ bool M3Actuator::ReadConfig(const char * filename)
 
 		try {
 		doc["calib"]["torque"]["torque_shift"] >> torque_shift;
-		} catch (YAML::KeyNotFound &e) {
+		} catch (...) {
 		torque_shift = 1.0;
 		}
 		
@@ -205,7 +205,7 @@ bool M3Actuator::ReadConfig(const char * filename)
 			doc["calib"]["amp_control_input"] >> str;
 			if (str.compare("pwm") == 0)			{amp_control_input	= ACTUATOR_INPUT_PWM;}
 			else if (str.compare("current") == 0)	{amp_control_input	= ACTUATOR_INPUT_CURRENT;}
-		} catch (YAML::KeyNotFound &e) {
+		} catch (...) {
 			amp_control_input = ACTUATOR_INPUT_CURRENT;
 		}
 		
@@ -215,7 +215,7 @@ bool M3Actuator::ReadConfig(const char * filename)
 
 bool M3Actuator::LinkDependentComponents()
 {
-	ecc=(M3ActuatorEc*) factory->GetComponent(ecc_name);
+	ecc=dynamic_cast<M3ActuatorEc*>(factory->GetComponent(ecc_name));
 	if (ecc==NULL)
 	{
 		M3_INFO("M3ActuatorEc component %s not found for component %s\n",ecc_name.c_str(),GetName().c_str());

@@ -42,10 +42,10 @@ bool M3Dynamatics::LinkDependentComponents()
 
 void M3Dynamatics::Startup()
 {		
-	if (ndof != m3chain->GetNumDof())
+	/*if (ndof != m3chain->GetNumDof())
 	{
 		M3_WARN("M3Dynamatics: ndof does not match chain: %s\n", chain_name.c_str());		
-	}
+	}*/
 	
 	q.resize(ndof+3);	// contains both position q.q and vel q.qdot
 	qdot_id.resize(ndof+3);
@@ -354,7 +354,7 @@ bool M3Dynamatics::ReadConfig(const char * filename)
 	{
 	    ymlparam["use_velocities"] >> btemp;
 	    param.set_use_velocities(btemp);
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		param.set_use_velocities(0);
 	} 
@@ -362,7 +362,7 @@ bool M3Dynamatics::ReadConfig(const char * filename)
 	{
 	  ymlparam["use_accelerations"] >> btemp;
 	  param.set_use_accelerations(btemp);
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		param.set_use_accelerations(0);
 	} 	

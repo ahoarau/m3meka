@@ -375,14 +375,14 @@ bool M3Omnibase::ReadConfig ( const char * filename ) {
     try {
         doc["use_truss_vel_thresh"] >> use_truss_vel_thresh;
         }
-    catch ( YAML::KeyNotFound& e ) {
+    catch ( ... ) {
         use_truss_vel_thresh = false;
         }
 
     try {
         doc["truss_vel_thresh"] >> truss_vel_thresh;
         }
-    catch ( YAML::KeyNotFound& e ) {
+    catch ( ... ) {
         truss_vel_thresh = 1000.0;
         }
     YAML::Node pcv_doc;
@@ -688,7 +688,7 @@ mReal M3Omnibase::WrapDeg ( mReal deg ) {
 
 bool M3Omnibase::LinkDependentComponents() {
     if ( joint_array_name!="" )
-        motor_array= ( M3JointArray* ) factory->GetComponent ( joint_array_name );
+		motor_array= dynamic_cast< M3JointArray* >( factory->GetComponent ( joint_array_name ));
     if ( motor_array==NULL ) {
         M3_ERR ( "M3JointArray component %s not found for component %s. Proceeding without it...\n",joint_array_name.c_str(),GetName().c_str() );
         return false;

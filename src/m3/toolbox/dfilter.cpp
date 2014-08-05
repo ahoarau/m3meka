@@ -74,8 +74,8 @@ bool M3SensorFilter::ReadConfig ( const YAML::Node & doc ) {
         try {
             x_df.ReadConfig ( doc["x_df"] );
             }
-        catch ( YAML::TypedKeyNotFound<string> e ) {
-		M3_ERR("x_df not found in doc: %s\n",e.what());
+        catch ( ... ) {
+		M3_ERR("x_df not found in doc\n");
 		return false;
 	}
         }
@@ -83,22 +83,22 @@ bool M3SensorFilter::ReadConfig ( const YAML::Node & doc ) {
         try {
             x_df.ReadConfig ( doc["x_df"] );
             }
-        catch ( YAML::TypedKeyNotFound<string> e ) {
-		M3_ERR("x_df not found in doc: %s\n",e.what());
+        catch ( ... ) {
+		M3_ERR("x_df not found in doc\n");
 		return false;
 	}
         try {
             xdot_df.ReadConfig ( doc["xdot_df"] );
             }
-        catch ( YAML::TypedKeyNotFound<string> e ) {
-		M3_ERR("xdot_df not found in doc: %s\n",e.what());
+        catch ( ... ) {
+		M3_ERR("xdot_df not found in doc\n");
 		return false;
 	}
         try {
             xdotdot_df.ReadConfig ( doc["xdotdot_df"] );
             }
-        catch ( YAML::TypedKeyNotFound<string> e ) {
-		M3_ERR("xdotdot_df not found in do: %s\n",e.what());
+        catch ( ... ) {
+		M3_ERR("xdotdot_df not found in doc\n");
 		return false;
 	}
         }
@@ -107,6 +107,7 @@ bool M3SensorFilter::ReadConfig ( const YAML::Node & doc ) {
 
 bool M3JointFilter::ReadConfig ( const YAML::Node & doc ) {
     string t;
+	try {
     doc["type"] >> t;
     if ( t.compare ( "none" ) ==0 ) type=NONE;
     if ( t.compare ( "df_chain" ) ==0 ) type=DF_CHAIN;
@@ -126,8 +127,8 @@ bool M3JointFilter::ReadConfig ( const YAML::Node & doc ) {
         try {
             x_df.ReadConfig ( doc["theta_df"] );
             }
-        catch ( YAML::TypedKeyNotFound<string> e ) {
-		M3_ERR("theta_df not found in doc: %s\n",e.what());
+        catch ( ... ) {
+		M3_ERR("theta_df not found in doc\n");
 		return false;
 	}
         }
@@ -135,27 +136,30 @@ bool M3JointFilter::ReadConfig ( const YAML::Node & doc ) {
         try {
             x_df.ReadConfig ( doc["theta_df"] );
             }
-        catch ( YAML::TypedKeyNotFound<string> e ) {
-		M3_ERR("theta_df not found in doc: %s\n",e.what());
+        catch ( ... ) {
+		M3_ERR("theta_df not found in doc\n");
 		return false;
 	}
         try {
             xdot_df.ReadConfig ( doc["thetadot_df"] );
             }
-        catch ( YAML::TypedKeyNotFound<string> e ) {
-		M3_ERR("thetadot_df not found in doc: %s\n",e.what());
+        catch ( ... ) {
+		M3_ERR("thetadot_df not found in doc\n");
 		return false;
 	}
         try {
             xdotdot_df.ReadConfig ( doc["thetadotdot_df"] );
             }
-        catch ( YAML::TypedKeyNotFound<string> e ) {
-		M3_ERR("thetadotdot_df not found in do: %s\n",e.what());
+        catch ( ... ) {
+		M3_ERR("thetadotdot_df not found in doc\n");
 		return false;
 	}
         }
-    return true;
-    }
+	}catch(...){
+		return false;
+	}
+	return true;
+}
 
 void M3PolyLeastSquares::Init ( int poly_order, int num_data_pts, mReal period, mReal weighting ) {
     n=poly_order;
@@ -221,8 +225,8 @@ void M3PolyLeastSquares::Step ( mReal new_qy ) {
 
 
 bool M3DFilter::ReadConfig ( const YAML::Node & doc ) {
+	string t;
     try {
-        string t;
         doc["type"] >> t;
         if ( t.compare ( "butterworth" ) ==0 ) {
             type = BUTTERWORTH;
@@ -254,7 +258,7 @@ bool M3DFilter::ReadConfig ( const YAML::Node & doc ) {
             }
         }
     catch ( YAML::Exception e ) {
-        M3_ERR ( "DFilter error while reading config: %s",e.what() );
+        //M3_ERR ( "DFilter error while reading config (type:%s) : %s\n",t.c_str(),e.what() );
         return false;
         }
     return true;

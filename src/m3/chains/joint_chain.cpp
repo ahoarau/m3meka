@@ -31,7 +31,7 @@ using namespace KDL;
 bool M3JointChain::LinkDependentComponents()
 {		
 	if (dynamatics_name!="")
-		dynamatics=(M3Dynamatics*)factory->GetComponent(dynamatics_name);
+		dynamatics=dynamic_cast<M3Dynamatics*>(factory->GetComponent(dynamatics_name));
 			
 	if (dynamatics==NULL)
 		M3_INFO("M3Dynamatics component %s not found for component %s. Proceeding without it...\n",dynamatics_name.c_str(),GetName().c_str());
@@ -92,7 +92,7 @@ bool M3JointChain::ReadConfig(const char * filename)
 	if(!M3JointArray::ReadConfig(filename)){return false;}
 	try{
 	doc["dynamatics_component"] >> dynamatics_name;	
-	}catch(YAML::BadDereference& e){
+	}catch(...){
 		return false;}
 	return true;
 }
