@@ -35,7 +35,7 @@ find_package(RTAI REQUIRED)
 add_definitions(-D__RTAI__)
 find_package(Eigen3 3 REQUIRED)
 
-include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${M3_INCLUDE_DIR})
+include_directories( ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR})
 
 
 # Start Protobuf stuff

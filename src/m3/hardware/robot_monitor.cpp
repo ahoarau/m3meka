@@ -189,7 +189,7 @@ bool M3RobotMonitor::ReadConfig(const char * filename)
 		   mReal val;
 		  it.first() >> key;
 #else
-		  for(auto it=doc["volt_components"].begin();it!=doc["volt_components"].end();++it) 
+		  for(YAML::const_iterator it=doc["volt_components"].begin();it!=doc["volt_components"].end();++it) 
 	  {		
 		  string key;
 		   mReal val;
@@ -232,7 +232,7 @@ bool M3RobotMonitor::ReadConfig(const char * filename)
 		   mReal val;
 		  it.first() >> key;
 #else
-		  for(auto it=doc["temp_components"].begin();it!=doc["temp_components"].end();++it) 
+		  for(YAML::const_iterator it=doc["temp_components"].begin();it!=doc["temp_components"].end();++it) 
 	  {		
 		  string key;
 		   mReal val;

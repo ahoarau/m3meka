@@ -45,7 +45,7 @@ find_package(orocos_kdl REQUIRED)
 #	${CMAKE_CURRENT_SOURCE_DIR}/../toolbox
 #)
 
-include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${M3_INCLUDE_DIR} ${orocos_kdl_INCLUDE_DIRS})
+include_directories(${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${orocos_kdl_INCLUDE_DIRS})
 
 
 # Start Protobuf stuff
@@ -54,7 +54,6 @@ PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${CMAKE_CURRENT_BINARY_DIR} ${Pr
 set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
                             GENERATED TRUE)
 add_custom_target(${LIBNAME}_protobuf_tmp  ALL DEPENDS ${ProtoSources}) # Force the re-generation
-
 
 SET(LIBS ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} m3toolbox ${orocos_kdl_LIBRARIES} m3base)
 
@@ -142,7 +141,7 @@ ${ProtoFiles}
 ## Building
 add_library(${LIBNAME} SHARED ${ALL_SRCS})
 target_link_libraries(${LIBNAME} ${LIBS})
-set_target_properties(${LIBNAME} PROPERTIES COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}/src")
+#set_target_properties(${LIBNAME} PROPERTIES COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}/src")
 
 ## Installing
 install(TARGETS ${LIBNAME} DESTINATION lib)
