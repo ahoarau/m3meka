@@ -31,7 +31,7 @@ from m3.ik_chain import M3IKChain
 from m3.robot import M3Robot
 from PyKDL import *
 
-class ChainAttributes:   
+class ChainAttributes(M3Component):   
     def __init__(self):
         self.chain_name = None
         self.T_parent_base = Frame()
@@ -52,6 +52,11 @@ class ChainAttributes:
         self.joint_names = []
         self.vias = []
         self.via_idx = 0
+        
+    def read_config(self):
+        assert(self.chain_name)
+        M3Component.__init__(self,self.chain_name)
+        M3Component.read_config(self)
         
 class CameraAttributes:
     def __init__(self):
@@ -103,6 +108,7 @@ class M3Humanoid(M3Robot):
     >>> T = bot.get_tool_2_world_transform_sim('right_arm')    
     """
     def __init__(self,name,type='m3humanoid'):
+        print 'Initializing ',name,'...'
         M3Robot.__init__(self,name,type=type)
         
         self.status=mrt.M3HumanoidStatus()
@@ -124,7 +130,8 @@ class M3Humanoid(M3Robot):
         self.left_hand.theta_sim = [0]*self.left_hand.ndof
         self.head.theta_sim = [0]*self.head.ndof
         self.torso.theta_sim = [0]*self.torso.ndof
-        
+        print 'Done initializing ',name
+
     def initialize(self, proxy):
         """
         Configures Humanoid in a state to publish commands and parameter updates and receive status updates.
@@ -135,7 +142,7 @@ class M3Humanoid(M3Robot):
         """
         proxy.subscribe_status(self)
         proxy.publish_command(self)
-        proxy.publish_param(self)
+        #proxy.publish_param(self)
         self.set_motor_power_on()
         proxy.make_operational_all()
         proxy.step()
@@ -984,45 +991,57 @@ class M3Humanoid(M3Robot):
         right_arm_model = None
         left_arm_model = None
                 
-        try:
-            f=open(self.config_name,'r')
-            self.config= yaml.safe_load(f.read())
-        except (IOError, EOFError):
-            print 'Config file not present:',self.config_name
-            return
+        #try:
+         #   f=open(self.config_name,'r')
+         #   self.config= yaml.safe_load(f.read())
+        #except (IOError, EOFError):
+        #    print 'Config file not present:',self.config_name
+        #    return
         # Parse the humanoid config
         if self.config['chains'].has_key('right_arm'):
             self.available_chains.append('right_arm')
-            self.right_arm.chain_name = self.config['chains']['right_arm']['chain_component']            
+            chain_name = self.config['chains']['right_arm']['chain_component']
+            self.right_arm.chain_name = chain_name
+            self.right_arm.read_config()
             self.__set_base_offset_tool_transforms('right_arm', self.config['chains']['right_arm'])
             right_arm_model = self.config['chains']['right_arm']['arm_model']
             
         if self.config['chains'].has_key('left_arm'):
             self.available_chains.append('left_arm')
-            self.left_arm.chain_name = self.config['chains']['left_arm']['chain_component']            
+            chain_name = self.config['chains']['left_arm']['chain_component']
+            self.left_arm.chain_name = chain_name
+            self.left_arm.read_config()       
             self.__set_base_offset_tool_transforms('left_arm', self.config['chains']['left_arm'])
             left_arm_model = self.config['chains']['left_arm']['arm_model']
             
         if self.config['chains'].has_key('torso'):
             self.available_chains.append('torso')
-            self.torso.chain_name = self.config['chains']['torso']['chain_component']
+            chain_name = self.config['chains']['torso']['chain_component']
+            self.torso.chain_name=chain_name
+            self.torso.read_config() 
             self.__set_base_offset_tool_transforms('torso', self.config['chains']['torso'])
             
         if self.config['chains'].has_key('head'):
             self.available_chains.append('head')
-            self.head.chain_name = self.config['chains']['head']['chain_component']
+            chain_name = self.config['chains']['head']['chain_component']
+            self.head.chain_name = chain_name
+            self.head.read_config() 
             self.__set_base_offset_tool_transforms('head', self.config['chains']['head'])
             
         if self.config['chains'].has_key('left_hand'):
             self.available_chains.append('left_hand')
-            self.left_hand.chain_name = self.config['chains']['left_hand']['chain_component']
+            chain_name = self.config['chains']['left_hand']['chain_component']
+            self.left_hand.chain_name=chain_name
+            self.left_hand.read_config() 
             try:
                 self.__set_base_offset_tool_transforms('left_hand', self.config['chains']['left_hand'])
             except:
                 pass
         if self.config['chains'].has_key('right_hand'):
             self.available_chains.append('right_hand')
-            self.right_hand.chain_name = self.config['chains']['right_hand']['chain_component']
+            chain_name = self.config['chains']['right_hand']['chain_component']
+            self.right_hand.chain_name=chain_name
+            self.right_hand.read_config() 
             try:
                 self.__set_base_offset_tool_transforms('right_hand', self.config['chains']['right_hand'])
             except:
@@ -1122,27 +1141,29 @@ class M3Humanoid(M3Robot):
     
     def __set_joints_max_min_deg(self, chain):
         chain_attr = getattr(self, chain)
-        file_name = m3t.get_component_config_filename(chain_attr.chain_name)
+        config = m3t.get_component_config(chain_attr.chain_name)
+        '''file_name = m3t.get_component_config_filename(chain_attr.chain_name)
         
         try:
             f=open(file_name,'r')
             config= yaml.safe_load(f.read())
         except (IOError, EOFError):
             print 'Config file not present:',file_name
-            return
+            return'''
 
         chain_attr.joints_max_deg = [0]*self.get_num_dof(chain)
         chain_attr.joints_min_deg = [0]*self.get_num_dof(chain)
         chain_attr.joint_names = ['']*self.get_num_dof(chain)
         for k in config['joint_components']:
             joint_name = config['joint_components'][k]
-            joint_file_name = m3t.get_component_config_filename(joint_name)
+            joint_config = m3t.get_component_config(joint_name)
+            '''joint_file_name = m3t.get_component_config_filename(joint_name)
             try:
                 jf=open(joint_file_name,'r')
                 joint_config= yaml.safe_load(jf.read())
             except (IOError, EOFError):
                 print 'Config file not present:', joint_file_name
-                return
+                return'''
             
             chain_attr.joint_names[int(k[1:])] = joint_name
             chain_attr.joints_max_deg[int(k[1:])] = joint_config['param']['max_q']
@@ -1150,26 +1171,28 @@ class M3Humanoid(M3Robot):
             
     def __get_max_slew_rates_from_config(self, chain):
         chain_attr = getattr(self, chain)
-        file_name = m3t.get_component_config_filename(chain_attr.chain_name)
+        config = m3t.get_component_config(chain_attr.chain_name)
+        '''file_name = m3t.get_component_config_filename(chain_attr.chain_name)
         
         try:
             f=open(file_name,'r')
             config= yaml.safe_load(f.read())
         except (IOError, EOFError):
             print 'Config file not present:',file_name
-            return
+            return'''
 
         max_slew_rates = [0.0]*self.get_num_dof(chain)
         
         for k in config['joint_components']:
             joint_name = config['joint_components'][k]
-            joint_file_name = m3t.get_component_config_filename(joint_name)
+            joint_config = m3t.get_component_config(joint_name)
+            '''joint_file_name = m3t.get_component_config_filename(joint_name)
             try:
                 jf=open(joint_file_name,'r')
                 joint_config= yaml.safe_load(jf.read())
             except (IOError, EOFError):
                 print 'Config file not present:', joint_file_name
-                return
+                return'''
             
             max_slew_rates[int(k[1:])] = joint_config['param']['max_q_slew_rate']
             
@@ -1582,43 +1605,45 @@ class M3Humanoid(M3Robot):
     def __get_ndof_from_config(self, chain):
         
         chain_attr = getattr(self, chain)
-        file_name = m3t.get_component_config_filename(chain_attr.chain_name)
+        config = chain_attr.config
+        '''file_name = m3t.get_component_config_filename(chain_attr.chain_name)
         
         try:
             f=open(file_name,'r')
             config= yaml.safe_load(f.read())
         except (IOError, EOFError):
             print 'Config file not present:',file_name
-            return
+            return'''
         
         return config['ndof']
     
     def __set_params_from_config(self, chain):        
         chain_attr = getattr(self, chain)
         param = self.get_param(chain)
-        file_name = m3t.get_component_config_filename(chain_attr.chain_name)                
+        config = chain_attr.config
+        '''file_name = m3t.get_component_config_filename(chain_attr.chain_name)                
         
         try:
             f=open(file_name,'r')
             config= yaml.safe_load(f.read())
         except (IOError, EOFError):
             print 'Config file not present:',file_name
-            return
+            return'''
         
         name = config['dynamatics_component']
 
         if name == "":
             print "Could not find dynamatics component for ", chain
             return
-        
-        file_name = m3t.get_component_config_filename(name)
+        config = m3t.get_component_config(name)
+        '''file_name = m3t.get_component_config_filename(name)
         
         try:
             f=open(file_name,'r')
             config= yaml.safe_load(f.read())
         except (IOError, EOFError):
             print 'Config file not present:',file_name
-            return
+            return'''
                 
         param.payload_mass = config['param']['payload_mass']
         param.payload_com[:] = config['param']['payload_com'][:]
@@ -1629,14 +1654,15 @@ class M3Humanoid(M3Robot):
     def __load_dh_from_kinefile(self, chain):
         
         chain_attr = getattr(self, chain)
-        file_name = m3t.get_component_config_filename(chain_attr.chain_name)
+        config = chain_attr.config
+        '''file_name = m3t.get_component_config_filename(chain_attr.chain_name)
         
         try:
             f=open(file_name,'r')
             config= yaml.safe_load(f.read())
         except (IOError, EOFError):
             print 'Config file not present:',file_name
-            return
+            return'''
         
         name = config['dynamatics_component']
 
@@ -1644,14 +1670,15 @@ class M3Humanoid(M3Robot):
             print "Could not find dynamatics component for ", chain
             return
         
-        file_name = m3t.get_component_config_filename(name)
+        config = m3t.get_component_config(name)
+        '''file_name = m3t.get_component_config_filename(name)
         
         try:
             f=open(file_name,'r')
             config= yaml.safe_load(f.read())
         except (IOError, EOFError):
             print 'Config file not present:',file_name
-            return
+            return'''
         
         for i in range(len(config['links'])):
             #print "link type = ", type(links[k]), " (should be dict)"

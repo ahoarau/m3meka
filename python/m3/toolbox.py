@@ -46,15 +46,19 @@ def get_m3_animation_path():
         return ''
 
 
+def get_component_pwr_name(name):
+    try:
+            with open(get_component_config_filename(name),'r') as f:
+                return yaml.safe_load(f.read())['pwr_component']
+    except (IOError, EOFError):
+            print 'Config file not present for ',name
+    return ''
+
+def get_pwr_component_config(name):
+    return get_component_config(name)
+
 def get_omnibase_pwr_component_name(name):
-        config= None	
-        try:
-                f=file(get_component_config_filename(name),'r')
-                config= yaml.safe_load(f.read())
-        except (IOError, EOFError):
-                print 'Config file not present:',get_component_config_filename(name),'for',name
-                return
-        return config['pwr_component']
+    return get_component_pwr_name(name)
 
 def get_chain_pwr_component_name(name):		
         names=get_chain_joint_names(name)
@@ -70,14 +74,13 @@ def get_actuator_pwr_component_name(name):
         return get_actuator_ec_pwr_component_name(get_actuator_ec_component_name(name))
 
 def get_actuator_ec_pwr_component_name(name):
-        config= None	
         try:
-                f=file(get_component_config_filename(name),'r')
-                config= yaml.safe_load(f.read())
+                with open(get_component_config_filename(name),'r') as f:
+                    return yaml.safe_load(f.read())['pwr_component']
         except (IOError, EOFError):
-                print 'Config file not present:',get_component_config_filename(name),'for',name
+                print 'Config file not present for component',name
                 return
-        return config['pwr_component']
+        return None
 
 def get_joint_actuator_component_name(name):	
         if get_component_config_type(name) == 'm3joint_slave':
@@ -145,17 +148,11 @@ def get_chain_limb_name(name):
                 return None
 
 def get_chain_joint_names(name):		
-        config= None	
-        try:
-                f=file(get_component_config_filename(name),'r')
-                config= yaml.safe_load(f.read())
-        except (IOError, EOFError):
-                print 'Config file not present:',get_component_config_filename(name),'for',name
-                return
+        config= get_component_config(name)
         if config.has_key('joint_components'):
                 #Have to sort keys by *_JID*'
                 ret=[]
-                for jid in range(len(config['joint_components'])):
+                for jid in xrange(len(config['joint_components'])):
                         ret.append(config['joint_components']['J'+str(jid)])
                 return ret
         else:
@@ -166,9 +163,9 @@ def get_chain_joint_limits(name):
         names=get_chain_joint_names(name)
         for n in names:
                 try:
-                        f=file(get_component_config_filename(n),'r')
-                        config= yaml.safe_load(f.read())
-                        l.append([config['param']['min_q'],config['param']['max_q']])
+                        with open(get_component_config_filename(n),'r') as f:
+                            config= yaml.safe_load(f.read())
+                            l.append([config['param']['min_q'],config['param']['max_q']])
                 except (IOError, EOFError):
                         print 'Config file not present:',get_component_config_filename(name),'for',name
                         return []
@@ -181,41 +178,47 @@ def get_actuator_ec_component_name(name):
         else:
                 return None
 
-def get_joint_chain_name(name):
-        config_all= get_m3_config()
-        for config in config_all:
-            for cdir in config['rt_components'].keys():
-                    for c in config['rt_components'][cdir].keys():
-                            if (c==name):
-                                    for d in config['rt_components'][cdir].keys():
-                                            if config['rt_components'][cdir][d] == 'm3arm' or \
-                                               config['rt_components'][cdir][d] == 'm3torso' or \
-                                               config['rt_components'][cdir][d] == 'm3hand' or \
-                                               config['rt_components'][cdir][d] == 'm3head':
-                                                    return d
+def get_joint_chain_name(joint_name,m3_config=None):
+        if not m3_config:
+            m3_config= get_m3_config()
+        comp_type='rt_components'
+        for config in m3_config:
+            for components in config[comp_type]: # ma17,mh28..
+                for comp_dir in components:# ma17
+                    dict_of_comp={}
+                    for comp in components[comp_dir]: #actuator1:type1,actuator2:type2
+                        cname = comp.keys()[0]
+                        ctype = comp[cname]
+                        if ctype in ['m3arm','m3torso' ,'m3hand','m3head']:
+                            dict_of_comp['joint_chain'] = cname
+                        dict_of_comp[cname]=ctype
+                    if dict_of_comp.get(joint_name,None):
+                        return dict_of_comp['joint_chain']
         return ''
 
-def get_robot_name():
-        config_all= get_m3_config()
-        for config in config_all:
-            for cdir in config['rt_components'].keys():
-                    for c in config['rt_components'][cdir].keys():
-                            if config['rt_components'][cdir][c] == 'm3humanoid' or config['rt_components'][cdir][c] == 'm3humanoid_sea':
-                                    return c
+def get_robot_name(m3_config=None):
+        if not m3_config:
+            m3_config= get_m3_config()
+        comp_type='rt_components'
+        for config in m3_config:
+            for components in config[comp_type]: # ma17,mh28..
+                for comp_dir in components:# ma17
+                    dict_of_comp={}
+                    for comp in components[comp_dir]: #actuator1:type1,actuator2:type2
+                        cname = comp.keys()[0]
+                        ctype = comp[cname]
+                        if ctype in ['m3humanoid','m3humanoid_sea']:
+                            return cname
         return ''
 
 def __get_hand_name(name):
-    assert name
     config_all= get_m3_config()
-    hand_name = None
     for config in config_all:
         try:
-            hand_name = config[name]
+            return config[name]
         except KeyError:
             pass
-    if not hand_name:
-        print name,' not found in '+m3_config_filename
-    return hand_name
+    return ''
 
 
 def get_right_hand_name():

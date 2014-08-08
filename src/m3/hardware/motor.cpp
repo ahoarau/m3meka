@@ -83,8 +83,8 @@ void M3MotorModel::ThermalInit(string config_filename)
 	    string s(temp_filename);
 	    
         YAML::Node node;
-        bool previous_temp_missing = !(m3rt::GetYamlDoc(s.c_str(),node,&doc_path));
-	    
+		doc_path = m3rt::GetYamlDoc(s.c_str(),node,NULL);
+		bool previous_temp_missing = doc_path.empty();
 	    /*try
 	    {
 	      GetYamlDoc(temp_filename.c_str(), node);

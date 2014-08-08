@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(m3meka-python)
 
+add_subdirectory(scripts)
 
 file(GLOB ${PROJECT_NAME}_m3
     "m3/*.py"

@@ -136,6 +136,21 @@ bool M3Actuator::ReadConfig(const char * filename)
 						
 					}
                 }
+                // DFilter Params 
+                // Set Order
+                ParamThetaDf()->set_order(angle_df.GetXdf()->GetOrder());
+				ParamThetaDotDf()->set_order(angle_df.GetXdotdf()->GetOrder());
+				ParamThetaDotDotDf()->set_order(angle_df.GetXdotdotdf()->GetOrder());
+				
+				// Set N
+				ParamThetaDf()->set_n(angle_df.GetXdf()->GetN());
+				ParamThetaDotDf()->set_n(angle_df.GetXdotdf()->GetN());
+				ParamThetaDotDotDf()->set_n(angle_df.GetXdotdotdf()->GetN());
+				
+				// Set Cutoff
+				ParamThetaDf()->set_cutoff_freq(angle_df.GetXdf()->GetCutOffFreq());
+				ParamThetaDotDf()->set_cutoff_freq(angle_df.GetXdotdf()->GetCutOffFreq());
+				ParamThetaDotDotDf()->set_cutoff_freq(angle_df.GetXdotdotdf()->GetCutOffFreq());
 		try 
 		{
 			doc["param"]["max_overload_time"] >> mval;
