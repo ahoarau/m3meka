@@ -20,6 +20,8 @@ if __name__ == '__main__':
         try:
             cnt=cnt+1
             elapsed = time.time()-start
+            for chain in bot.get_available_chains():
+            
             bot.set_mode_theta_gc('right_arm')
             bot.set_slew_rate_proportion('right_arm',[1.0]*7)
             bot.set_stiffness('right_arm', [1.0]*7)
