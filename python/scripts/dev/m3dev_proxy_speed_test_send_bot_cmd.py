@@ -13,23 +13,22 @@ if __name__ == '__main__':
     proxy.start()
     bot = m3h.M3Humanoid(m3t.get_robot_name())
     bot.initialize(proxy)
-    proxy.step()
-    start = time.time()
     cnt=0
+    start = time.time()
     while 1:
         try:
             cnt=cnt+1
-            elapsed = time.time()-start
             for chain in bot.get_available_chains():
-            
-            bot.set_mode_theta_gc('right_arm')
-            bot.set_slew_rate_proportion('right_arm',[1.0]*7)
-            bot.set_stiffness('right_arm', [1.0]*7)
-            bot.set_theta_deg('right_arm', [0.0]*7)
-            if(elapsed >= 1):
-                start = time.time()
-                print 'cnt:',cnt,'freq : ',cnt
+                bot.set_mode_theta_gc(chain)
+                bot.set_slew_rate_proportion(chain,[1.0]*bot.get_num_dof(chain))
+                bot.set_stiffness(chain, [1.0]*bot.get_num_dof(chain))
+                bot.set_theta_deg(chain, [0.0]*bot.get_num_dof(chain)) 
+            if(time.time()-start >= 1):
+                for chain in bot.get_available_chains():
+                    print chain,bot.get_theta_deg(chain)
+                print 'freq : ',cnt
                 cnt=0
+                start = time.time()
             proxy.step()
         except KeyboardInterrupt:
             break
