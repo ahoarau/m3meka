@@ -130,7 +130,7 @@ class M3Calibrate:
 		return False
 		
 	def get_raw_calibration(self):
-		fn=m3t.get_m3_config_path()+'data/calibration_data_raw_'+self.comp_ec.name+'.yml'
+		fn=m3t.get_m3_config_path()[-1]+'data/calibration_data_raw_'+self.comp_ec.name+'.yml'
 		try:
 			f=file(fn,'r')
 			raw_data= yaml.safe_load(f.read())
@@ -144,7 +144,7 @@ class M3Calibrate:
 	def write_raw_calibration(self,data):
 		print 'Save raw data [y]?'
 		if m3t.get_yes_no('y'):
-			fn=m3t.get_m3_config_path()+'data/calibration_data_raw_'+self.comp_ec.name+'.yml'
+			fn=m3t.get_m3_config_path()[-1]+'data/calibration_data_raw_'+self.comp_ec.name+'.yml'
 			try:
 				f=file(fn,'r')
 				raw_data= yaml.safe_load(f.read())

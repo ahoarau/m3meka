@@ -4,7 +4,7 @@ set(LIBNAME "m3toolbox")
 
 find_package(M3 COMPONENTS HARDWARE ROBOTS CHAINS TOOLBOX SHARED_MEM)
 find_package(M3rt)
-include_directories(${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})
+include_directories(${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR} ${M3RT_SRC})
 
 ## First generate the python 
 find_package(Protobuf REQUIRED)
@@ -18,14 +18,24 @@ PROTOBUF_GENERATE_PYTHON(PySources ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles})
 add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # force the generation
 # End Protobuf stuff
 
+## YAML CPP 
+find_package(PkgConfig REQUIRED)
+#find_package(YamlCpp  REQUIRED)
+pkg_check_modules(YAMLCPP REQUIRED yaml-cpp)
+if(NOT ${YAMLCPP_VERSION} VERSION_LESS "0.5")
+set_property(
+   DIRECTORY
+   PROPERTY COMPILE_DEFINITIONS YAMLCPP_05
+   )
+endif(NOT ${YAMLCPP_VERSION} VERSION_LESS "0.5")
+link_directories(${YAMLCPP_LIBRARY_DIRS})
 
 if(RTAI)
 find_package(RTAI REQUIRED)
 add_definitions(-D__RTAI__)
 find_package(Eigen3 3 REQUIRED)
 
-include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${M3_INCLUDE_DIR})
-
+include_directories( ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR})
 
 # Start Protobuf stuff
 ## Cpp protobufs
@@ -34,8 +44,12 @@ set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
                             GENERATED TRUE)
 add_custom_target(${LIBNAME}_protobuf_tmp  ALL DEPENDS ${ProtoSources}) # Force the re-generation
 
+# OROCOS KDL
+find_package(orocos_kdl REQUIRED)
+include_directories(${orocos_kdl_INCLUDE_DIRS})
 
-SET(LIBS ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3base)
+SET(LIBS ${RTAI_LIBRARIES} pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3base ${orocos_kdl_LIBRARIES})
+
 
 
 set( ALL_SRCS 
@@ -70,7 +84,7 @@ ${ProtoFiles}
 ## Building
 add_library(${LIBNAME} SHARED ${ALL_SRCS})
 target_link_libraries(${LIBNAME} ${LIBS})
-set_target_properties(${LIBNAME} PROPERTIES COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}/src")
+#set_target_properties(${LIBNAME} PROPERTIES COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}/src")
 
 ## Installing
 install(TARGETS ${LIBNAME} DESTINATION lib)

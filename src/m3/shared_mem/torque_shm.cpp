@@ -234,7 +234,7 @@ bool M3TorqueShm::LinkDependentComponents()
 {
 	if (humanoid_name.size()!=0)
 	{		
-		bot=(M3Humanoid*)factory->GetComponent(humanoid_name);
+		bot=dynamic_cast<M3Humanoid*>(factory->GetComponent(humanoid_name));
 		
 		if (bot==NULL)
 		{
@@ -261,7 +261,7 @@ bool M3TorqueShm::ReadConfig(const char * filename)
 	try{
 	  doc["right_loadx6_component"] >>right_loadx6_name;	
 	}
-	catch(YAML::KeyNotFound& e)
+	catch(...)
 	{
 	  right_loadx6_name="";
 	}
@@ -269,7 +269,7 @@ bool M3TorqueShm::ReadConfig(const char * filename)
 	try{
 	  doc["left_loadx6_component"] >>left_loadx6_name;	
 	}
-	catch(YAML::KeyNotFound& e)
+	catch(...)
 	{
 	  left_loadx6_name="";
 	}

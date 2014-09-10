@@ -134,7 +134,7 @@ bool M3LedMatrixEcShm::LinkDependentComponents()
 	
 	if (led_matrix_name.size()!=0)
 	{		
-		led_matrix = (M3LedMatrixEc*)factory->GetComponent(led_matrix_name);
+		led_matrix = dynamic_cast<M3LedMatrixEc*>(factory->GetComponent(led_matrix_name));
 		if (led_matrix==NULL)
 		{
 			M3_ERR("M3LedMatrixEc component %s declared for M3LedMatrixEcShm but could not be linked\n",

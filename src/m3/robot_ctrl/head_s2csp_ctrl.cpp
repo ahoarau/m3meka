@@ -114,10 +114,12 @@ void M3HeadS2CSPCtrl::StepCommand()
 	xe = eTw*xw;
 	xe_l = eTw_l*xw;
 	
-	mReal tl= sqrt(xe[0]*xe[0]+ xe[1]*xe[1]+ xe[2]*xe[2]); //length to target in camera frame
+	// Length to target in camera frame:
+	mReal tlr      = sqrt(xe[0]*xe[0]+xe[1]*xe[1]+xe[2]*xe[2]);
+	mReal tll      = sqrt(xe_l[0]*xe_l[0]+xe_l[1]*xe_l[1]+xe_l[2]*xe_l[2]);
 	//Hack to avoid singularities...need to redo w/o atan2 singularity in workspace
-	xe[0]=MAX(tl*0.1,xe[0]); //point must be well in front of camera, otherwise atan2 flips.
-	xe_l[0]=MAX(tl*0.1,xe_l[0]);
+	xe[0]=MAX(tlr*0.1,xe[0]); //point must be well in front of camera, otherwise atan2 flips.
+	xe_l[0]=MAX(tll*0.1,xe_l[0]);
 	mReal eye_pan=q5c+RAD2DEG(atan2(xe[0],-1.0*xe[1]))-90.0; //angle that will pan the eye to target
 	mReal eye_pan_l = q6c+RAD2DEG(atan2(xe_l[0],-1.0*xe_l[1]))-90.0;
 	//if (tmp_cnt++%100==0)

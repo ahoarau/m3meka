@@ -1067,6 +1067,7 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	//YAML::Node doc;
 	//GetYamlDoc(filename, doc);
 	assert(doc.size());
+#ifndef YAMLCPP_05
 	const YAML::Node * ra_node;
 	const YAML::Node * la_node;
 	const YAML::Node * t_node;
@@ -1107,7 +1108,7 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	} catch(YAML::KeyNotFound& e) {		
 		lh_node = NULL;
 	}
-	
+#endif
 	vector<mReal> ra_rot;
 	vector<mReal> la_rot;
 	vector<mReal> t_rot;
@@ -1120,7 +1121,7 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	vector<mReal> h_trans;
 	/*vector<mReal> rh_trans;
 	vector<mReal> lh_trans;*/
-
+#ifndef YAMLCPP_05
 	if (ra_node)
 	{	
 		(*ra_node)["chain_component"] >> right_arm_name;		
@@ -1205,11 +1206,102 @@ bool M3Humanoid::ReadConfig(const char * filename)
 		}
 
 	}
-	
+#else
+	if (doc["chains"]["right_arm"])
+	{	
+		YAML::Node ra_node = doc["chains"]["right_arm"];
+		(ra_node)["chain_component"] >> right_arm_name;		
+		(ra_node)["base_rotation_in_parent"] >> ra_rot;		
+		(ra_node)["base_translation_in_parent"] >> ra_trans;
+		try {
+		  (ra_node)["force_shm_mode"] >> force_shm_r_arm;
+		} catch(YAML::Exception& e) {		
+			force_shm_r_arm = false;
+		}
+		try{
+		  (ra_node)["use_loadx6_instead_of_payload"]>>right_use_loadx6_instead_of_payload;
+		}
+		catch(YAML::Exception& e)
+		{
+		  right_use_loadx6_instead_of_payload = false;
+		}
+		
+		try{
+		  (ra_node)["load_x6_component"]>>right_load_x6_component;
+		}
+		catch(YAML::Exception& e)
+		{
+		  right_load_x6_component = "";
+		}
+	}
+	if (doc["chains"]["left_arm"])
+	{	
+		YAML::Node la_node = doc["chains"]["left_arm"];
+		(la_node)["chain_component"] >> left_arm_name;
+		(la_node)["base_rotation_in_parent"] >> la_rot;
+		(la_node)["base_translation_in_parent"] >> la_trans;
+		try {
+		  (la_node)["force_shm_mode"] >> force_shm_l_arm;
+		} catch(YAML::Exception& e) {		
+			force_shm_l_arm = false;
+		}		
+	}
+	if (doc["chains"]["torso"])
+	{	
+		YAML::Node t_node = doc["chains"]["torso"];
+		(t_node)["chain_component"] >> torso_name;
+		(t_node)["base_rotation_in_parent"] >> t_rot;
+		(t_node)["base_translation_in_parent"] >> t_trans;
+		try {
+		  (t_node)["force_shm_mode"] >>force_shm_torso;
+		} catch(YAML::Exception& e) {		
+			force_shm_torso = false;
+		}
+	}
+	if (doc["chains"]["head"])
+	{	
+		YAML::Node h_node = doc["chains"]["head"];	
+		(h_node)["chain_component"] >> head_name;
+		(h_node)["base_rotation_in_parent"] >> h_rot;
+		(h_node)["base_translation_in_parent"] >> h_trans;
+		try {
+		  (h_node)["force_shm_mode"] >>force_shm_head;
+		} catch(YAML::Exception& e) {		
+			force_shm_head = false;
+		}
+
+	}
+	if (doc["chains"]["right_hand"])
+	{	
+		YAML::Node rh_node = doc["chains"]["right_hand"];
+		(rh_node)["chain_component"] >> right_hand_name;
+		//(rh_node)["base_rotation_in_parent"] >> rh_rot;
+		//(rh_node)["base_translation_in_parent"] >> rh_trans;
+		try {
+		  (rh_node)["force_shm_mode"] >>force_shm_r_hand;
+		} catch(YAML::Exception& e) {		
+			force_shm_r_hand = false;
+		}
+
+	}
+	if (doc["chains"]["left_hand"])
+	{	
+		YAML::Node lh_node = doc["chains"]["left_hand"];	
+		(lh_node)["chain_component"] >> left_hand_name;
+		//(lh_node)["base_rotation_in_parent"] >> lh_rot;
+		//(lh_node)["base_translation_in_parent"] >> lh_trans;
+		try {
+		  (lh_node)["force_shm_mode"] >>force_shm_l_hand;
+		} catch(YAML::Exception& e) {		
+			force_shm_l_hand = false;
+		}
+
+	}
+#endif
 	try{
 	  doc["startup_motor_pwr_on"]>>startup_motor_pwr_on;
 	}
-	catch(YAML::KeyNotFound& e)
+	catch(...)
 	{
 	  startup_motor_pwr_on=false;
 	}

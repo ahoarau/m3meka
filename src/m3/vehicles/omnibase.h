@@ -20,7 +20,7 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef M3_OMNIBASE_H
 #define M3_OMNIBASE_H
 
-#include "holomni_pcv/Pcv.h"
+#include "holomni-pcv/Pcv.h"
 
 #define DEG2RAD(a)     (mReal)2.0*M_PI*((mReal)a)/360.0
 

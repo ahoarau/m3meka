@@ -606,7 +606,7 @@ int main (int argc, char **argv)
 	
 	try {
 	  doc["ndof_chains"]["right_arm"] >> ndof;
-	} catch (YAML::KeyNotFound &e) {
+	} catch (...) {
 	  ndof = 0;	  
 	}
 	ndof_right_arm = ndof;
@@ -614,7 +614,7 @@ int main (int argc, char **argv)
 	
 	try {
 	  doc["ndof_chains"]["left_arm"] >> ndof;
-	} catch (YAML::KeyNotFound &e) {
+	} catch (...) {
 	  ndof = 0;	  
 	}
 	ndof_left_arm = ndof;
@@ -622,7 +622,7 @@ int main (int argc, char **argv)
 	
 	try {
 	  doc["ndof_chains"]["torso"] >> ndof;
-	} catch (YAML::KeyNotFound &e) {
+	} catch (...) {
 	  ndof = 0;	  
 	}
 	ndof_torso = ndof;
@@ -630,7 +630,7 @@ int main (int argc, char **argv)
 	
 	try {
 	  doc["ndof_chains"]["head"] >> ndof;
-	} catch (YAML::KeyNotFound &e) {
+	} catch (...) {
 	  ndof = 0;	  
 	}
 	ndof_head = ndof;
@@ -638,7 +638,7 @@ int main (int argc, char **argv)
 	
 	try {
 	  doc["ndof_chains"]["right_hand"] >> ndof;
-	} catch (YAML::KeyNotFound &e) {
+	} catch (...) {
 	  ndof = 0;	  
 	}
 	ndof_right_hand = ndof;
@@ -646,7 +646,7 @@ int main (int argc, char **argv)
 	
 	try {
 	  doc["ndof_chains"]["left_hand"] >> ndof;
-	} catch (YAML::KeyNotFound &e) {
+	} catch (...) {
 	  ndof = 0;	  
 	}
 	ndof_left_hand = ndof;
@@ -654,7 +654,7 @@ int main (int argc, char **argv)
 		
 	try {
 	  doc["ndof_chains"]["left_gripper"] >> ndof;
-	} catch (YAML::KeyNotFound &e) {
+	} catch (...) {
 	  ndof = 0;	  
 	}
 	ndof_left_gripper = ndof;

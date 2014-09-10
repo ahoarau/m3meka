@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with M3.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <humanoid_shm.h>
+#include "m3/robots/humanoid_shm.h"
 #include "m3rt/base/component_factory.h"
 
 
@@ -412,7 +412,7 @@ bool M3HumanoidShm::LinkDependentComponents() {
     tmp_cnt = 0;
 
     if ( bot_name.size() !=0 ) {
-        bot= ( M3Humanoid* ) factory->GetComponent ( bot_name );
+		bot= dynamic_cast< M3Humanoid* > (factory->GetComponent ( bot_name ));
         if ( bot==NULL ) {
             M3_ERR ( "M3Humanoid component %s declared for M3BotShm but could not be linked\n",
                      bot_name.c_str() );
@@ -421,7 +421,7 @@ bool M3HumanoidShm::LinkDependentComponents() {
         }
 
     if ( pwr_name.size() !=0 ) {
-        pwr= ( M3Pwr* ) factory->GetComponent ( pwr_name );
+		pwr= dynamic_cast< M3Pwr* >( factory->GetComponent ( pwr_name ));
         if ( pwr==NULL )
             M3_WARN ( "M3Pwr component %s declared for M3BotShm but could not be linked\n",
                       pwr_name.c_str() );
@@ -429,7 +429,7 @@ bool M3HumanoidShm::LinkDependentComponents() {
         }
 
     if ( right_hand_name.size() !=0 ) {
-        right_hand= ( M3Hand* ) factory->GetComponent ( right_hand_name ); //May be null if not on this robot model
+		right_hand= dynamic_cast< M3Hand* >( factory->GetComponent ( right_hand_name )); //May be null if not on this robot model
         if ( right_hand==NULL ) {
             M3_WARN ( "M3Hand component %s declared for M3BotShm but could not be linked\n",
                       right_hand_name.c_str() );
@@ -438,7 +438,7 @@ bool M3HumanoidShm::LinkDependentComponents() {
         }
 
     if ( right_loadx6_name.size() !=0 ) {
-        right_loadx6= ( M3LoadX6* ) factory->GetComponent ( right_loadx6_name );
+		right_loadx6= dynamic_cast< M3LoadX6* >( factory->GetComponent ( right_loadx6_name ));
         if ( right_loadx6==NULL ) {
             M3_WARN ( "M3LoadX6 component %s declared for M3BotShm but could not be linked\n",
                       right_loadx6_name.c_str() );
@@ -447,7 +447,7 @@ bool M3HumanoidShm::LinkDependentComponents() {
         }
 
     if ( left_hand_name.size() !=0 ) {
-        left_hand= ( M3Hand* ) factory->GetComponent ( left_hand_name ); //May be null if not on this robot model
+		left_hand= dynamic_cast< M3Hand* >( factory->GetComponent ( left_hand_name )); //May be null if not on this robot model
         if ( left_hand==NULL ) {
             M3_WARN ( "M3Hand component %s declared for M3BotShm but could not be linked\n",
                       left_hand_name.c_str() );
@@ -456,7 +456,7 @@ bool M3HumanoidShm::LinkDependentComponents() {
         }
 
     if ( left_gripper_name.size() !=0 ) {
-        left_gripper= ( M3Joint* ) factory->GetComponent ( left_gripper_name ); //May be null if not on this robot model
+		left_gripper= dynamic_cast< M3Joint* >( factory->GetComponent ( left_gripper_name )); //May be null if not on this robot model
         if ( left_gripper==NULL ) {
             M3_WARN ( "M3Gripper component %s declared for M3BotShm but could not be linked\n",
                       left_gripper_name.c_str() );
@@ -464,7 +464,7 @@ bool M3HumanoidShm::LinkDependentComponents() {
         }
 
     if ( right_gripper_name.size() !=0 ) {
-        right_gripper= ( M3Joint* ) factory->GetComponent ( right_gripper_name ); //May be null if not on this robot model
+		right_gripper= dynamic_cast< M3Joint* >( factory->GetComponent ( right_gripper_name )); //May be null if not on this robot model
         if ( right_gripper==NULL ) {
             M3_WARN ( "M3Gripper component %s declared for M3BotShm but could not be linked\n",
                       right_gripper_name.c_str() );
@@ -473,7 +473,7 @@ bool M3HumanoidShm::LinkDependentComponents() {
 
 
     if ( left_loadx6_name.size() !=0 ) {
-        left_loadx6= ( M3LoadX6* ) factory->GetComponent ( left_loadx6_name );
+		left_loadx6= dynamic_cast< M3LoadX6* >( factory->GetComponent ( left_loadx6_name ));
         if ( left_loadx6==NULL ) {
             M3_WARN ( "M3LoadX6 component %s declared for M3BotShm but could not be linked\n",
                       left_loadx6_name.c_str() );
@@ -500,56 +500,56 @@ bool M3HumanoidShm::ReadConfig ( const char * filename ) {
     try {
         doc["humanoid_component"] >> bot_name;
         }
-    catch ( YAML::KeyNotFound& e ) {
+    catch ( ... ) {
         bot_name="";
         }
 
     try {
         doc["right_hand_component"] >> right_hand_name;
         }
-    catch ( YAML::KeyNotFound& e ) {
+    catch ( ... ) {
         right_hand_name="";
         }
 
     try {
         doc["right_loadx6_component"] >> right_loadx6_name;
         }
-    catch ( YAML::KeyNotFound& e ) {
+    catch ( ... ) {
         right_loadx6_name="";
         }
 
     try {
         doc["left_hand_component"] >> left_hand_name;
         }
-    catch ( YAML::KeyNotFound& e ) {
+    catch ( ... ) {
         left_hand_name="";
         }
 
     try {
         doc["left_gripper_component"] >> left_gripper_name;
         }
-    catch ( YAML::KeyNotFound& e ) {
+    catch ( ... ) {
         left_gripper_name="";
         }
 
     try {
         doc["right_gripper_component"] >> right_gripper_name;
         }
-    catch ( YAML::KeyNotFound& e ) {
+    catch ( ... ) {
         right_gripper_name="";
         }
 
     try {
         doc["left_loadx6_component"] >> left_loadx6_name;
         }
-    catch ( YAML::KeyNotFound& e ) {
+    catch ( ... ) {
         left_loadx6_name="";
         }
 
     try {
         doc["pwr_component"]>>pwr_name;
         }
-    catch ( YAML::KeyNotFound& e ) {
+    catch ( ... ) {
         pwr_name = "";
         }
 

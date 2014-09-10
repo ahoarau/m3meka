@@ -37,7 +37,8 @@ class M3Head : public M3JointChain
 		Frame GetRightEyeOffset(){return right_eye_offset;}
 		Frame GetLeftEyeOffset(){return left_eye_offset;}
 	protected:
-		bool ReadConfig(const char * filename);		
+		bool ReadConfig(const char * filename);
+		void StepCommand(void); // A.H : Added custom command
 	private:
 		Frame left_eye_offset;
 		Frame right_eye_offset;		

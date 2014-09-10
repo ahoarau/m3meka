@@ -18,6 +18,18 @@ PROTOBUF_GENERATE_PYTHON(PySources ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles})
 add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # force the generation
 # End Protobuf stuff
 
+## YAML CPP 
+find_package(PkgConfig REQUIRED)
+#find_package(YamlCpp  REQUIRED)
+pkg_check_modules(YAMLCPP REQUIRED yaml-cpp)
+if(NOT ${YAMLCPP_VERSION} VERSION_LESS "0.5")
+set_property(
+   DIRECTORY
+   PROPERTY COMPILE_DEFINITIONS YAMLCPP_05
+   )
+endif(NOT ${YAMLCPP_VERSION} VERSION_LESS "0.5")
+link_directories(${YAMLCPP_LIBRARY_DIRS})
+
 if(RTAI)
 find_package(RTAI REQUIRED)
 add_definitions(-D__RTAI__)
@@ -25,6 +37,10 @@ add_definitions(-D__RTAI__)
 find_package(Boost REQUIRED)
 find_package(Eigen3 3 REQUIRED)
 find_package(Protobuf REQUIRED)
+find_package(orocos_kdl REQUIRED)
+include_directories(${orocos_kdl_INCLUDE_DIRS})
+
+
 #SET(M3_INCLUDE_DIR 
 #	${CMAKE_CURRENT_SOURCE_DIR}/../..
 #	${CMAKE_CURRENT_SOURCE_DIR}/../toolbox

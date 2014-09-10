@@ -17,40 +17,11 @@
  * is strictly forbidden unless prior written permission is obtained
  * from Redwood Robotics Incorporated.
  */
- 
-#include <cmath>
-
-#include "m3rt/base/m3rt_def.h"
-#include "m3rt/base/component_factory.h"
-
 #include "m3/hardware/ctrl_simple.h"
-
 namespace m3{
 	
 using namespace m3rt;
 using namespace std;
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-//			M3 Stuffs
-
-void operator >> (const YAML::Node& node, M3ParamTrajectory* traj)
-{
-	mReal tmp;
-	node["freq"] >> tmp; 		traj->set_freq(tmp);
-	node["amp"] >> tmp;			traj->set_amp(tmp);
-	node["zero"] >> tmp;		traj->set_zero(tmp);
-}
-
-void operator >> (const YAML::Node& node, M3ParamPID* pid)
-{
-	mReal val;
-	node["k_p"] >> val;			pid->set_k_p(val);
-	node["k_i"] >> val;			pid->set_k_i(val);
-	node["k_d"] >> val;			pid->set_k_d(val);
-	node["k_i_limit"] >> val;	pid->set_k_i_limit(val);
-	node["k_i_range"] >> val;	pid->set_k_i_range(val);
-}
 
 
 bool M3CtrlSimple::ReadConfig(const char * filename)
@@ -65,20 +36,18 @@ bool M3CtrlSimple::ReadConfig(const char * filename)
 	
 	//Misc
 	doc["act_component"] >> act_name;
-
-	doc["param"]["traj_current"] >> ParamTrajCurrent();
-	doc["param"]["traj_theta"] >> ParamTrajTheta();
-	doc["param"]["traj_torque"] >> ParamTrajTorque();
+	NodeToTrajParam(doc["param"]["traj_current"],ParamTrajCurrent());
+	NodeToTrajParam(doc["param"]["traj_theta"],ParamTrajTheta());
+	NodeToTrajParam(doc["param"]["traj_torque"], ParamTrajTorque());
 	
-	doc["param"]["pid_theta"] >> ParamPidTheta();
-	doc["param"]["pid_torque"] >> ParamPidTorque();
-
+	NodeToPIDParam(doc["param"]["pid_theta"] ,ParamPidTheta());
+	NodeToPIDParam(doc["param"]["pid_torque"] , ParamPidTorque());
 	return true;
 } // end ReadConfig
 
 bool M3CtrlSimple::LinkDependentComponents()
 {
-	act = (M3Actuator*) factory->GetComponent(act_name);
+	act = dynamic_cast<M3Actuator*>(factory->GetComponent(act_name));
 	if (act==NULL)
 	{
 		M3_INFO("M3Actuator component %s not found for component %s\n",act_name.c_str(),GetName().c_str());

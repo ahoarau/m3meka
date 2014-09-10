@@ -65,5 +65,24 @@ bool M3Head::ReadConfig(const char * filename)
 
 	return true;
 }
+void M3Head::StepCommand(void)
+{
+	//A.H: Head does not have Series Elastic Actuators, so send thetaGC will trigger Theta MJ Mode !
+	for (int i=0;i<ndof;i++){
+	      if (joints[i]!=NULL){
+		  switch(command.ctrl_mode(i)){
+		      case JOINT_ARRAY_MODE_THETA_GC:
+			    command.set_ctrl_mode(i,JOINT_ARRAY_MODE_THETA);
+			    break;
+		      case JOINT_ARRAY_MODE_THETA_GC_MJ:
+			  command.set_ctrl_mode(i,JOINT_ARRAY_MODE_THETA_MJ);
+			  break;
+		      default:
+			  break;
+		  }
+	      }
+	}
+	M3JointArray::StepCommand();
+}
 
 }

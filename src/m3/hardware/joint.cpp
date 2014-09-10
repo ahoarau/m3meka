@@ -64,7 +64,7 @@ bool M3Joint::ReadConfig(const char * filename)
 	param.set_kqdot_d(val);
 	doc["param"]["kqdot_i_limit"] >> val;
 	param.set_kqdot_i_limit(val);
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		param.set_kqdot_p(0.0);
 		param.set_kqdot_i(0.0);
@@ -109,7 +109,7 @@ bool M3Joint::ReadConfig(const char * filename)
 	{
 	doc["param"]["kq_p_tq_gm"] >> val;
 	param.set_kq_p_tq_gm(val);
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		param.set_kq_p_tq_gm(0.0);
 	} 	
@@ -118,7 +118,7 @@ bool M3Joint::ReadConfig(const char * filename)
 	{
 	doc["param"]["kq_i_tq_gm"] >> val;
 	param.set_kq_i_tq_gm(val);
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		param.set_kq_i_tq_gm(0.0);
 	}
@@ -127,7 +127,7 @@ bool M3Joint::ReadConfig(const char * filename)
 	{
 	doc["param"]["kq_d_tq_gm"] >> val;
 	param.set_kq_d_tq_gm(val);
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		param.set_kq_d_tq_gm(0.0);
 	} 	
@@ -136,7 +136,7 @@ bool M3Joint::ReadConfig(const char * filename)
 	{
 	doc["param"]["kq_i_limit_tq_gm"] >> val;
 	param.set_kq_i_limit_tq_gm(val);
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		param.set_kq_i_limit_tq_gm(0.0);
 	} 	
@@ -145,7 +145,7 @@ bool M3Joint::ReadConfig(const char * filename)
 	{
 	doc["param"]["kq_i_range_tq_gm"] >> val;
 	param.set_kq_i_range_tq_gm(val);
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		param.set_kq_i_range_tq_gm(0.0);
 	} 
@@ -154,7 +154,7 @@ bool M3Joint::ReadConfig(const char * filename)
 	{
 	doc["param"]["kq_d_pose"] >> val;
 	param.set_kq_d_pose(val);
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		param.set_kq_d_pose(param.kq_d());
 	} 	
@@ -166,7 +166,7 @@ bool M3Joint::ReadConfig(const char * filename)
 		if (t.compare("none")==0){brake_type=BRAKE_NONE;}
 		if (t.compare("auto")==0){brake_type=BRAKE_AUTO;}
 		if (t.compare("manual")==0){brake_type=BRAKE_MANUAL;}
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		brake_type=BRAKE_NONE;
 	} 
@@ -174,7 +174,7 @@ bool M3Joint::ReadConfig(const char * filename)
 	try 
 	{
 		doc["control_component"] >> ctrl_simple_name;		
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		ctrl_simple_name="";
 	} 
@@ -183,7 +183,7 @@ bool M3Joint::ReadConfig(const char * filename)
 
 bool M3Joint::LinkDependentComponents()
 {
-	act=(M3Actuator*) factory->GetComponent(act_name);
+	act=dynamic_cast<M3Actuator*>(factory->GetComponent(act_name));
 	if (act==NULL)
 	{
 		M3_INFO("M3Actuator component %s not found for component %s\n",act_name.c_str(),GetName().c_str());

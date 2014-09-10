@@ -153,7 +153,7 @@ bool M3JointZLiftShm::LinkDependentComponents()
 	
 	if (zlift_name.size()!=0)
 	{		
-		zlift = (M3JointZLift*)factory->GetComponent(zlift_name);
+		zlift = dynamic_cast<M3JointZLift*>(factory->GetComponent(zlift_name));
 		if (zlift==NULL)
 		{
 			M3_ERR("M3JointZLift component %s declared for M3JointZLiftShm but could not be linked\n",

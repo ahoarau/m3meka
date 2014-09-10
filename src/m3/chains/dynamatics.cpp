@@ -42,10 +42,10 @@ bool M3Dynamatics::LinkDependentComponents()
 
 void M3Dynamatics::Startup()
 {		
-	if (ndof != m3chain->GetNumDof())
+	/*if (ndof != m3chain->GetNumDof())
 	{
 		M3_WARN("M3Dynamatics: ndof does not match chain: %s\n", chain_name.c_str());		
-	}
+	}*/
 	
 	q.resize(ndof+3);	// contains both position q.q and vel q.qdot
 	qdot_id.resize(ndof+3);
@@ -354,7 +354,7 @@ bool M3Dynamatics::ReadConfig(const char * filename)
 	{
 	    ymlparam["use_velocities"] >> btemp;
 	    param.set_use_velocities(btemp);
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		param.set_use_velocities(0);
 	} 
@@ -362,7 +362,7 @@ bool M3Dynamatics::ReadConfig(const char * filename)
 	{
 	  ymlparam["use_accelerations"] >> btemp;
 	  param.set_use_accelerations(btemp);
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		param.set_use_accelerations(0);
 	} 	
@@ -390,6 +390,7 @@ bool M3Dynamatics::ReadConfig(const char * filename)
 			cy.push_back(rtemp);
 			links[i]["cz"] >> rtemp;
 			cz.push_back(rtemp);
+#ifndef YAMLCPP_05
 			if(const YAML::Node *pName = links[i].FindValue("Ixx")) {
     				*pName >> rtemp;
 			} else {
@@ -426,6 +427,14 @@ bool M3Dynamatics::ReadConfig(const char * filename)
     				rtemp = 0.0;
 			}
 			Izz.push_back(rtemp);
+#else
+		 Ixx.push_back(links[i]["Ixx"].as<mReal>(0.0));
+		 Ixy.push_back(links[i]["Ixy"].as<mReal>(0.0));
+		 Ixz.push_back(links[i]["Ixz"].as<mReal>(0.0));
+		 Iyy.push_back(links[i]["Iyy"].as<mReal>(0.0));
+		 Iyz.push_back(links[i]["Iyz"].as<mReal>(0.0));
+		 Izz.push_back(links[i]["Izz"].as<mReal>(0.0));
+#endif
 		}
 	}
 

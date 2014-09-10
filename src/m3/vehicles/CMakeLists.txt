@@ -2,9 +2,18 @@ cmake_minimum_required(VERSION 2.8)
 project(vehicles)
 set(LIBNAME "m3vehicles")
 
-find_package(M3 COMPONENTS HARDWARE CHAINS TOOLBOX VEHICLE)
+find_package(M3 COMPONENTS HARDWARE CHAINS TOOLBOX VEHICLES)
 find_package(M3rt)
 include_directories(${M3RT_INCLUDE_DIR} ${M3_INCLUDE_DIR})
+
+find_package(Holomni)
+if(HOLOMNI_FOUND)
+	include_directories(${HOLOMNI_INCLUDE_DIR})
+	set(LIBS ${LIBS} ${HOLOMNI_LIBRARY})
+else()
+message(WARNING "Holomni library not found, not building m3vehicles library")
+endif()
+
 
 ## First generate the python 
 find_package(Protobuf REQUIRED)
@@ -19,13 +28,24 @@ PROTOBUF_GENERATE_PYTHON(PySources ${CMAKE_CURRENT_BINARY_DIR} ${ProtoFiles})
 add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # force the generation
 # End Protobuf stuff
 
+
+## YAML CPP 
+find_package(PkgConfig REQUIRED)
+#find_package(YamlCpp  REQUIRED)
+pkg_check_modules(YAMLCPP REQUIRED yaml-cpp)
+if(NOT ${YAMLCPP_VERSION} VERSION_LESS "0.5")
+set_property(
+   DIRECTORY
+   PROPERTY COMPILE_DEFINITIONS YAMLCPP_05
+   )
+endif(NOT ${YAMLCPP_VERSION} VERSION_LESS "0.5")
+link_directories(${YAMLCPP_LIBRARY_DIRS})
+
 if(RTAI)
 find_package(RTAI REQUIRED)
 add_definitions(-D__RTAI__)
 find_package(Boost REQUIRED)
 find_package(Eigen3 3 REQUIRED)
-find_package(Holomni)
-include_directories(${HOLOMNI_INCLUDE_DIR})
 
 #SET(M3_INCLUDE_DIR 
 #	${CMAKE_CURRENT_SOURCE_DIR}/../..
@@ -34,7 +54,7 @@ include_directories(${HOLOMNI_INCLUDE_DIR})
 #	${CMAKE_CURRENT_SOURCE_DIR}/../hardware
 #)
 
-include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${M3_INCLUDE_DIR} ${HOLOMNI_INCLUDE_DIRS})
+include_directories(${M3RT_INCLUDE_DIR} ${RTAI_INCLUDE_DIR} ${THREADS_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR} ${M3_INCLUDE_DIR})
 
 
 # Start Protobuf stuff
@@ -44,9 +64,13 @@ set_source_files_properties(${ProtoSources} ${ProtoHeaders} PROPERTIES
                             GENERATED TRUE)
 add_custom_target(${LIBNAME}_protobuf_tmp  ALL DEPENDS ${ProtoSources}) # Force the re-generation
 
+# OROCOS KDL
+find_package(orocos_kdl REQUIRED)
+include_directories(${orocos_kdl_INCLUDE_DIRS})
+set(LIBS ${LIBS} ${orocos_kdl_LIBRARIES})
 
 
-SET(LIBS ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3chains m3toolbox m3hardware holomni_pcv m3base)
+set(LIBS ${LIBS} ${RTAI_LIBRARIES}  pthread ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES} ${PROTOBUF_LIBRARIES} m3chains m3toolbox m3hardware m3base)
 
 
 set( ALL_SRCS 

@@ -91,7 +91,7 @@ bool M3MekaLog::LinkDependentComponents()
 	
 	for (int i = 0; i < comp_names.size(); i++)
 	{
-	   M3Component * a = (M3Component *)factory->GetComponent(comp_names[i]);
+		M3Component * a = dynamic_cast<M3Component *>(factory->GetComponent(comp_names[i]));
 	   if (a != NULL)
 	   {
 	    components.push_back(a);
@@ -250,7 +250,7 @@ bool M3MekaLog::ReadConfig(const char * filename)
 	      doc["components"][i] >> tmp;
 	       comp_names.push_back(tmp);
 	  }	   
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		
 	} 

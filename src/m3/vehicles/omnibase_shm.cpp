@@ -151,7 +151,7 @@ bool M3OmnibaseShm::LinkDependentComponents()
 	if (pwr_name.size()!=0)
 	{		
 	    
-		pwr=(M3Pwr*)factory->GetComponent(pwr_name);
+		pwr=dynamic_cast<M3Pwr*>(factory->GetComponent(pwr_name));
 		
 		if (pwr==NULL)
 		{
@@ -190,7 +190,7 @@ bool M3OmnibaseShm::ReadConfig(const char * filename)
 	try{
 	  doc["pwr_component"] >> pwr_name;	 
 	}
-	catch(YAML::KeyNotFound& e)
+	catch(...)
 	{	  
 	  pwr_name="";
 	}
@@ -198,7 +198,7 @@ bool M3OmnibaseShm::ReadConfig(const char * filename)
 	try{
 	  doc["startup_motor_pwr_on"]>>startup_motor_pwr_on;
 	}
-	catch(YAML::KeyNotFound& e)
+	catch(...)
 	{
 	  startup_motor_pwr_on=false;
 	}

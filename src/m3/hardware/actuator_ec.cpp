@@ -771,7 +771,7 @@ static int cnt;
 
 bool M3ActuatorEc::LinkDependentComponents()
 {
-	pwr=(M3Pwr*) factory->GetComponent(pwr_name);
+	pwr=dynamic_cast<M3Pwr*>( factory->GetComponent(pwr_name));
 	if (pwr==NULL)
 	{
 		M3_INFO("M3Pwr component %s not found for component %s. Proceeding without it...\n",pwr_name.c_str(),GetName().c_str());
@@ -802,7 +802,7 @@ bool M3ActuatorEc::ReadConfig(const char * filename)
 	try
 	{
 		doc["ignore_pwm_slew"] >>ignore_pwm_slew;
-	} catch(YAML::TypedKeyNotFound<string> e) 
+	} catch(...) 
 	{
 		ignore_pwm_slew=0;
 	}
@@ -845,7 +845,7 @@ bool M3ActuatorEc::ReadConfig(const char * filename)
 		try
 		{
 			ymlparam["bldc_mode"] >> val;						
-		} catch(YAML::TypedKeyNotFound<string> e) 
+		} catch(...) 
 		{
 			val=0;
 		}
@@ -863,7 +863,7 @@ bool M3ActuatorEc::ReadConfig(const char * filename)
 		
 		try {
 		  doc["config"]["has_brake"] >> has_brake;
-		} catch (YAML::KeyNotFound &e) {
+		} catch (...) {
 		  has_brake = false;
 		  //M3_DEBUG("exception: %s\n", e.what() );
 		}
@@ -871,7 +871,7 @@ bool M3ActuatorEc::ReadConfig(const char * filename)
 		override_ext_temp = true;
 		try {
 		  doc["config"]["over_ride_ext_temp"] >> override_ext_temp_act_ec_name;		  
-		} catch (YAML::KeyNotFound &e) {
+		} catch (...) {
 		  override_ext_temp_act_ec_name = "";
 		  override_ext_temp = false;		  		  
 		}

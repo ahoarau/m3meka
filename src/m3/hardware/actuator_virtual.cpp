@@ -40,37 +40,15 @@ void M3ActuatorVirtual::Startup()
 
 bool M3ActuatorVirtual::ReadConfig(const char * filename)
 {
-	int val;
-	//YAML::Node doc;
 	if (!M3Actuator::ReadConfig(filename))
 		return false;
-	//GetYamlDoc(filename, doc);
 	doc["joint_component"] >> jnt_name;
-	
-	// DFilter Params 
-	// Set Order
-	ParamThetaDf()->set_order(angle_df.GetXdf()->GetOrder());
-	ParamThetaDotDf()->set_order(angle_df.GetXdotdf()->GetOrder());
-	ParamThetaDotDotDf()->set_order(angle_df.GetXdotdotdf()->GetOrder());
-	
-	// Set N
-	ParamThetaDf()->set_n(angle_df.GetXdf()->GetN());
-	ParamThetaDotDf()->set_n(angle_df.GetXdotdf()->GetN());
-	ParamThetaDotDotDf()->set_n(angle_df.GetXdotdotdf()->GetN());
-	
-	// Set Cutoff
-	ParamThetaDf()->set_cutoff_freq(angle_df.GetXdf()->GetCutOffFreq());
-	ParamThetaDotDf()->set_cutoff_freq(angle_df.GetXdotdf()->GetCutOffFreq());
-	ParamThetaDotDotDf()->set_cutoff_freq(angle_df.GetXdotdotdf()->GetCutOffFreq());
-	
-	
-	
 	return true;
 }
 
 bool M3ActuatorVirtual::LinkDependentComponents()
 {
-	joint=(M3Joint*) factory->GetComponent(jnt_name);
+	joint=dynamic_cast<M3Joint*>( factory->GetComponent(jnt_name));
 	if (joint==NULL)
 	{
 		M3_INFO("M3Joint component %s not found for component %s. Proceeding without it.\n",jnt_name.c_str(),GetName().c_str());
@@ -100,13 +78,17 @@ void M3ActuatorVirtual::StepStatus()
 		{
 			this->StepFilterParam();
 			// A.H : try to set fake torque to virtual motors = Tdes // TODO: investigate on torque jumps
-			tq_sense.Step(this->GetDesiredTorque()-t->GetTorqueDesJoint()*1000.0/torque_shift);
+			/*if(pnt_cnt % 100 == 0){
+				pnt_cnt=0;
+				cout<<"Desired torque :"<<this->GetDesiredTorque()<<"To ticks : "<<tq_sense.mNmToTicks(this->GetDesiredTorque())<<";jointdes:"<<t->GetTorqueDesJoint()<<";tostatus:"<<tq_sense.GetTorque_mNm()<<endl;
+			}*/
+			tq_sense.Step(tq_sense.mNmToTicks(this->GetDesiredTorque()));
 			status.set_torque(tq_sense.GetTorque_mNm());
 			status.set_torquedot(torquedot_df.Step(tq_sense.GetTorque_mNm()));
 			// A.H test : torque and not torquedot (I don't care about torquedot)
 			//status.set_torque(torquedot_df.Step(tq_jt));
 			
-			angle_df.Step(t->GetThetaDesJointDeg(),0); //Note: should be GetThetaDesSensorDeg, not working. this OK so long as all angle sensors are collocated 1:1
+			angle_df.Step(t->GetThetaDesJointDeg(),status.thetadot()); //Note: should be GetThetaDesSensorDeg, not working. this OK so long as all angle sensors are collocated 1:1
 			status.set_theta(angle_df.GetTheta());
 			status.set_thetadot(angle_df.GetThetaDot());
 			status.set_thetadotdot(angle_df.GetThetaDotDot());

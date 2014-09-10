@@ -33,7 +33,7 @@ using namespace std;
 bool M3JointSlave::LinkDependentComponents()
 {
 	
-	cpj=(M3Joint*) factory->GetComponent(cpj_name);
+	cpj=dynamic_cast<M3Joint*>( factory->GetComponent(cpj_name));
 	if (cpj==NULL)
 	{
 		M3_INFO("M3Joint component %s not found for component %s\n",cpj_name.c_str(),GetName().c_str());

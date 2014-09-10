@@ -168,22 +168,33 @@ bool M3RobotMonitor::ReadConfig(const char * filename)
 	//GetYamlDoc(filename, doc);
 	
 	bool has_volt = true;
+#ifndef YAMLCPP_05
 	try 
 	{
 	    YAML::Iterator it=doc["volt_components"].begin();
-	}catch(YAML::TypedKeyNotFound<string> e) 
+	}catch(...) 
 	{
 	  has_volt = false;
 	}
-	
+#else
+	(doc["volt_components"] ? has_volt=true:has_volt=false);
+#endif
 	int i = 0;
 	if (has_volt)
 	{
+#ifndef YAMLCPP_05
 	  for(YAML::Iterator it=doc["volt_components"].begin();it!=doc["volt_components"].end();++it) 
 	  {		
 		  string key;
 		   mReal val;
 		  it.first() >> key;
+#else
+		  for(YAML::const_iterator it=doc["volt_components"].begin();it!=doc["volt_components"].end();++it) 
+	  {		
+		  string key;
+		   mReal val;
+		  key = it->first.as<string>();
+#endif
 		  volt_names.push_back(key);
 		  param.add_volt_comp();
 		  param.mutable_volt_comp(i)->set_component_name(key);
@@ -200,21 +211,33 @@ bool M3RobotMonitor::ReadConfig(const char * filename)
 	}
 	
 	bool has_temp = true;
+#ifndef YAMLCPP_05
 	try 
 	{
 	    YAML::Iterator it=doc["temp_components"].begin();
-	}catch(YAML::TypedKeyNotFound<string> e) 
+	}catch(...) 
 	{
 	  has_temp = false;
 	}
+#else
+	(doc["temp_components"] ? has_temp=true:has_temp=false);
+#endif
 	i = 0;
 	if (has_temp)
 	{
+#ifndef YAMLCPP_05
 	  for(YAML::Iterator it=doc["temp_components"].begin();it!=doc["temp_components"].end();++it) 
 	  {		
 		  string key;
-		  mReal val;
+		   mReal val;
 		  it.first() >> key;
+#else
+		  for(YAML::const_iterator it=doc["temp_components"].begin();it!=doc["temp_components"].end();++it) 
+	  {		
+		  string key;
+		   mReal val;
+		  key = it->first.as<string>();
+#endif	
 		  temp_names.push_back(key);
 		  param.add_temp_comp();
 		  param.mutable_temp_comp(i)->set_component_name(key);		  
