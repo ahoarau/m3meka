@@ -11,7 +11,8 @@ if(HOLOMNI_FOUND)
 	include_directories(${HOLOMNI_INCLUDE_DIR})
 	set(LIBS ${LIBS} ${HOLOMNI_LIBRARY})
 else()
-message(WARNING "Holomni library not found, not building m3vehicles library")
+message(WARNING "Holomni library not found, please install it first if you want to control the base: \n cd ~/mekabot/holmni_pcv && mkdir build;cd build && cmake .. && make && sudo make install")
+return()
 endif()
 
 
