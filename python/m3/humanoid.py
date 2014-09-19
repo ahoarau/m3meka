@@ -985,7 +985,12 @@ class M3Humanoid(M3Robot):
         chain_attr.fksolver_pos = ChainFkSolverPos_recursive(chain_attr.kdl_chain)        
         
 
-        
+    def get_chain_real_name(self,chain_name):
+        try:
+            return self.config['chains'][chain_name]['chain_component']
+        except:
+            print("M3 WARNING:",chain_name,"doesnt exists!")
+
     def read_config(self):
         M3Component.read_config(self)
         right_arm_model = None
@@ -1027,7 +1032,17 @@ class M3Humanoid(M3Robot):
             self.head.chain_name = chain_name
             self.head.read_config() 
             self.__set_base_offset_tool_transforms('head', self.config['chains']['head'])
-            
+
+        if self.config['chains'].has_key('right_hand'):
+            self.available_chains.append('right_hand')
+            chain_name = self.config['chains']['right_hand']['chain_component']
+            self.right_hand.chain_name=chain_name
+            self.right_hand.read_config() 
+            try:
+                self.__set_base_offset_tool_transforms('right_hand', self.config['chains']['right_hand'])
+            except:
+                pass  
+          
         if self.config['chains'].has_key('left_hand'):
             self.available_chains.append('left_hand')
             chain_name = self.config['chains']['left_hand']['chain_component']
@@ -1037,15 +1052,7 @@ class M3Humanoid(M3Robot):
                 self.__set_base_offset_tool_transforms('left_hand', self.config['chains']['left_hand'])
             except:
                 pass
-        if self.config['chains'].has_key('right_hand'):
-            self.available_chains.append('right_hand')
-            chain_name = self.config['chains']['right_hand']['chain_component']
-            self.right_hand.chain_name=chain_name
-            self.right_hand.read_config() 
-            try:
-                self.__set_base_offset_tool_transforms('right_hand', self.config['chains']['right_hand'])
-            except:
-                pass
+
             
         # Now configure
         if self.right_arm.chain_name is not None:
