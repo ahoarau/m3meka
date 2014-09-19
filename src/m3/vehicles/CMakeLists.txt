@@ -40,7 +40,7 @@ set_property(
    PROPERTY COMPILE_DEFINITIONS YAMLCPP_05
    )
 endif(NOT ${YAMLCPP_VERSION} VERSION_LESS "0.5")
-link_directories(${YAMLCPP_LIBRARY_DIRS})
+set(LIBS ${LIBS} ${YAMLCPP_LIBRARY})
 
 if(RTAI)
 find_package(RTAI REQUIRED)
