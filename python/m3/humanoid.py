@@ -2702,7 +2702,93 @@ class M3Humanoid(M3Robot):
         else:
             v = [mab.JOINT_ARRAY_MODE_THETA_GC] * len(ind)
         self.set_mode(chain, v, ind)        
+
+    def set_mode_thetadot(self, chain, ind=None):
+        """
+        Sets joint controller mode for selected chain to joint velocity control.  A 
+        list of joint indexes can be supplied to set specific joints, or the index
+        can be omitted to set all controllers in that chain to joint velocity.
         
+        :param chain: Desired chain.
+        :type chain: 'right_arm', 'left_arm', 'torso', 'head'
+        :param ind: Index of joints.
+        :type ind: array_like, shape < ndof, optional
+        
+        :raises: 
+           M3Exception if chain is not supported or ind.shape is not < ndof
+                  
+        :See Also:            
+           :meth:`M3Humanoid.set_mode`
+           :meth:`M3Humanoid.set_mode_torque`
+           :meth:`M3Humanoid.set_mode_off`
+           :meth:`M3Humanoid.set_mode_torque_gc`
+           :meth:`M3Humanoid.set_mode_theta`
+           :meth:`M3Humanoid.set_mode_theta_mj`
+           :meth:`M3Humanoid.set_mode_theta_gc_mj`
+           :meth:`M3Humanoid.set_mode_splined_traj`
+           :meth:`M3Humanoid.set_mode_splined_traj_gc`
+           
+        :Examples:
+
+        To set all joint controllers to joint angle control with gravity compensation:  
+        
+        >>> from m3.humanoid import M3Humanoid        
+        >>> bot = M3Humanoid('bob')        
+        >>> bot.set_mode_thetadot('right_arm')        
+        
+        To set a subset of joint controllers to joint angle control with gravity compensation:
+                
+        >>> index = [3, 4]
+        >>> bot.set_mode_theta_gc('right_arm',index)
+        """
+        if ind is None:
+            v = [mab.JOINT_ARRAY_MODE_THETADOT] * self.get_num_dof(chain)
+        else:
+            v = [mab.JOINT_ARRAY_MODE_THETADOT] * len(ind)
+        self.set_mode(chain, v, ind)        
+    def set_mode_thetadot_gc(self, chain, ind=None):
+        """
+        Sets joint controller mode for selected chain to joint velocity control with gravity compensation.  A 
+        list of joint indexes can be supplied to set specific joints, or the index
+        can be omitted to set all controllers in that chain to joint velocity with gravity compensation.
+        
+        :param chain: Desired chain.
+        :type chain: 'right_arm', 'left_arm', 'torso', 'head'
+        :param ind: Index of joints.
+        :type ind: array_like, shape < ndof, optional
+        
+        :raises: 
+           M3Exception if chain is not supported or ind.shape is not < ndof
+                  
+        :See Also:            
+           :meth:`M3Humanoid.set_mode`
+           :meth:`M3Humanoid.set_mode_torque`
+           :meth:`M3Humanoid.set_mode_off`
+           :meth:`M3Humanoid.set_mode_torque_gc`
+           :meth:`M3Humanoid.set_mode_theta`
+           :meth:`M3Humanoid.set_mode_theta_mj`
+           :meth:`M3Humanoid.set_mode_theta_gc_mj`
+           :meth:`M3Humanoid.set_mode_splined_traj`
+           :meth:`M3Humanoid.set_mode_splined_traj_gc`
+           
+        :Examples:
+
+        To set all joint controllers to joint angle control with gravity compensation:  
+        
+        >>> from m3.humanoid import M3Humanoid        
+        >>> bot = M3Humanoid('bob')        
+        >>> bot.set_mode_theta_gc('right_arm')        
+        
+        To set a subset of joint controllers to joint angle control with gravity compensation:
+                
+        >>> index = [3, 4]
+        >>> bot.set_mode_theta_gc('right_arm',index)
+        """
+        if ind is None:
+            v = [mab.JOINT_ARRAY_MODE_THETADOT_GC] * self.get_num_dof(chain)
+        else:
+            v = [mab.JOINT_ARRAY_MODE_THETADOT_GC] * len(ind)
+        self.set_mode(chain, v, ind)        
     def set_mode_theta_mj(self, chain, ind=None):
         """
         Sets joint controller mode for selected chain to joint angle control with minimum jerk filtering.  A 
