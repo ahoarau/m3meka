@@ -171,6 +171,10 @@ class M3JointArray(M3Component):
         M3Component.set_int_array(self,self.command.ctrl_mode,mam.JOINT_ARRAY_MODE_THETA,ind)
     def set_mode_theta_gc(self,ind=None):
         M3Component.set_int_array(self,self.command.ctrl_mode,mam.JOINT_ARRAY_MODE_THETA_GC,ind)
+    def set_mode_thetadot(self,ind=None):
+        M3Component.set_int_array(self,self.command.ctrl_mode,mam.JOINT_ARRAY_MODE_THETADOT,ind)
+    def set_mode_thetadot_gc(self,ind=None):
+        M3Component.set_int_array(self,self.command.ctrl_mode,mam.JOINT_ARRAY_MODE_THETADOT_GC,ind)
     def set_mode_theta_mj(self,ind=None):
         M3Component.set_int_array(self,self.command.ctrl_mode,mam.JOINT_ARRAY_MODE_THETA_MJ,ind)
     def set_mode_theta_gc_mj(self,ind=None):
