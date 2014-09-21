@@ -4,6 +4,11 @@ compiler:
   - gcc
 
 
+## Prereqs : 
+## Yamlcpp 0.5.1
+## findXXX.cmake
+## m3core
+
 before_install:
   - export CI_SOURCE_PATH=$(pwd)
   - wget http://yaml-cpp.googlecode.com/files/yaml-cpp-0.5.1.tar.gz
