@@ -13,7 +13,7 @@ before_install:
   - export CI_SOURCE_PATH=$(pwd)
   - wget http://yaml-cpp.googlecode.com/files/yaml-cpp-0.5.1.tar.gz
   - tar -xf yaml-cpp-0.5.1.tar.gz
-  - cd yaml-cpp
+  - cd yaml-cpp-0.5.1
   - mkdir build;cd build;
   - cmake .. -DBUILD_SHARED_LIBS=1
   - make -j$(nproc)
