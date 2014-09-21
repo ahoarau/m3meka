@@ -10,6 +10,7 @@ compiler:
 ## m3core
 
 before_install:
+  - sudo apt-get install -qq swig moc cmake libeigen3-dev libprotobuf-dev protobuf-compiler libboost-dev python-dev python-protobuf python-matplotlib python-yaml python-gnuplot python-scipy python-sip-dev python-sip
   - export CI_SOURCE_PATH=$(pwd)
   - wget http://yaml-cpp.googlecode.com/files/yaml-cpp-0.5.1.tar.gz
   - tar -xf yaml-cpp-0.5.1.tar.gz
@@ -31,7 +32,6 @@ before_install:
   - sudo make install
  
 install:
-  - sudo apt-get install -qq swig moc cmake libeigen3-dev libprotobuf-dev protobuf-compiler libboost-dev python-dev python-protobuf python-matplotlib python-yaml python-gnuplot python-scipy python-sip-dev python-sip
   #- wget http://perso.ensta-paristech.fr/~hoarau/rtmeka-kern/$(uname -p)/linux-image-rt.deb
   #- sudo dpkg -i linux-headers-rt.deb 
   #- sudo dpkg -i linux-image-rt.deb
