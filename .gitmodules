@@ -1,0 +1,3 @@
+[submodule "ros/m3ros_control"]
+	path = ros/m3ros_control
+	url = https://github.com/ahoarau/m3ros_control.git
