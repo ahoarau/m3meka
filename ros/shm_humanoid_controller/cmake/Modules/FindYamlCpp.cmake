@@ -43,10 +43,8 @@ find_library(YAMLCPP_LIBRARY
                     /opt/csw
                     /opt
                     ${YAMLCPP_DIR}/lib)
-set(YAMLCPP_LIBRARIES ${YAMLCPP_LIBRARY})
+
 # handle the QUIETLY and REQUIRED arguments and set YAMLCPP_FOUND to TRUE if all listed variables are TRUE
 include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(YAMLCPP DEFAULT_MSG YAMLCPP_INCLUDE_DIR YAMLCPP_LIBRARY)
 mark_as_advanced(YAMLCPP_INCLUDE_DIR YAMLCPP_LIBRARY)
-message("YAML LIB: ${YAMLCPP_LIBRARIES}")
-message("YAML INCLUDE: ${YAMLCPP_INCLUDE_DIR}")
