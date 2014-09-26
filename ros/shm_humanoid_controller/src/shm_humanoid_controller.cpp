@@ -50,7 +50,6 @@ extern "C" {
 #include <iostream>
 #include <fstream>
 #include "yaml-cpp/yaml.h"
-//#include "m3rt/base/toolbox.h>
 
 // Needed for ROS
 #include <ros/ros.h>
@@ -78,7 +77,7 @@ static int ndof_total = 0;
 
 
 using namespace std;
-
+using namespace m3rt;
 ////////////////////////////////////////////////////////////////////////////////////
 static int sys_thread_active = 0;
 static int sys_thread_end=0;

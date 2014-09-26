@@ -17,14 +17,14 @@ find_package(catkin REQUIRED COMPONENTS
 ## YAML CPP 
 find_package(PkgConfig REQUIRED)
 #find_package(YamlCpp  REQUIRED)
-pkg_check_modules(YAMLCPP REQUIRED yaml-cpp<=0.5)
-if(NOT ${YAMLCPP_VERSION} VERSION_LESS "0.5")
-add_definitions(-DHAVE_NEW_YAMLCPP)
-endif(NOT ${YAMLCPP_VERSION} VERSION_LESS "0.5")
-link_directories(${YAMLCPP_LIBRARY_DIRS})
+pkg_check_modules(YAMLCPP REQUIRED yaml-cpp)
+if(${YAMLCPP_VERSION} VERSION_GREATER "0.5")
+set_property(DIRECTORY
+                PROPERTY COMPILE_DEFINITIONS "YAMLCPP_05")
+endif(${YAMLCPP_VERSION} VERSION_GREATER "0.5")
 
 
-
+find_package(M3rt REQUIRED)
 find_package(RTAI REQUIRED)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -108,7 +108,7 @@ catkin_package(
 ###########
 
 
-SET(LIBS ${catkin_LIBRARIES} ${YAMLCPP_LIBRARIES} ${CMAKE_DL_LIBS} ${RTAI_LIBRARIES} m3base)
+SET(LIBS ${catkin_LIBRARIES} ${YAMLCPP_LIBRARIES} ${CMAKE_DL_LIBS} ${RTAI_LIBRARY} ${M3_LIBRARIES} ${M3RT_LIBRARIES})
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 # include_directories(include)
@@ -116,6 +116,8 @@ include_directories(
   ${catkin_INCLUDE_DIRS} 
   ${YAMLCPP_INCLUDE_DIRS}
   ${RTAI_INCLUDE_DIR}
+${M3RT_INCLUDE_DIRS}
+${M3RT_INCLUDE_DIRS}
 )
 
 
