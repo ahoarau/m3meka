@@ -85,6 +85,8 @@ void M3MotorModel::ThermalInit(string config_filename)
         YAML::Node node;
 		doc_path = m3rt::GetYamlDoc(s.c_str(),node,NULL);
 		bool previous_temp_missing = doc_path.empty();
+                if(previous_temp_missing)
+                    M3_WARN("Previous temp missing, setting to default.\n");
 	    /*try
 	    {
 	      GetYamlDoc(temp_filename.c_str(), node);
@@ -96,38 +98,27 @@ void M3MotorModel::ThermalInit(string config_filename)
 	      previous_temp_missing = true;
 	      M3_DEBUG("a\n");
 	    }*/	
-	    
+	    previous_winding_temp=25.0;
+            previous_case_temp=25.0;
+            previous_temp_timestamp="";
 	    if (!previous_temp_missing)
 	    {
 	      try 
 	      {
 		
 		      node["previous_winding_temp"] >> previous_winding_temp;
-		      
-	      } catch(...) 
-	      {		
-		      previous_winding_temp=0.0;
-	      } 
+	      } catch(...){} 
 
 	      try 
 	      {
 		      node["previous_case_temp"] >> previous_case_temp;
 		      
-	      } catch(...) 
-	      {		
-		      previous_case_temp=0.0;
-	      } 
-
-
+	      } catch(...){} 
 	      try 
 	      {
 		      node["previous_temp_timestamp"] >> previous_temp_timestamp;
 		      
-	      } catch(...) 
-	      {
-		      //M3_WARN("Missing version key in config file for motor %s. Defaulting to type MODEL_V0\n",name.c_str());
-		      previous_temp_timestamp="";
-	      } 
+	      } catch(...){} 
 	      
 	      if (previous_temp_timestamp != "")
 	      {
