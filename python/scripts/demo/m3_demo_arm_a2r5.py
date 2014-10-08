@@ -47,14 +47,6 @@ class M3Proc:
         # ######## Setup Proxy and Components #########################
         self.proxy.start()
         self.current_first = True
-        
-        #self.ex = me.M3Example('m3uta_example_ex0')
-        demo_name = self.proxy.get_available_components('m3haptic_demo')
-        self.ex = None
-        if len(demo_name) > 0:
-            self.ex = me.M3HapticDemo(demo_name[0])        
-            self.proxy.subscribe_status(self.ex)
-            self.proxy.publish_command(self.ex)
 
         
         bot_name=m3t.get_robot_name()
@@ -76,7 +68,7 @@ class M3Proc:
         hand_names = self.bot.get_available_chains()    
         hand_names = [x for x in hand_names if x.find('hand')!=-1]
         if len(hand_names)==0:
-            print 'No arms found'
+            print 'No hands found'
             return
         if len(arm_names)==1:
             self.hand_name=hand_names[0]
