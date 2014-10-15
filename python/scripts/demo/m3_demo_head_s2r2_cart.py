@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/python
 
 #Copyright  2008, Meka Robotics
 #All rights reserved.
@@ -104,7 +104,6 @@ class M3Proc:
 				self.ts_rand=time.time()
 		
 		target = [self.x[0],self.y[0],self.z[0]]
-		self.bot.
 		print 'Target',target
 		
 		if self.mode[0]==0:
