@@ -1,7 +1,18 @@
-## Welcome to m3::m3meka.
+## Welcome to m3meka.
 
-m3 is open-source control software provided by Meka Robotics,LLC for it's robots.
+m3 is open-source control software provided by Meka Robotics for its robots.
 This is an update to match with recent configurations and needs at Ensta ParisTech.
+
+>New features:
+* Velocity control mode ( set_thetadot_deg in C++/Python API)
+* Fixed differential butterworth instability bug
+* Filters can be modified online (angle_df, torque_df etc in actuators config files)
+* Supports Yamlcpp >0.5 (new API)
+* Right and left hands are now part of the bot interface (C++/Python):
+    * You can control them in ros_control (using https://github.com/ahoarau/m3ros_control)
+    * In the Python API: bot.set_theta_deg("right_hand",[0,0,0,0,0])
+* Various minor bug fixes
+
 
 > Maintainer : Antoine Hoarau (hoarau.robotics@gmail.com)
 
