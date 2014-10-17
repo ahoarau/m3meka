@@ -78,6 +78,7 @@ message M3BaseHumanoidStatus
 
 
 message M3BaseHumanoidCommand{
+	repeated bool 				cmd_enabled= 10;			// A.H: To support multi clients (on different chains) for humanoid
 	repeated double				tq_desired = 1;				//Desired torque (mNm)
 	repeated double				q_stiffness = 2;			//Desired joint stifness (0.0-1.0, scalar)
 	repeated JOINT_ARRAY_MODE		ctrl_mode = 3;				//Desired arm control mode 

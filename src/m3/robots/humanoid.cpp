@@ -171,6 +171,7 @@ void M3Humanoid::Startup()
 			status.mutable_right_arm()->add_thetadot(0);
 			status.mutable_right_arm()->add_thetadotdot(0);
 			status.mutable_right_arm()->add_pwm_cmd(0);
+			command.mutable_right_arm()->add_cmd_enabled(true);
 			command.mutable_right_arm()->add_q_desired(0);	
 			command.mutable_right_arm()->add_qdot_desired(0);			
 			command.mutable_right_arm()->add_tq_desired(0);
@@ -192,6 +193,7 @@ void M3Humanoid::Startup()
 			status.mutable_right_hand()->add_thetadot(0);
 			status.mutable_right_hand()->add_thetadotdot(0);
 			status.mutable_right_hand()->add_pwm_cmd(0);
+			command.mutable_right_hand()->add_cmd_enabled(true);
 			command.mutable_right_hand()->add_q_desired(0);	
 			command.mutable_right_hand()->add_qdot_desired(0);			
 			command.mutable_right_hand()->add_tq_desired(0);
@@ -213,6 +215,7 @@ void M3Humanoid::Startup()
 			status.mutable_left_hand()->add_thetadot(0);
 			status.mutable_left_hand()->add_thetadotdot(0);
 			status.mutable_left_hand()->add_pwm_cmd(0);
+			command.mutable_left_hand()->add_cmd_enabled(true);
 			command.mutable_left_hand()->add_q_desired(0);	
 			command.mutable_left_hand()->add_qdot_desired(0);			
 			command.mutable_left_hand()->add_tq_desired(0);
@@ -270,6 +273,7 @@ void M3Humanoid::Startup()
 			status.mutable_left_arm()->add_thetadot(0);
 			status.mutable_left_arm()->add_thetadotdot(0);
 			status.mutable_left_arm()->add_pwm_cmd(0);
+			command.mutable_left_arm()->add_cmd_enabled(true);
 			command.mutable_left_arm()->add_q_desired(0);	
 			command.mutable_left_arm()->add_qdot_desired(0);			
 			command.mutable_left_arm()->add_tq_desired(0);
@@ -325,6 +329,7 @@ void M3Humanoid::Startup()
 			status.mutable_torso()->add_thetadot(0);
 			status.mutable_torso()->add_thetadotdot(0);
 			status.mutable_torso()->add_pwm_cmd(0);
+			command.mutable_torso()->add_cmd_enabled(true);
 			command.mutable_torso()->add_q_desired(0);
 			command.mutable_torso()->add_qdot_desired(0);			
 			command.mutable_torso()->add_tq_desired(0);
@@ -386,6 +391,7 @@ void M3Humanoid::Startup()
 			status.mutable_head()->add_thetadot(0);
 			status.mutable_head()->add_thetadotdot(0);
 			status.mutable_head()->add_pwm_cmd(0);
+			command.mutable_head()->add_cmd_enabled(true);
 			command.mutable_head()->add_q_desired(0);
 			command.mutable_head()->add_qdot_desired(0);
 			command.mutable_head()->add_tq_desired(0);
@@ -425,6 +431,10 @@ void M3Humanoid::StepCommand()
 	{
 		for (int i=0; i<right_hand->GetNumDof(); i++)
 		{
+		    // A.H: Detect if the command if NULL (no changed), then do not apply. This is useful if multiple client 
+		    // publishes command to the bot interface for example, and one is publishing to the head only, the other to the arms.
+		    // So I just check if the fields cmd_enabled is false (FYI it is initialized at true for backward compatibility)
+		    if(command.right_hand().ctrl_mode(i)== JOINT_ARRAY_MODE_OFF && command.right_hand().cmd_enabled(i) == false) continue;
 		    if (command.right_hand().ctrl_mode(i) == JOINT_ARRAY_MODE_TORQUE_SHM || force_shm_r_hand)
 		    {
 			if (enable_shm_r_hand)
@@ -459,6 +469,8 @@ void M3Humanoid::StepCommand()
 	{
 		for (int i=0; i<left_hand->GetNumDof(); i++)
 		{
+		    if(command.left_hand().ctrl_mode(i)== JOINT_ARRAY_MODE_OFF && command.left_hand().cmd_enabled(i) == false) continue;
+		    
 		    if (command.left_hand().ctrl_mode(i) == JOINT_ARRAY_MODE_TORQUE_SHM || force_shm_l_hand)
 		    {
 			if (enable_shm_l_hand)
@@ -493,6 +505,7 @@ void M3Humanoid::StepCommand()
 	{
 		for (int i=0; i<torso->GetNumDof(); i++)
 		{
+		    if(command.torso().ctrl_mode(i)== JOINT_ARRAY_MODE_OFF && command.torso().cmd_enabled(i) == false) continue;
 		     if (command.torso().ctrl_mode(i) == JOINT_ARRAY_MODE_TORQUE_SHM || force_shm_torso)
 		     {
 		       if (enable_shm_torso)
@@ -527,6 +540,7 @@ void M3Humanoid::StepCommand()
 	{
 		for (int i=0; i<head->GetNumDof(); i++)
 		{
+		  if(command.head().ctrl_mode(i)== JOINT_ARRAY_MODE_OFF && command.head().cmd_enabled(i) == false) continue;
 		    if (command.head().ctrl_mode(i) == JOINT_ARRAY_MODE_ANGLE_SHM || force_shm_head)
 		    {
 		       if (enable_shm_head)
@@ -563,6 +577,7 @@ void M3Humanoid::StepCommand()
 	{
 		for (int i=0; i<right_arm->GetNumDof(); i++)
 		{
+		  if(command.right_arm().ctrl_mode(i)== JOINT_ARRAY_MODE_OFF && command.right_arm().cmd_enabled(i) == false) continue;
 		    if (command.right_arm().ctrl_mode(i) == JOINT_ARRAY_MODE_TORQUE_SHM || force_shm_r_arm)
 		    {
 			if (enable_shm_r_arm)
@@ -598,6 +613,7 @@ void M3Humanoid::StepCommand()
 	{
 		for (int i=0; i<left_arm->GetNumDof(); i++)
 		{
+		  if(command.left_arm().ctrl_mode(i)== JOINT_ARRAY_MODE_OFF && command.left_arm().cmd_enabled(i) == false) continue;
 		    if (command.left_arm().ctrl_mode(i) == JOINT_ARRAY_MODE_TORQUE_SHM || force_shm_l_arm)
 		    {
 		      if (enable_shm_l_arm)

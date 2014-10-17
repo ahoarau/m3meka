@@ -1712,7 +1712,8 @@ class M3Humanoid(M3Robot):
                         
     def __grow_command_message(self, chain):        
         chain_attr = getattr(self, chain)
-        for i in range(self.get_num_dof(chain)):            
+        for i in range(self.get_num_dof(chain)):
+            self.get_command(chain).cmd_enabled.append(False) #A.H: will allow multiple clients on same bot
             self.get_command(chain).tq_desired.append(0)
             self.get_command(chain).q_desired.append(0)
             self.get_command(chain).qdot_desired.append(0)
@@ -2374,7 +2375,7 @@ class M3Humanoid(M3Robot):
                 slew_rates.append(chain_attr.max_slew_rates[i]*v[i])        
         self.set_float_array(self.get_command(chain).q_slew_rate,slew_rates,ind)
         
-    def set_mode(self, chain, v,ind=None):
+    def set_mode(self, chain, v,ind=None, cmd_enabled=True):
         """
         Sets joint controller mode for selected chain to desired option.  A list of joint indexes can be 
         supplied to set specific joint mode values, or the index
@@ -2428,6 +2429,7 @@ class M3Humanoid(M3Robot):
             chain_attr = getattr(self, chain)
             self.__assert_list_size(v, chain_attr.ndof)        
         self.set_int_array(self.get_command(chain).ctrl_mode,v,ind)
+        self.set_int_array(self.get_command(chain).cmd_enabled,[cmd_enabled]*len(v),ind)
         
     def set_mode_off(self, chain, ind=None):
         """
@@ -2471,7 +2473,7 @@ class M3Humanoid(M3Robot):
             v = [mab.JOINT_ARRAY_MODE_OFF] * self.get_num_dof(chain)
         else:
             v = [mab.JOINT_ARRAY_MODE_OFF] * len(ind)
-        self.set_mode(chain, v, ind)
+        self.set_mode(chain, v, ind,False) # A.H: set cmd_enabled to false for mumtiple clients
     
     def set_mode_pwm(self, chain, ind=None):
         """
@@ -3561,7 +3563,7 @@ class M3Humanoid(M3Robot):
     
     def set_int_array(self,attr,val,ind=None):
         if ind is None:
-            ind=range(len(attr))
+            ind=xrange(len(attr))
             
         j = 0
         for i in ind:
@@ -3570,7 +3572,7 @@ class M3Humanoid(M3Robot):
 
     def set_float_array(self,attr,val,ind=None):
         if ind is None:
-            ind=range(len(attr))
+            ind=xrange(len(attr))
         j = 0
         for i in ind:
             attr[i]=float(val[j])
