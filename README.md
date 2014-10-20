@@ -11,6 +11,7 @@ This is an update to match with recent configurations and needs at Ensta ParisTe
 * Right and left hands are now part of the bot interface (C++/Python):
     * You can control them in ros_control (using https://github.com/ahoarau/m3ros_control)
     * In the Python API: bot.set_theta_deg("right_hand",[0,0,0,0,0])
+* New Python API functions: get_ik, get_fk
 * Various minor bug fixes
 
 
