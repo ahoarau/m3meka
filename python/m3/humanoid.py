@@ -107,7 +107,10 @@ class M3Humanoid(M3Robot):
     >>> bot.set_theta_sim_deg('right_arm', q_a)
     >>> T = bot.get_tool_2_world_transform_sim('right_arm')    
     """
-    def __init__(self,name,type='m3humanoid'):
+    import m3.toolbox as m3t
+    ROBOT_NAME = m3t.get_robot_name()
+    
+    def __init__(self,name=ROBOT_NAME,type='m3humanoid'):
         print 'Initializing ',name,'...'
         M3Robot.__init__(self,name,type=type)
         
@@ -1060,6 +1063,7 @@ class M3Humanoid(M3Robot):
             self.right_arm.max_slew_rates = self.__get_max_slew_rates_from_config('right_arm')            
             self.__set_params_from_config('right_arm')
             self.__grow_command_message('right_arm')
+            self.__grow_status_message('right_arm')
             self.__load_dh_from_kinefile('right_arm')
             self.__make_kdl_chain('right_arm')
             frame = Frame()            
@@ -1076,6 +1080,7 @@ class M3Humanoid(M3Robot):
             self.left_arm.max_slew_rates = self.__get_max_slew_rates_from_config('left_arm')
             self.__set_params_from_config('left_arm')
             self.__grow_command_message('left_arm')
+            self.__grow_status_message('left_arm')
             self.__load_dh_from_kinefile('left_arm')
             self.__make_kdl_chain('left_arm')
             frame = Frame()            
@@ -1092,6 +1097,7 @@ class M3Humanoid(M3Robot):
             self.torso.max_slew_rates = self.__get_max_slew_rates_from_config('torso')        
             self.__set_params_from_config('torso')
             self.__grow_command_message('torso')
+            self.__grow_status_message('torso')
             self.__load_dh_from_kinefile('torso')
             self.__make_kdl_chain('torso')
             self.__set_joints_max_min_deg('torso')
@@ -1101,6 +1107,7 @@ class M3Humanoid(M3Robot):
             self.head.max_slew_rates = self.__get_max_slew_rates_from_config('head')        
             self.__set_params_from_config('head')
             self.__grow_command_message('head')
+            self.__grow_status_message('head')
             self.__load_dh_from_kinefile('head')
             self.__make_kdl_chain('head')
             self.__set_joints_max_min_deg('head')
@@ -1109,6 +1116,7 @@ class M3Humanoid(M3Robot):
             self.left_hand.ndof = self.__get_ndof_from_config('left_hand')            
             self.left_hand.max_slew_rates = self.__get_max_slew_rates_from_config('left_hand')        
             self.__grow_command_message('left_hand')
+            self.__grow_status_message('left_hand')
             try: # Dynamatics stuff
                 self.__set_params_from_config('left_hand')
                 self.__load_dh_from_kinefile('left_hand')
@@ -1120,7 +1128,8 @@ class M3Humanoid(M3Robot):
         if self.right_hand.chain_name is not None:
             self.right_hand.ndof = self.__get_ndof_from_config('right_hand')            
             self.right_hand.max_slew_rates = self.__get_max_slew_rates_from_config('right_hand')       
-            self.__grow_command_message('right_hand') 
+            self.__grow_command_message('right_hand')
+            self.__grow_status_message('right_hand')
             try:  # Dynamatics stuff
                 self.__set_params_from_config('right_hand')
                 self.__load_dh_from_kinefile('right_hand')
@@ -1277,6 +1286,102 @@ class M3Humanoid(M3Robot):
             T_base_world = self.__get_T_parent_base(chain).Inverse()
         P_base_wrist = self.__get_T_wrist_tool(chain).Inverse() * T_base_world * P_world_tool
         return P_base_wrist
+    
+    def get_fk(self,chain,theta_rad):
+        """
+        Return the forward kinematics (uses the simulated robot)
+        param:
+        """
+        self.__assert_chain(chain)
+        self.__assert_list_size(theta_rad,self.get_num_dof(chain))
+        # save current sim value
+        th_saved = self.get_theta_sim_rad(chain)
+        # set the fk to test
+        self.set_theta_sim_rad(chain,theta_rad)
+        # get fk
+        tool_pos = self.get_tool_position_sim(chain)
+        tool_rot = self.get_tool_quaternion_sim(chain)
+        fk = nu.concatenate((tool_pos,tool_rot))
+        assert(nu.shape(fk)==(7,))
+        # put back the saved value
+        self.set_theta_sim_rad(chain,th_saved)
+        return fk
+
+    def get_ik(self,chain,tool_pos,tool_rot=[0,0,0,1]):
+        """
+        Gets a set of joint angles to make the arm's tool frame origin coincident with the tool position specified
+        and also orient the tool frame according to the roll, pitch, and yaw values specified in degrees.
+        Returns false if no solution can be found.
+                                        
+        :param chain: Desired chain to use for tool frame.
+        :type chain: 'right_arm', 'left_arm'
+        :param tool_pos: Desired tool frame origin in meters specified in world coordinate system.
+        :type tool_pos: array_like, shape (3)
+        :param tool_rot: The desired rotation of the tool in radians (can be roll,pitch,yaw, or quaternion)
+        :type tool_rot: array_like, shape (3) or shape(4)       
+        :returns: theta_deg_out: Solution with Euclidian distance closest to current theta values
+        :rtype: theta_deg_out: array, shape (ndof)
+        
+        .. Note:: 
+           The tool position must be meters with respect to world coordinate system.
+           
+           * -180 <= Roll <= 180
+           * -90 <= Pitch <= 90
+           * -180 <= Yaw  <= 180
+           
+           Joint solution (if found) is passed back through the parameter theta_deg_out.
+        
+           Roll, pitch, and yaw angles in this context are considered X-Y-Z fixed angles around a fixed
+           reference frame (the world frame).  Starting with the tool frame coincident with the world frame,
+           the RPY values returned describe the tool frame orientation as follows:
+           
+           * First rotate the tool frame by roll angle around X-axis of world frame.
+           * Next rotate the tool frame by pitch angle around Y-axis of world frame.           
+           * Finally rotate the tool frame by yaw angle around Z-axis of world frame.                   
+        
+        :raises: M3Exception if chain is not supported or tool_pos.shape is not (3) or tool_rpy.shape is not (3) or
+           RPY angles are outside of bounds.
+        
+        :See Also: 
+           :meth:`M3Humanoid.get_tool_position_rpy_2_theta_rad`
+           :meth:`M3Humanoid.get_tool_axis_2_theta_deg`
+           
+        :Examples:
+        
+        To move the right arm's tool 10 cm upwards in the Z-axis of the world frame and keep it's current orientation:
+                
+        >>> from m3.humanoid import M3Humanoid       
+        >>> bot = M3Humanoid()
+        >>> ## Quaternion
+        >>> joints_angles_rad = bot.get_ik('right_arm',[0.0, 0.11 , 0.46],[0.0,0.0,0.0,1.0])
+        >>> ## Rotation Matrix
+        >>> import numpy as np
+        >>> joints_angles_rad = bot.get_ik('right_arm',[0.0, 0.11 , 0.46],np.identity(3))  
+        >>> ## RPY
+        >>> joints_angles_rad = bot.get_ik('right_arm',[0.0, 0.11 , 0.46],[0.0,0.0,0.0])
+        """
+        if nu.shape(tool_rot)==(4,):
+            return self.__get_ik_with_quat(chain,tool_pos,tool_rot)
+        if nu.shape(tool_rot)==(3,):
+            return self.__get_ik_with_rpy_rad(chain,tool_pos,tool_rot)
+
+        print "tool_rot only supports RPY in rad (shape(3)) or Quaternions (shape(4))"
+        return nu.array()
+        
+        
+    def __get_ik_with_quat(self,chain,tool_pos,tool_quat):
+        tool_rot_kdl = Rotation.Quaternion(tool_quat[0],tool_quat[1],tool_quat[2],tool_quat[3])
+        tool_rpy_rad = tool_rot_kdl.GetRPY()
+        return self.__get_ik(chain,tool_pos,tool_rpy_rad)
+        
+    def __get_ik_with_rpy_rad(self,chain,tool_pos,tool_rpy_rad):
+        return self.__get_ik(chain,tool_pos,tool_rpy_rad)
+        
+    def __get_ik(self,chain,tool_pos,tool_rpy_rad):
+        self.__assert_rpy_rad(tool_rpy_rad)
+        theta_soln = []
+        success = self.get_tool_position_rpy_2_theta_rad(chain, tool_pos, tool_rpy_rad, theta_soln)
+        return nu.array(theta_soln)
         
     def get_tool_position_rpy_2_theta_deg(self, chain, tool_pos, tool_rpy_deg, theta_deg_out):
         """
@@ -1721,8 +1826,17 @@ class M3Humanoid(M3Robot):
             self.get_command(chain).q_slew_rate.append(0)
             self.get_command(chain).pwm_desired.append(0)
             self.get_command(chain).ctrl_mode.append(mab.JOINT_ARRAY_MODE_OFF)
-            self.get_command(chain).smoothing_mode.append(msm.SMOOTHING_MODE_OFF)        
-                                
+            self.get_command(chain).smoothing_mode.append(msm.SMOOTHING_MODE_OFF)
+    
+    def __grow_status_message(self, chain):        
+        chain_attr = getattr(self, chain)
+        for i in range(self.get_num_dof(chain)):
+            self.get_status(chain).torque.append(0)
+            self.get_status(chain).torquedot.append(0)
+            self.get_status(chain).theta.append(0)
+            self.get_status(chain).thetadot.append(0)
+            self.get_status(chain).thetadotdot.append(0)
+                       
     def set_motor_power_on(self):
         """
         Enables power supply for motor controllers.
@@ -3216,7 +3330,15 @@ class M3Humanoid(M3Robot):
         '''
         T = self.__get_tool_2_world_kdl_sim(chain)        
         return nu.array(T.M.GetRPY(),float)
-    
+        
+    def get_tool_quaternion_sim(self,chain):
+        T = self.__get_tool_2_world_kdl_sim(chain)
+        return nu.array(T.M.GetQuaternion())
+        
+    def get_tool_quaternion(self,chain):
+        T = self.__get_tool_2_world_kdl(chain)
+        return nu.array(T.M.GetQuaternion())
+        
     def get_tool_roll_pitch_yaw_deg_sim(self, chain):
         '''
         :See Also: 
@@ -3608,3 +3730,16 @@ class M3Humanoid(M3Robot):
                     self.get_command(chain).vias[-1].qdot_avg.append(float(thetadot_avg[i]))
                 self.get_command(chain).vias[-1].idx=chain_attr.via_idx
             chain_attr.vias=chain_attr.vias[nadd:]
+"""
+bot = M3Humanoid()
+for x in xrange(0,100):
+    for y in xrange(0,100):
+        for z in xrange(0,100):
+            th=bot.get_ik('right_arm',[x/100.0,y/100.0,z/100.0],[0.0,0.0,0.0,1])
+            if len(th)>0:
+                print "input pos/quat:",[x/100.0,y/100.0,z/100.0],[0.0,0.0,0.0,1]
+                print "th_out:",th
+                print "fk:",bot.get_fk('right_arm',th)
+                
+ """               
+                
