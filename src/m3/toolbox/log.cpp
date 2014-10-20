@@ -76,7 +76,9 @@ static void* log_thread(void * arg)
 		//usleep(100000);
 		usleep(100000);
 	}	
+	cout<<"writeentry"<<endl;
 	svc->WriteEntry(true);
+	cout<<"todisk"<<endl;
 	svc->WritePagesToDisk();
 	M3_DEBUG("Exiting M3 Log Server Thread\n",0);
 #ifdef __RTAI__	
@@ -222,14 +224,14 @@ void M3MekaLog::Shutdown()
 	pthread_join((pthread_t)hlt, NULL);
 #endif
 	if (log_thread_active) M3_WARN("M3RtLogService thread did not shut down correctly\n");
-	while (pages.size()) 
+	/*while (pages.size()) 
 	{
 		M3StatusLogPage * p=pages[0];
 		pages.erase(pages.begin());
 		delete p;
 	}
 	
-	page=NULL;
+	page=NULL;*/
       }
 }
 

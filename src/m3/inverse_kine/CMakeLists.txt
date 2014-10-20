@@ -63,12 +63,12 @@ string ( REGEX REPLACE "^${PYTHON_PREFIX}/" ""
 ## Installation
 install ( TARGETS ${ALL_MODULES}
    LIBRARY 
-     DESTINATION ${PYTHON_SITE_DIR}/m3/ 
+     DESTINATION ${PYTHON_SITE_DIR}/m3 
      COMPONENT library 
 ) 
 foreach(swig_py_file ${ALL_PY})
 install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${swig_py_file}.py
-   DESTINATION ${PYTHON_SITE_DIR}/m3/
+   DESTINATION ${PYTHON_SITE_DIR}/m3
    COMPONENT library 
 ) 
 endforeach()

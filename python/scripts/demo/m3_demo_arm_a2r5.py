@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/env python
 
 #Copyright  2008, Meka Robotics
 #All rights reserved.

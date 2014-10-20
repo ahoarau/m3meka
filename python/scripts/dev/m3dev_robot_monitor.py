@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import m3.rt_proxy as m3p
 proxy = m3p.M3RtProxy()
 import m3.robot_monitor as rm
