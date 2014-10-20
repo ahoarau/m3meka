@@ -15,53 +15,55 @@
 
 #You should have received a copy of the GNU Lesser General Public License
 #along with M3.  If not, see <http://www.gnu.org/licenses/>.
-import roslib; roslib.load_manifest('kontrol')
-from kontrol.msg import Kontrol
+#import roslib; roslib.load_manifest('kontrol')
+#from kontrol.msg import Kontrol
 import time
-import os
-
 import rospy
-import subprocess
 from threading import Thread
-
-
+from sensor_msgs.msg import Joy
+import os
+import subprocess
 class M3KontrolThread(Thread):
-    def __init__ (self,verbose=True):
-	Thread.__init__(self)
-	
-	self.sliders = [0]*9
+    def __init__(self,verbose=True):
+        Thread.__init__(self)
+        self.korg  = subprocess.Popen(['rosrun', 'korg_nanokontrol', 'kontrol.py','3'])
+
+        
+        self.sliders = [0]*9
         self.knobs = [0]*9
         self.buttons = [0]*18
-        
-	self.verbose=verbose
+        self.verbose=verbose
 
     def start(self):
-	if self.verbose:
-	    print 'Starting M3KontrolThread...'
-	rospy.init_node('kontrol_sub', anonymous=True,disable_signals=True) #allow Ctrl-C to master process
-	
-	rospy.Subscriber("/kontrol", Kontrol, self.callback)
-	
-	Thread.start(self)
+        if self.verbose:
+            print 'Starting M3KontrolThread...'
+        rospy.init_node('korg_nanokontrol',anonymous=True,disable_signals=True) #allow Ctrl-C to master process
+        rospy.Subscriber("/joy",Joy,self.callback)
+        Thread.start(self)
         
-    def stop(self):        
+    def stop(self): 
+        os.system("pkill -P " + str(self.korg.pid))
+        os.kill(self.korg.pid,9)
         rospy.signal_shutdown('Exiting')
 
     def run(self):
-	rospy.spin()
+        rospy.spin()
 
     def callback(self,data):
-
-	if self.verbose:
-	    print data
-
-	self.sliders = data.sliders
-	self.knobs = data.buttons
+        if self.verbose:
+            print data
+        self.sliders = data.axes[:len(self.sliders)]
+        self.knobs = data.axes[len(self.sliders):len(self.sliders)+len(self.knobs)]
         self.buttons = data.buttons
+        if self.verbose:
+            print self.sliders
+            print self.knobs
+            print self.buttons
+
 
 class M3Kontrol:        
-    def __init__(self):
-        self.kontrol_thread = M3KontrolThread(verbose=False)
+    def __init__(self,verbose=False):
+        self.kontrol_thread = M3KontrolThread(verbose)
         
         self.kontrol_thread.start()
 
@@ -82,9 +84,8 @@ class M3Kontrol:
             return self.kontrol_thread.buttons[idx]
         else:
             return 0
-	
+    
     def stop(self):
-	self.kontrol_thread.stop()
-        
-            
+        self.kontrol_thread.stop()
+
     
