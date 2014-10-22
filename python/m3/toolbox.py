@@ -45,7 +45,6 @@ def get_m3_animation_path():
                 print 'SET YOUR M3_ROBOT ENVIRONMENT VARIABLE'
         return ''
 
-
 def get_component_pwr_name(name):
     try:
             with open(get_component_config_filename(name),'r') as f:
@@ -214,15 +213,31 @@ Note: the joint angles seem scale by a factor of 0.5, and the velocities are all
        we'll just use the joint angles anyhow
 """
 
-def get_animation_files():
-        path=get_m3_animation_path()[-1]
-        return glob.glob(path+'*.txt')
+def get_animation_files(extension=['.yml']):
+        anim_files=[]
+        for ex in extension:
+            for p in get_m3_animation_path():
+                anim_files.extend(glob.glob(p+'*'+ex))
+        return anim_files
+
+def get_animation_file(filename):
+    if filename.rfind('.') is -1:
+        raise M3Exception("You should add an extension to the filename (you provided "+filename)
+    paths=[]
+    for p in get_m3_animation_path():
+        f = p+filename
+        paths.append(f)
+        if os.path.isfile(f):
+            return f
+    print filename,'not found'
+    print 'I looked in the following paths:'
+    for p in paths:
+        print '-',p
+    return ''
 
 def get_animation_names():
-        path=get_m3_animation_path()[-1]
-        full=glob.glob(path+'*.txt')
         names=[]
-        for s in full:
+        for s in get_animation_files(['.txt','.yml']):
                 names.append(s[s.rfind('/')+1:s.rfind('.')])
         return names
 
@@ -274,13 +289,10 @@ def load_animation(filename):
         return animation
 
 def get_via_files():
-        path=get_m3_animation_path()[-1]
-        return [glob.glob(p+'*.via')[0] for p in path]
+        return get_animation_files(['.via'])
 
 def get_via_names():
-        path=get_m3_animation_path()[-1]
-        full=[glob.glob(p+'*.via')[0] for p in path]
         names=[]
-        for s in full:
+        for s in get_via_files():
                 names.append(s[s.rfind('/')+1:s.rfind('.')])
         return names
