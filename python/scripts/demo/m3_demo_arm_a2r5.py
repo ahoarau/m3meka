@@ -182,11 +182,10 @@ class M3Proc:
 
         # ##### Load Via Trajectories ############################
         self.via_files={'TrajA':'kha1.via'}
-        pt=m3t.get_m3_animation_path()[-1]
         for k in self.via_files.keys():
-            fn=pt+self.via_files[k]
+            fn=m3t.get_animation_file(self.via_files[k])
             try:
-                f=file(fn,'r')
+                f=open(fn,'r')
                 d=yaml.safe_load(f.read())
                 self.via_traj[k]=d[self.arm_name]
             except IOError:
@@ -195,10 +194,8 @@ class M3Proc:
         # ##### Hand Trajectories ############################
         if self.hand_name is not None:
             try:
-                pf=m3t.get_m3_animation_path()[0]+self.bot.get_chain_real_name(self.hand_name)+'_postures.yml'
-                f=file(pf,'r')
-                self.hand_data= yaml.safe_load(f.read())
-                f.close()
+                with open(m3t.get_animation_file(self.hand_name+'_postures.yml'),'r') as f:
+                    self.hand_data= yaml.safe_load(f.read())
             except Exception,e:
                 print e
         self.hand_traj_first=True
@@ -293,7 +290,7 @@ class M3Proc:
                 thetadot_avg=self.hand_data['thetadot_avg'][pose_name]
                 self.bot.add_splined_traj_via_deg(self.hand_name,theta_des,thetadot_avg)
                 self.bot.add_splined_traj_via_deg(self.hand_name,self.hand_data['param']['posture_return'],self.hand_data['param']['posture_return_speed'])
-        if  self.bot.is_splined_traj_complete():
+        if  self.bot.is_splined_traj_complete(self.hand_name):
             self.hand_traj_first=True
 
     def step_via_traj(self):
@@ -340,7 +337,7 @@ class M3Proc:
 
     def step_gravity(self):
         self.bot.set_mode_theta_gc(self.arm_name)
-        #self.bot.set_theta_deg(self.arm_name,self.bot.get_theta_deg(self.arm_name)[:])
+        #self.bot.set_theta_deg(self.arm_name,self.bot.get_theta_deg(self.arm_name))
         self.bot.set_theta_deg(self.arm_name,[0.0]*3,[4,5,6])
         self.bot.set_stiffness(self.arm_name,[0.0]*4,[0,1,2,3])
         self.bot.set_stiffness(self.arm_name,[0.7]*3,[4,5,6])

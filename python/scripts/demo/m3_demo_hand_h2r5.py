@@ -6,7 +6,7 @@
 #http://mekabot.com
 
 #Redistribution and use in source and binary forms, with or without
-#modification, are permitted. 
+#modification, are permitted.
 
 
 #THIS SOFTWARE IS PROVIDED BY THE Copyright HOLDERS AND CONTRIBUTORS
@@ -24,13 +24,58 @@
 
 import time
 import m3.gui as m3g
-import m3.hand as m3h
+import m3.humanoid as m3h
 import m3.toolbox as m3t
 import m3.unit_conversion as m3u
 import m3.component_factory as m3f
 import numpy as nu
 import m3.rt_proxy as m3p
 import yaml
+
+class HandDemo:
+    def __init__(self,bot,hand_name,gui=None,gui_column=1):
+        self.name = hand_name
+        self.gui = gui
+        self.bot=bot
+        self.gui_col = gui_column
+
+        self.data={}
+        self.data['param']={}
+        self.param = self.data['param']
+        self.ndof = self.bot.get_num_dof(self.name)
+        try:
+            with open(m3t.get_animation_file(self.name+'_postures.yml'),'r') as f:
+                self.data= yaml.safe_load(f.read())
+                self.param=self.data['param']
+                print 'Loaded animation:',self.data
+        except:
+            print "Animation file not found, using default anim"
+            self.param['stiffness']=[1.0]*self.ndof
+            self.param['q_slew_rate']=[1.0]*self.ndof
+            self.param['grasp_torque']=[200]*self.ndof
+            self.data['postures'].append([0.0]*self.ndof)            
+            self.data['postures'].append([250.0]*self.ndof)
+            
+        #Create gui
+        self.theta_desire=[0,0,0,0,0]
+        self.mode=[1,1,1,1,1]
+        self.run=False
+        self.run_last=False
+        self.running=False
+        self.grasp=False
+        self.grasp_last=False
+        self.grasp_off=False
+        self.grasp_off_ts=time.time()
+        
+        if self.gui:
+            self.gui.add('M3GuiTree',   'Param',   (self,'param'),[],[],m3g.M3GuiWrite,column=self.gui_col)
+            self.gui.add('M3GuiToggle', 'Animation',      (self,'run'),[],[['Run','Stop']],m3g.M3GuiWrite,self.gui_col)
+            self.gui.add('M3GuiModes',  'Joint',      (self,'mode'),range(5),[['Off','Enabled'],1],m3g.M3GuiWrite,self.gui_col)
+            self.gui.add('M3GuiSliders','Theta (Deg)', (self,'theta_desire'),range(5),[0,300],m3g.M3GuiWrite,self.gui_col)
+            self.gui.add('M3GuiToggle', 'Power Grasp', (self,'grasp'),[],[['Run','Stop']],m3g.M3GuiWrite,self.gui_col)
+
+    def step(self):
+        pass
 
 class M3Proc:
     def __init__(self):
@@ -39,132 +84,83 @@ class M3Proc:
 
     def stop(self):
         self.proxy.stop()
+
     def start(self):
         self.proxy.start()
         self.proxy.make_operational_all()
 
-        chain_names=self.proxy.get_available_components('m3hand')
-        if len(chain_names)>1:
-            hand_name=m3t.user_select_components_interactive(chain_names,single=True)
-        else:
-            hand_name=chain_names
-        pwr_name=self.proxy.get_available_components('m3pwr')
-	if len(pwr_name)>1:
-            pwr_name=m3t.user_select_components_interactive(pwr_name,single=True)
+        self.bot = m3h.M3Humanoid()
+        self.bot.initialize(self.proxy)
+        
+        self.chains = [c for c in self.bot.get_available_chains() if 'hand' in c]
+        
+        self.hands = []
+        i=1
+        for chain in self.chains:
+            self.hands.append(HandDemo(self.bot,chain,self.gui,i)) ; i=i+2
 
-
-	arm_names=self.proxy.get_available_components('m3arm')
-	if len(arm_names)>0:
-	  	print 'Position arm [y]?'
-		if m3t.get_yes_no('y'):
-		  if len(arm_names)>1:
-			  print 'Select arm: '	
-			  arm_name=m3t.user_select_components_interactive(arm_names,single=True)[0]
-		  else:
-			  arm_name=arm_names[0]
-		  self.arm=m3f.create_component(arm_name)
-		  self.proxy.publish_command(self.arm)
-		  self.arm.set_mode_theta_gc()
-		  self.arm.set_theta_deg([30,0,0,110,0,0,0])
-		  self.arm.set_stiffness(0.5)
-		  self.arm.set_slew_rate_proportion([0.75]*7)
-
-	humanoid_shm_names=self.proxy.get_available_components('m3humanoid_shm')
-	if len(humanoid_shm_names) > 0:
-	  self.proxy.make_safe_operational(humanoid_shm_names[0])
-		
-        self.chain=m3f.create_component(hand_name[0])
-        self.proxy.publish_command(self.chain)
-        self.proxy.subscribe_status(self.chain)
-
-        self.pwr=m3f.create_component(pwr_name[0])
-        self.proxy.publish_command(self.pwr)
-        self.pwr.set_motor_power_on()
-
- 	#Force safe-op of robot if present
-        hum=self.proxy.get_available_components('m3humanoid')
-        if len(hum)>0:
-            self.proxy.make_safe_operational(hum[0])
-	
-        #Setup postures
-	self.posture_filename=m3t.get_m3_animation_path()[-1]+self.chain.name+'_postures.yml'
-	f=file(self.posture_filename,'r')
-	self.data= yaml.safe_load(f.read())
-	self.param=self.data['param']
-	f.close()
-	self.theta_desire=[0,0,0,0,0]
-	self.mode=[1,1,1,1,1]
-	
-        #Create gui
-        self.run=False
-        self.run_last=False
-        self.running=False
-	self.grasp=False
-	self.grasp_last=False
-	self.grasp_off=False
-	self.grasp_off_ts=time.time()
+        self.proxy.step()
         self.status_dict=self.proxy.get_status_dict()
-        self.gui.add('M3GuiTree',   'Status',    (self,'status_dict'),[],[],m3g.M3GuiRead,column=3)
-        self.gui.add('M3GuiTree',   'Param',   (self,'param'),[],[],m3g.M3GuiWrite,column=3)
-        self.gui.add('M3GuiToggle', 'Animation',      (self,'run'),[],[['Run','Stop']],m3g.M3GuiWrite,column=1)
-	self.gui.add('M3GuiModes',  'Joint',      (self,'mode'),range(5),[['Off','Enabled'],1],m3g.M3GuiWrite,column=2)	
-	self.gui.add('M3GuiSliders','Theta (Deg)', (self,'theta_desire'),range(5),[0,300],m3g.M3GuiWrite,column=2) 
-	self.gui.add('M3GuiToggle', 'Power Grasp', (self,'grasp'),[],[['Run','Stop']],m3g.M3GuiWrite,column=2)
+        self.gui.add('M3GuiTree',   'Status',    (self,'status_dict'),[],[],m3g.M3GuiRead,2)
         self.gui.start(self.step)
 
     def step(self):
+#        try:
         self.proxy.step()
         self.status_dict=self.proxy.get_status_dict()
-        self.chain.set_stiffness(self.param['stiffness'])
-	self.chain.set_slew_rate_proportion(self.param['q_slew_rate'])
-	#Do power Grasp
-	if self.grasp and not self.grasp_last:
-	    if self.mode[0]:
-		self.chain.set_mode_theta_gc([0])
-	    if self.mode[1]:
-		self.chain.set_mode_torque_gc([1])
-	    if self.mode[2]:
-		self.chain.set_mode_torque_gc([2])
-	    if self.mode[3]:
-		self.chain.set_mode_torque_gc([3])
-	    if self.mode[4]:
-		self.chain.set_mode_torque_gc([4])
-	    self.chain.set_theta_deg(self.chain.get_theta_deg())
-	    self.chain.set_torque_mNm(self.param['grasp_torque'])
-	self.grasp_last=self.grasp
-	
-	#Do joint theta control
-	if not self.grasp and not self.running: #theta open
-	    for jidx in range(5):
-		    if self.mode[jidx]:
-			self.chain.set_mode_theta_gc(jidx)
-		    else:
-			self.chain.set_mode_off(jidx)    
-	
-	#Start Animation
-        if not self.run_last and self.run and not self.running:
-            self.running=True
-	    for jidx in range(5):
-		    if self.mode[jidx]:
-			    self.chain.set_mode_theta_gc(jidx)
-		    else:
-			    self.chain.set_mode_off(jidx)
-	    self.pose_idx=0
-	    self.ts_anim=time.time()
-	
-	if self.running:
-	    self.chain.set_theta_deg(self.data['postures'][self.pose_idx])
-	    if time.time()-self.ts_anim>self.param['pose_time']:
-		    self.ts_anim=time.time()
-		    self.pose_idx=self.pose_idx+1
-		    if self.pose_idx>=len(self.data['postures']):
-			    self.running=False
-			    print 'Animation done'
-			    
-        if not self.running:
-	    self.chain.set_theta_deg(self.theta_desire)
-	self.run_last=self.run
-		    
+        for hand in self.hands:
+            self.bot.set_stiffness(hand.name,hand.param['stiffness'])
+            self.bot.set_slew_rate_proportion(hand.name,hand.param['q_slew_rate'])
+            #Do power Grasp
+            if hand.grasp and not hand.grasp_last:
+                if hand.mode[0]:
+                    self.bot.set_mode_theta_gc(hand.name,[0])
+                if hand.mode[1]:
+                    self.bot.set_mode_torque_gc(hand.name,[1])
+                if hand.mode[2]:
+                    self.bot.set_mode_torque_gc(hand.name,[2])
+                if hand.mode[3]:
+                    self.bot.set_mode_torque_gc(hand.name,[3])
+                if hand.mode[4]:
+                    self.bot.set_mode_torque_gc(hand.name,[4])
+                self.bot.set_theta_deg(hand.name,self.bot.get_theta_deg(hand.name))
+                self.bot.set_torque_mNm(hand.name,hand.param['grasp_torque'])
+            hand.grasp_last=hand.grasp
+
+            #Do joint theta control
+            if not hand.grasp and not hand.running: #theta open
+                for jidx in range(5):
+                    if hand.mode[jidx]:
+                        self.bot.set_mode_theta_gc(hand.name,[jidx])
+                    else:
+                        self.bot.set_mode_off(hand.name,[jidx])
+
+            #Start Animation
+            if not hand.run_last and hand.run and not hand.running:
+                hand.running=True
+                for jidx in range(5):
+                    if hand.mode[jidx]:
+                        self.bot.set_mode_theta_gc(hand.name,[jidx])
+                    else:
+                        self.bot.set_mode_off(hand.name,[jidx])
+                hand.pose_idx=0
+                hand.ts_anim=time.time()
+
+            if hand.running:
+                self.bot.set_theta_deg(hand.name,hand.data['postures'][hand.pose_idx])
+                if time.time()-hand.ts_anim>hand.param['pose_time']:
+                    hand.ts_anim=time.time()
+                    hand.pose_idx=hand.pose_idx+1
+                    if hand.pose_idx>=len(hand.data['postures']):
+                        hand.running=False
+                        print 'Animation done'
+
+            if not hand.running:
+                self.bot.set_theta_deg(hand.name,hand.theta_desire)
+            hand.run_last=hand.run
+#        except Exception,e:
+#            print e
+
 if __name__ == '__main__':
     t=M3Proc()
     try:
