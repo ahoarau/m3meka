@@ -114,7 +114,7 @@ class M3Proc:
         
         self.bot.set_mode_theta_gc(self.arm_name)
         #self.bot.set_theta_deg(self.arm_name,self.poses['zero'][self.arm_name])
-        self.bot.set_theta_proportion(self.arm_name,theta_des)
+        self.bot.set_theta_deg(self.arm_name,theta_des)
         self.bot.set_stiffness(self.arm_name, [self.stiffness]*7)
         #self.bot.set_thetadot_deg(self.arm_name,[20.0]*self.ndof)
         self.bot.set_slew_rate_proportion(self.arm_name,[self.slew_rate]*self.num_dof)
