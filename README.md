@@ -3,6 +3,9 @@
 m3 is open-source control software provided by Meka Robotics for its robots.
 This is an update to match with recent configurations and needs at Ensta ParisTech.
 
+This repository hosts all the Meka dependant components base on [m3core](https://github.com/ahoarau/m3core).
+Please checkout https://github.com/ahoarau/mekabot for installation instructions.
+
 >New features:
 * Velocity control mode ( set_thetadot_deg in C++/Python API)
 * Fixed differential butterworth instability bug
