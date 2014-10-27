@@ -66,6 +66,7 @@ async_io.cpp
 ctrl_simple.cpp
 factory_proxy.cpp
 joint.cpp
+joint_virtual.cpp
 joint_slave.cpp
 joint_zlift.cpp
 joint_zlift_shm.cpp
@@ -97,6 +98,7 @@ actuator_virtual.h
 async_io.h
 ctrl_simple.h
 joint.h
+joint_virtual.h
 joint_slave.h
 joint_zlift.h
 joint_zlift_shm.h

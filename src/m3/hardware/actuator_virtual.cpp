@@ -48,7 +48,7 @@ bool M3ActuatorVirtual::ReadConfig(const char * filename)
 
 bool M3ActuatorVirtual::LinkDependentComponents()
 {
-	joint=dynamic_cast<M3Joint*>( factory->GetComponent(jnt_name));
+	joint=dynamic_cast<M3JointVirtual*>( factory->GetComponent(jnt_name));
 	if (joint==NULL)
 	{
 		M3_INFO("M3Joint component %s not found for component %s. Proceeding without it.\n",jnt_name.c_str(),GetName().c_str());
@@ -82,7 +82,7 @@ void M3ActuatorVirtual::StepStatus()
 				pnt_cnt=0;
 				cout<<"Desired torque :"<<this->GetDesiredTorque()<<"To ticks : "<<tq_sense.mNmToTicks(this->GetDesiredTorque())<<";jointdes:"<<t->GetTorqueDesJoint()<<";tostatus:"<<tq_sense.GetTorque_mNm()<<endl;
 			}*/
-			tq_sense.Step(tq_sense.mNmToTicks(this->GetDesiredTorque()));
+			tq_sense.Step(tq_sense.mNmToTicks(this->joint->GetTorqueGravity()));
 			status.set_torque(tq_sense.GetTorque_mNm());
 			status.set_torquedot(torquedot_df.Step(tq_sense.GetTorque_mNm()));
 			// A.H test : torque and not torquedot (I don't care about torquedot)
@@ -92,13 +92,14 @@ void M3ActuatorVirtual::StepStatus()
 			status.set_theta(angle_df.GetTheta());
 			status.set_thetadot(angle_df.GetThetaDot());
 			status.set_thetadotdot(angle_df.GetThetaDotDot());
+			status.set_amp_temp(25.0);
+			//status.set_current(0.0);
+			status.set_motor_temp(25.0);
 		}
 		else
 			M3_INFO("No transmission found for %s\n",joint->GetName().c_str());
 	}
-	//status.set_amp_temp(25.0);
-	//status.set_current(0.0);
-	//status.set_motor_temp(25.0);
+
 }
 
 void M3ActuatorVirtual::StepCommand()

@@ -55,6 +55,7 @@ component_map['m3actuator_ec'] = m3.actuator_ec.M3ActuatorEc
 component_map['m3actuator'] = m3.actuator.M3Actuator
 component_map['m3actuator_virtual'] = m3.actuator.M3Actuator
 component_map['m3joint'] = m3.joint.M3Joint
+component_map['m3joint_virtual'] = m3.joint.M3Joint
 component_map['m3joint_slave'] = m3.joint_slave.M3JointSlave
 component_map['m3pwr'] = m3.pwr.M3Pwr
 component_map['m3pwr_ec'] = m3.pwr_ec.M3PwrEc

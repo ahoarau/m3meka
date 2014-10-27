@@ -24,6 +24,7 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #include "m3/hardware/pwr_ec.h"
 #include "m3/hardware/pwr.h"
 #include "m3/hardware/pwr_virtual.h"
+#include "m3/hardware/joint_virtual.h"
 #include "m3/hardware/joint.h"
 #include "m3/hardware/joint_slave.h"
 #include "m3/hardware/joint_zlift.h"
@@ -60,6 +61,7 @@ extern "C"
 #define M3PWREC_TYPE_NAME "m3pwr_ec"
 #define M3PWR_TYPE_NAME "m3pwr"
 #define M3PWR_VIRTUAL_TYPE_NAME "m3pwr_virtual"
+#define M3JOINT_VIRTUAL_TYPE_NAME "m3joint_virtual"
 #define M3JOINT_TYPE_NAME "m3joint"
 #define M3JOINT_SLAVE_TYPE_NAME "m3joint_slave"
 #define M3_LOADX1_EC_TYPE_NAME "m3loadx1_ec"
@@ -87,6 +89,7 @@ m3rt::M3Component * create_m3pwr_ec(){return new m3::M3PwrEc;}
 m3rt::M3Component * create_m3actuator(){return new m3::M3Actuator;}
 m3rt::M3Component * create_m3pwr(){return new m3::M3Pwr;}
 m3rt::M3Component * create_m3pwr_virtual(){return new m3::M3PwrVirtual;}
+m3rt::M3Component * create_m3joint_virtual(){return new m3::M3JointVirtual;}
 m3rt::M3Component * create_m3joint(){return new m3::M3Joint;}
 m3rt::M3Component * create_m3joint_slave(){return new m3::M3JointSlave;}
 m3rt::M3Component * create_m3joint_zlift(){return new m3::M3JointZLift;}
@@ -117,6 +120,7 @@ void destroy_m3actuator(m3rt::M3Component* c) {delete c;}
 void destroy_m3pwr(m3rt::M3Component* c) {delete c;}
 void destroy_m3pwr_virtual(m3rt::M3Component* c) {delete c;}
 void destroy_m3joint(m3rt::M3Component* c) {delete c;}
+void destroy_m3joint_virtual(m3rt::M3Component* c) {delete c;}
 void destroy_m3joint_slave(m3rt::M3Component* c) {delete c;}
 void destroy_m3joint_zlift(m3rt::M3Component* c) {delete c;}
 void destroy_m3actuator_virtual(m3rt::M3Component* c) {delete c;}
@@ -168,6 +172,9 @@ public:
 		m3rt::creator_factory[M3JOINT_TYPE_NAME] =	create_m3joint;
 		m3rt::destroyer_factory[M3JOINT_TYPE_NAME] =  destroy_m3joint;
 
+		m3rt::creator_factory[M3JOINT_VIRTUAL_TYPE_NAME] =	create_m3joint_virtual;
+		m3rt::destroyer_factory[M3JOINT_VIRTUAL_TYPE_NAME] =  destroy_m3joint_virtual;
+		
 		m3rt::creator_factory[M3JOINT_SLAVE_TYPE_NAME] =	create_m3joint_slave;
 		m3rt::destroyer_factory[M3JOINT_SLAVE_TYPE_NAME] =  destroy_m3joint_slave;
 		

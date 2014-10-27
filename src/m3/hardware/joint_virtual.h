@@ -17,34 +17,22 @@ You should have received a copy of the GNU Lesser General Public License
 along with M3.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef M3_ACTUATOR_VIRTUAL_H
-#define M3_ACTUATOR_VIRTUAL_H
+#ifndef M3_JOINT_VIRTUAL_H
+#define M3_JOINT_VIRTUAL_H
 
-#include "m3/hardware/actuator.h"
 #include "m3/hardware/joint.h"
-#include "m3/hardware/joint_virtual.h"
+
+
 namespace m3
 {
-  /////////////////////////////////////////////////////////////////////////
-
-class M3ActuatorVirtual : public m3::M3Actuator
+//Joint space representation.
+class M3JointVirtual: public m3::M3Joint
 {
 	public:
-		M3ActuatorVirtual():joint(0){}	
-		virtual bool IsMotorPowerOn(){return true;}
-		virtual bool IsMotorPowerSlewedOn(){return true;}
+		M3JointVirtual(){} 
 	protected:
-		void Startup();
 		void StepStatus();
 		void StepCommand();
-		bool LinkDependentComponents();
-		int GetTicks() {return 33;}
-		bool IsEncoderCalibrated(){return true;}
-		void SetLimitSwitchNegZeroEncoder(){}
-		void ClrLimitSwitchNegZeroEncoder(){}
-		bool ReadConfig(const char * filename);
-		std::string jnt_name	;
-		m3::M3JointVirtual * joint;
 };
 
 
