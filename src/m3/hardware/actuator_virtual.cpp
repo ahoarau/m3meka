@@ -43,6 +43,31 @@ bool M3ActuatorVirtual::ReadConfig(const char * filename)
 	if (!M3Actuator::ReadConfig(filename))
 		return false;
 	doc["joint_component"] >> jnt_name;
+	if(!torque_df.ReadConfig(doc["param"]["angle_df"])) // A.H : now allow to modify it online
+		{
+	if(!torque_df.ReadConfig( doc["calib"]["angle_df"])){
+					M3_ERR("torque_df config error (keys missing)\n");
+					return false;
+					
+				}
+	}
+	mReal val=0.0;
+	try
+		{
+			doc["param"]["k_qdot_virtual"] >> val;
+			param.set_k_qdot_virtual(val);
+		} catch(...) 
+		{
+			param.set_k_qdot_virtual(0.008);
+		} 
+	try
+		{
+			doc["param"]["k_qdotdot_virtual"] >> val;
+			param.set_k_qdotdot_virtual(val);
+		} catch(...) 
+		{
+			param.set_k_qdotdot_virtual(0.0001);
+		} 
 	return true;
 }
 
@@ -54,6 +79,12 @@ bool M3ActuatorVirtual::LinkDependentComponents()
 		M3_INFO("M3Joint component %s not found for component %s. Proceeding without it.\n",jnt_name.c_str(),GetName().c_str());
 		return false;
 	}
+	try{
+	joint->GetConfig()["param"]["max_q_slew_rate"] >> max_q_slew_rate;
+	}catch(...){
+	  max_q_slew_rate = 25.0;
+	}
+
 	return true;
 }
 
@@ -77,18 +108,11 @@ void M3ActuatorVirtual::StepStatus()
 		if (t!=NULL)
 		{
 			this->StepFilterParam();
-			// A.H : try to set fake torque to virtual motors = Tdes // TODO: investigate on torque jumps
-			/*if(pnt_cnt % 100 == 0){
-				pnt_cnt=0;
-				cout<<"Desired torque :"<<this->GetDesiredTorque()<<"To ticks : "<<tq_sense.mNmToTicks(this->GetDesiredTorque())<<";jointdes:"<<t->GetTorqueDesJoint()<<";tostatus:"<<tq_sense.GetTorque_mNm()<<endl;
-			}*/
-			tq_sense.Step(tq_sense.mNmToTicks(this->joint->GetTorqueGravity()));
-			status.set_torque(tq_sense.GetTorque_mNm());
-			status.set_torquedot(torquedot_df.Step(tq_sense.GetTorque_mNm()));
+			torque_df.Step(this->joint->GetTorqueGravity(),status.torquedot());
+			status.set_torque(torque_df.GetX());
+			status.set_torquedot(torque_df.GetXDot());
 			// A.H test : torque and not torquedot (I don't care about torquedot)
-			//status.set_torque(torquedot_df.Step(tq_jt));
-			
-			angle_df.Step(t->GetThetaDesJointDeg(),status.thetadot()); //Note: should be GetThetaDesSensorDeg, not working. this OK so long as all angle sensors are collocated 1:1
+			angle_df.Step(slew.Step(t->GetThetaDesJointDeg()+param.k_qdot_virtual()*status.thetadot()+param.k_qdotdot_virtual()*status.thetadotdot(),max_q_slew_rate),status.thetadot()); //Note: should be GetThetaDesSensorDeg, not working. this OK so long as all angle sensors are collocated 1:1
 			status.set_theta(angle_df.GetTheta());
 			status.set_thetadot(angle_df.GetThetaDot());
 			status.set_thetadotdot(angle_df.GetThetaDotDot());

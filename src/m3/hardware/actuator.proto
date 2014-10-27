@@ -76,6 +76,8 @@ message M3ActuatorParamAngleDf {
     }
 
 message M3ActuatorParam {
+    optional double 					k_qdot_virtual =10;// Just for simulation
+    optional double 					k_qdotdot_virtual = 11;
     optional double					max_tq			= 1;	//Soft limit to controller (mNm)
     optional double					min_tq			= 2;	//Soft limit to controller (mNm)
     optional double					max_i			= 3;	//Soft limit to controller (mA),
