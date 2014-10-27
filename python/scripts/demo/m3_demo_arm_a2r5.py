@@ -184,10 +184,11 @@ class M3Proc:
         self.via_files={'TrajA':'kha1.via'}
         for k in self.via_files.keys():
             fn=m3t.get_animation_file(self.via_files[k])
+            print "Loading:",fn
             try:
-                f=open(fn,'r')
-                d=yaml.safe_load(f.read())
-                self.via_traj[k]=d[self.arm_name]
+                with open(fn,'r') as f:
+                    d=yaml.safe_load(f.read())
+                    self.via_traj[k]=d[self.arm_name]
             except IOError:
                 print 'Via file',k,'not present. Skipping...'
 
@@ -234,7 +235,7 @@ class M3Proc:
     def step(self):
         try:
             self.proxy.step()
-            print time.time()
+            print self.bot.get_timestamp_uS()
             print 'Arm: ',self.bot.get_theta_deg(self.arm_name)
             print 'Hand:',self.bot.get_theta_deg(self.hand_name)
             apply(self.arm_mode_methods[self.arm_mode[0]])
