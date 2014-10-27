@@ -38,6 +38,8 @@ include_directories(
 
 add_subdirectory(src)
 add_subdirectory(python)
+add_subdirectory(scripts)
+
 
 if(NOT MEKABOT)
 configure_file(setup.bash.in ${CMAKE_CURRENT_BINARY_DIR}/setup.bash)
