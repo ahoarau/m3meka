@@ -305,7 +305,7 @@ class M3Proc:
     
                 for scope_torque in self.scope_torque:
                     if self.do_scope_torque and self.scope_torque is not None:
-                         scope_torque.plot(c.get_torque_mNm()*1000.0,tqd)
+                         scope_torque.plot(c.get_torque_mNm(),tqd)
         
                 for scope_torquedot in self.scope_torquedot:
                     if self.do_scope_torquedot and self.scope_torquedot is not None:
