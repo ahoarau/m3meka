@@ -42,8 +42,8 @@ if len(base_name)!=1:
 omni=m3o.M3OmniBase(base_name[0])
 proxy.subscribe_status(omni)
 
-scope_steer = m3t.M3ScopeN(xwidth=100,n=5,title='Steer and Total Currents')
-scope_roll = m3t.M3ScopeN(xwidth=100,n=4,title='Roll Currents')
+scope_steer = m3t.M3ScopeN(xwidth=100,title='Steer and Total Currents')
+scope_roll = m3t.M3ScopeN(xwidth=100,title='Roll Currents')
 
 
 try:
@@ -51,12 +51,12 @@ try:
        while True:
             proxy.step()                        
             motor_current = omni.get_motor_torques()
-            roll_total_current = []
+            roll_current = []
             str_current = []
             for i in range(4):
                         roll_current.append(motor_current[i*2])
                         str_current.append(motor_current[i*2+1])
-            str_current.append(pwr.get_bus_current_mA())
+            str_current.append(pwr.get_bus_current())
             scope_steer.plot(str_current)
             scope_roll.plot(roll_current)
             #print 'Time: ',60.0-(time.time()-ts),field,':',v
