@@ -135,36 +135,38 @@ def get_chain_joint_limits(name):
 def get_actuator_ec_component_name(name):
     return get_sub_component_name(name,'ec_component')
 
-def get_joint_chain_name(joint_name,m3_config=None):
-        if not m3_config:
-            m3_config= get_m3_config()
+def get_joint_chain_name(joint_name):
+        m3_config= get_m3_config()
         comp_type='rt_components'
-        for config in m3_config:
-            try: ## new config
-                for components in config[comp_type]: # ma17,mh28..
-                    for comp_dir in components:# ma17
-                        dict_of_comp={}
-                        for comp in components[comp_dir]: #actuator1:type1,actuator2:type2
-                            cname = comp.keys()[0]
-                            ctype = comp[cname]
-                            if ctype in ['m3arm','m3torso' ,'m3hand','m3head']:
-                                dict_of_comp['joint_chain'] = cname
-                            dict_of_comp[cname]=ctype
-                        if dict_of_comp.get(joint_name,None):
-                            return dict_of_comp['joint_chain']
-            except TypeError:
-                for cdir in config[comp_type]:
-                    if joint_name in config[comp_type][cdir]:
-                        for c in config[comp_type][cdir]:
-                            ctype = config[comp_type][cdir][c]
-                            if ctype in ['m3arm','m3torso' ,'m3hand','m3head']:
-                                return c
+        try:
+            for config in m3_config:
+                try: ## new config
+                    for components in config[comp_type]: # ma17,mh28..
+                        for comp_dir in components:# ma17
+                            dict_of_comp={}
+                            for comp in components[comp_dir]: #actuator1:type1,actuator2:type2
+                                cname = comp.keys()[0]
+                                ctype = comp[cname]
+                                if ctype in ['m3arm','m3torso' ,'m3hand','m3head']:
+                                    dict_of_comp['joint_chain'] = cname
+                                dict_of_comp[cname]=ctype
+                            if dict_of_comp.get(joint_name,None):
+                                try:
+                                    return dict_of_comp['joint_chain']
+                                except: return ''
+                except TypeError:
+                    for cdir in config[comp_type]:
+                        if joint_name in config[comp_type][cdir]:
+                            for c in config[comp_type][cdir]:
+                                ctype = config[comp_type][cdir][c]
+                                if ctype in ['m3arm','m3torso' ,'m3hand','m3head']:
+                                    return c
+        except: pass
 
         return ''
 
-def get_robot_name(m3_config=None):
-        if not m3_config:
-            m3_config= get_m3_config()
+def get_robot_name():
+        m3_config= get_m3_config()
         comp_type='rt_components'
         for config in m3_config:
             try:
