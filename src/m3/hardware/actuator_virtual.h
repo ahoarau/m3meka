@@ -44,7 +44,7 @@ class M3ActuatorVirtual : public m3::M3Actuator
 		void ClrLimitSwitchNegZeroEncoder(){}
 		bool ReadConfig(const char * filename);
 		std::string jnt_name	;
-		m3::M3JointVirtual * joint;
+		m3::M3Joint * joint;
 		M3JointFilter torque_df; // Just for simulated torque, usign angle_df params
 		M3TimeSlew slew;
 		double max_q_slew_rate;

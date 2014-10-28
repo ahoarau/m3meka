@@ -75,7 +75,7 @@ bool M3ActuatorVirtual::ReadConfig(const char * filename)
 
 bool M3ActuatorVirtual::LinkDependentComponents()
 {
-	joint=dynamic_cast<M3JointVirtual*>( factory->GetComponent(jnt_name));
+	joint=reinterpret_cast<M3Joint *>( factory->GetComponent(jnt_name));
 	if (joint==NULL)
 	{
 		M3_INFO("M3Joint component %s not found for component %s. Proceeding without it.\n",jnt_name.c_str(),GetName().c_str());
