@@ -68,6 +68,7 @@ component_map['m3humanoid'] = m3.humanoid.M3Humanoid
 component_map['m3dynamatics'] = m3.dynamatics.M3Dynamatics
 component_map['m3head_s2csp_ctrl'] = m3.head_s2csp_ctrl.M3HeadS2CSPCtrl
 component_map['m3joint_zlift'] = m3.joint_zlift.M3JointZLift
+component_map['m3joint_zlift_virtual'] = m3.joint_zlift.M3JointZLift
 component_map['m3omnibase'] = m3.omnibase.M3OmniBase
 component_map['m3ledx2xn_ec'] = m3.ledx2xn_ec.M3LedX2XNEc
 component_map['m3led_matrix_ec'] = m3.led_matrix_ec.M3LedMatrixEc

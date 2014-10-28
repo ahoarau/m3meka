@@ -28,6 +28,7 @@ along with M3.  If not, see <http://www.gnu.org/licenses/>.
 #include "m3/hardware/joint.h"
 #include "m3/hardware/joint_slave.h"
 #include "m3/hardware/joint_zlift.h"
+#include "m3/hardware/joint_zlift_virtual.h"
 #include "m3/hardware/actuator_virtual.h"
 #include "m3/hardware/loadx1_ec.h"
 #include "m3/hardware/loadx1.h"
@@ -74,6 +75,7 @@ extern "C"
 #define M3LEDX2XN_EC_TYPE_NAME "m3ledx2xn_ec"
 #define M3LED_MATRIX_EC_TYPE_NAME "m3led_matrix_ec"
 #define M3JOINT_ZLIFT_TYPE_NAME "m3joint_zlift"
+#define M3JOINT_ZLIFT_VIRTUAL_TYPE_NAME "m3joint_zlift_virtual"
 #define M3ROBOT_MONITOR_TYPE_NAME "m3robot_monitor"
 #define M3ASYNC_IO_TYPE_NAME "m3async_io"
 #define M3LOG_TEST_TYPE_NAME "m3log_test"
@@ -93,6 +95,7 @@ m3rt::M3Component * create_m3joint_virtual(){return new m3::M3JointVirtual;}
 m3rt::M3Component * create_m3joint(){return new m3::M3Joint;}
 m3rt::M3Component * create_m3joint_slave(){return new m3::M3JointSlave;}
 m3rt::M3Component * create_m3joint_zlift(){return new m3::M3JointZLift;}
+m3rt::M3Component * create_m3joint_zlift_virtual(){return new m3::M3JointZLiftVirtual;}
 m3rt::M3Component * create_m3actuator_virtual(){return new m3::M3ActuatorVirtual;}
 m3rt::M3Component * create_m3loadx1_ec(){return new m3::M3LoadX1Ec;}
 m3rt::M3Component * create_m3loadx1(){return new m3::M3LoadX1;}
@@ -123,6 +126,7 @@ void destroy_m3joint(m3rt::M3Component* c) {delete c;}
 void destroy_m3joint_virtual(m3rt::M3Component* c) {delete c;}
 void destroy_m3joint_slave(m3rt::M3Component* c) {delete c;}
 void destroy_m3joint_zlift(m3rt::M3Component* c) {delete c;}
+void destroy_m3joint_zlift_virtual(m3rt::M3Component* c) {delete c;}
 void destroy_m3actuator_virtual(m3rt::M3Component* c) {delete c;}
 void destroy_m3loadx1_ec(m3rt::M3Component* c) {delete c;}
 void destroy_m3loadx1(m3rt::M3Component* c) {delete c;}
@@ -180,6 +184,9 @@ public:
 		
 		m3rt::creator_factory[M3JOINT_ZLIFT_TYPE_NAME] =	create_m3joint_zlift;
 		m3rt::destroyer_factory[M3JOINT_ZLIFT_TYPE_NAME] =  destroy_m3joint_zlift;
+		
+		m3rt::creator_factory[M3JOINT_ZLIFT_VIRTUAL_TYPE_NAME] =	create_m3joint_zlift_virtual;
+		m3rt::destroyer_factory[M3JOINT_ZLIFT_VIRTUAL_TYPE_NAME] =  destroy_m3joint_zlift_virtual;
 		
 		m3rt::creator_factory[M3ACTUATOR_VIRTUAL_TYPE_NAME] =	create_m3actuator_virtual;
 		m3rt::destroyer_factory[M3ACTUATOR_VIRTUAL_TYPE_NAME] =  destroy_m3actuator_virtual;

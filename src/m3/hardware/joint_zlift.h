@@ -40,6 +40,12 @@ class M3JointZLift : public M3Joint
 		mReal GetForceGravity(){return status.torque_gravity()*cb_mN_per_mNm;} //mN
 		mReal GetPos(){return status.theta()*cb_mm_per_deg;} //mm
 		mReal GetPosDot(){return status.thetadot()*cb_mm_per_deg;} //mm/s
+		mReal GetPayloadMass(){return cb_payload_mass;}
+		mReal Getcb_mN_per_mNm(){return cb_mN_per_mNm;} //convert force at lift to torque at actuator
+		mReal Getcb_mm_per_deg(){return cb_mm_per_deg;} //convert translation of lift to rotation of actuator
+		mReal Getcb_gearing(){return cb_gearing;} //actuator to ball-screw N:1 reduction
+		mReal Getcb_screw_pitch(){return cb_screw_pitch;} //mm_per_rev
+		mReal Getcb_screw_efficiency(){return cb_screw_efficiency;} //0.9 typical
 	protected:
 		bool ReadConfig(const char * filename);
 		void StepCommand();

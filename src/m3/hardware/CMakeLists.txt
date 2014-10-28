@@ -68,6 +68,7 @@ factory_proxy.cpp
 joint.cpp
 joint_virtual.cpp
 joint_slave.cpp
+joint_zlift_virtual.cpp
 joint_zlift.cpp
 joint_zlift_shm.cpp
 led_matrix_ec.cpp
@@ -101,6 +102,7 @@ joint.h
 joint_virtual.h
 joint_slave.h
 joint_zlift.h
+joint_zlift_virtual.h
 joint_zlift_shm.h
 joint_zlift_shm_sds.h
 led_matrix_ec.h
