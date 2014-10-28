@@ -92,7 +92,7 @@ void M3JointVirtual::StepCommand()
 	}
 	
 	//Avoid pops
-	if (command.ctrl_mode()!=mode_last)
+/*	if (command.ctrl_mode()!=mode_last)
 	{
 		q_on_slew.Reset(0.0);
 		tq_on_slew.Reset(0.0);
@@ -108,7 +108,7 @@ void M3JointVirtual::StepCommand()
 		if (IsVersion(IQ)) { 
 		ctrl_simple->ResetIntegrators();
 		}
-	}
+	}*/
 	if (IsVersion(IQ)) { 
 	if (!act->IsMotorPowerSlewedOn())
 	ctrl_simple->ResetIntegrators();	 
@@ -137,7 +137,6 @@ void M3JointVirtual::StepCommand()
 				//ctrl_simple->SetDesiredControlMode(CTRL_MODE_THETA);
 				ctrl_simple->SetDesiredControlMode(CTRL_MODE_THETA);
 				ctrl_simple->SetDesiredTheta(DEG2RAD(des));
-								
 				break;
 			}
 			case JOINT_MODE_THETA_GC:
@@ -196,25 +195,32 @@ void M3JointVirtual::StepCommand()
 			}
 			case JOINT_MODE_TORQUE_GC:			
 			{
-			if (!IsEncoderCalibrated())
-				break;
-				mReal tq_on, tq_out,gravity;
-				mReal tq_des=command.tq_desired();
-				StepBrake(tq_des,trans->GetTorqueJoint());
-				gravity=GetTorqueGravity()*param.kq_g();
+				if (!IsEncoderCalibrated())
+				break;	
+				// A.H
+				//Do PID in torque grav model space
+				mReal tq_des =pid_tq_grav_model.Step(trans->GetTorqueJoint(),
+						trans->GetTorqueDotJoint(),
+						-GetTorqueGravity()+command.tq_desired(),
+						param.kq_p_tq_gm(),
+						param.kq_i_tq_gm(),
+						param.kq_d_tq_gm(),
+						param.kq_i_limit_tq_gm(),
+						param.kq_i_range_tq_gm());
 				//Ramp in from torque at switch-over point
-				tq_on=tq_on_slew.Step(1.0,1.0/MODE_TQ_ON_SLEW_TIME);
-				tq_out=tq_on*(tq_des-gravity)+(1.0-tq_on)*tq_switch;
+				mReal tq_on, tq_out;
+				tq_on=tq_on_slew.Step(1.0,1.0/MODE_TQ_ON_SLEW_TIME); 
+				//tq_on = 1.0;
+				tq_out=tq_on*(tq_des)+(1.0-tq_on)*tq_switch;				
 				//Send out
-				/*if (pnt_cnt%200==0) {		
-					M3_DEBUG("actuator: %s tq_gravity: %f\n", GetName().c_str(),gravity);
-					M3_DEBUG("tq_des: %f tqout_des: %f\n",tq_des,tq_out);
-				}*/
-				trans->SetTorqueDesJoint(tq_out/1000.0);				
+				trans->SetTorqueDesJoint(tq_out/1000.0);	//TODO: convert back to mNm
 				
 				ctrl_simple->SetDesiredControlMode(CTRL_MODE_TORQUE);
 				ctrl_simple->SetDesiredTorque(trans->GetTorqueDesActuator());
 				
+				tq_des = status.theta()-trans->GetTorqueDesJoint();
+				// Let's transform to angle for the robot to move :)
+				trans->SetThetaDesJointDeg(tq_des);
 				break;
 			}
 			
@@ -253,8 +259,10 @@ void M3JointVirtual::StepCommand()
 				trans->SetTorqueDesJoint(tq_out/1000.0);	//TODO: convert back to mNm	
 				
 				ctrl_simple->SetDesiredControlMode(CTRL_MODE_TORQUE);
-				ctrl_simple->SetDesiredTorque(trans->GetTorqueDesActuator());
-				
+				ctrl_simple->SetDesiredTorque(trans->GetTorqueDesJoint());
+				tq_des = status.theta()+trans->GetTorqueDesJoint();
+				// Let's transform to angle for the robot to move :)
+				trans->SetThetaDesJointDeg(tq_des);
 				break;
 			}
 
@@ -282,32 +290,58 @@ void M3JointVirtual::StepCommand()
 				tq_on=tq_on_slew.Step(1.0,1.0/MODE_TQ_ON_SLEW_TIME); 
 				tq_out=tq_on*(stiffness*tq_des)+(1.0-tq_on)*tq_switch;
 				//Send out
-				/*if (pnt_cnt%200==0) {		
+				if (pnt_cnt%200==0) {		
 					M3_DEBUG("actuator: %s\n", GetName().c_str());
 					M3_DEBUG("tq_des: %f tqout_des: %f v: %f\n",tq_des,tq_out,trans->GetThetaDotJointDeg());
 					M3_DEBUG("des: %f Tjoint: %f desac: %f\n\n",des,trans->GetTorqueJoint(),trans->GetTorqueDesActuator());
-				}*/
+				}
 				trans->SetTorqueDesJoint(tq_out/1000.0);	//TODO: convert back to mNm	
 				
 				ctrl_simple->SetDesiredControlMode(CTRL_MODE_TORQUE);
 				ctrl_simple->SetDesiredTorque(trans->GetTorqueDesActuator());
-				
+				tq_des = status.theta()+trans->GetTorqueDesJoint();
+				// Let's transform to angle for the robot to move :)
+				trans->SetThetaDesJointDeg(tq_des);
 				break;
 			}
 			case JOINT_MODE_TORQUE:
-			{		  
-				mReal tq_on,tq_out;
+			{	
+				if (!IsEncoderCalibrated())
+				break;	
+				// A.H
+				//Do PID in torque grav model space
+				mReal tq_des =pid_tq_grav_model.Step(trans->GetTorqueJoint(),
+						trans->GetTorqueDotJoint(),
+						command.tq_desired(),
+						param.kq_p_tq_gm(),
+						param.kq_i_tq_gm(),
+						param.kq_d_tq_gm(),
+						param.kq_i_limit_tq_gm(),
+						param.kq_i_range_tq_gm());
 				//Ramp in from torque at switch-over point
-				mReal tq_des=command.tq_desired();
-				StepBrake(tq_des,trans->GetTorqueJoint());
-				tq_on=tq_on_slew.Step(1.0,1.0/MODE_TQ_ON_SLEW_TIME);
-				tq_out=tq_on*tq_des+(1.0-tq_on)*tq_switch;
+				mReal tq_on, tq_out;
+				tq_on=tq_on_slew.Step(1.0,1.0/MODE_TQ_ON_SLEW_TIME); 
+				//tq_on = 1.0;
+				tq_out=tq_on*(tq_des)+(1.0-tq_on)*tq_switch;				
 				//Send out
-				trans->SetTorqueDesJoint(tq_out/1000.0);
+				trans->SetTorqueDesJoint(tq_out/1000.0);	//TODO: convert back to mNm
 				
 				ctrl_simple->SetDesiredControlMode(CTRL_MODE_TORQUE);
 				ctrl_simple->SetDesiredTorque(trans->GetTorqueDesActuator());
-								
+				
+				tq_des = status.theta()-trans->GetTorqueDesJoint();
+				// Extra PId not really useful
+				/*tq_des =pid_theta_gc.Step(trans->GetThetaJointDeg(),
+						trans->GetThetaDotJointDeg(),
+						status.theta()-tq_out,
+						param.kq_p(),
+						param.kq_i(),
+						param.kq_d(),
+						param.kq_i_limit(),
+						param.kq_i_range());*/
+				
+				// Let's transform to angle for the robot to move :)
+				trans->SetThetaDesJointDeg(tq_des);
 				break;
 			}
 			case JOINT_MODE_TORQUE_GRAV_MODEL:

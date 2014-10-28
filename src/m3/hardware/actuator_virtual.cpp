@@ -31,6 +31,8 @@ using namespace std;
 void M3ActuatorVirtual::Startup()
 {
 	SetStateSafeOp();
+	status.set_torque(0.0);
+	status.set_torquedot(0.0);
 }
 
 /*void M3ActuatorVirtual::Shutdown()
@@ -58,7 +60,7 @@ bool M3ActuatorVirtual::ReadConfig(const char * filename)
 			param.set_k_qdot_virtual(val);
 		} catch(...) 
 		{
-			param.set_k_qdot_virtual(0.008);
+			param.set_k_qdot_virtual(0.0);
 		} 
 	try
 		{
@@ -66,7 +68,7 @@ bool M3ActuatorVirtual::ReadConfig(const char * filename)
 			param.set_k_qdotdot_virtual(val);
 		} catch(...) 
 		{
-			param.set_k_qdotdot_virtual(0.0001);
+			param.set_k_qdotdot_virtual(0.0);
 		} 
 	return true;
 }
@@ -108,11 +110,12 @@ void M3ActuatorVirtual::StepStatus()
 		if (t!=NULL)
 		{
 			this->StepFilterParam();
-			torque_df.Step(this->joint->GetTorqueGravity(),status.torquedot());
+			torque_df.Step(-this->joint->GetTorqueGravity(),status.torquedot());
 			status.set_torque(torque_df.GetX());
 			status.set_torquedot(torque_df.GetXDot());
 			// A.H test : torque and not torquedot (I don't care about torquedot)
-			angle_df.Step(slew.Step(t->GetThetaDesJointDeg()+param.k_qdot_virtual()*status.thetadot()+param.k_qdotdot_virtual()*status.thetadotdot(),max_q_slew_rate),status.thetadot()); //Note: should be GetThetaDesSensorDeg, not working. this OK so long as all angle sensors are collocated 1:1
+			mReal th = t->GetThetaDesJointDeg() +param.k_qdot_virtual()*status.thetadot()+param.k_qdotdot_virtual()*status.thetadotdot();
+			angle_df.Step(slew.Step(th,max_q_slew_rate),status.thetadot()); //Note: should be GetThetaDesSensorDeg, not working. this OK so long as all angle sensors are collocated 1:1
 			status.set_theta(angle_df.GetTheta());
 			status.set_thetadot(angle_df.GetThetaDot());
 			status.set_thetadotdot(angle_df.GetThetaDotDot());
