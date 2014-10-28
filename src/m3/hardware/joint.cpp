@@ -111,7 +111,7 @@ bool M3Joint::ReadConfig(const char * filename)
 	param.set_kq_p_tq_gm(val);
 	} catch(...) 
 	{
-		param.set_kq_p_tq_gm(0.0);
+		param.set_kq_p_tq_gm(1.0);
 	} 	
 	
 	try 
@@ -129,7 +129,7 @@ bool M3Joint::ReadConfig(const char * filename)
 	param.set_kq_d_tq_gm(val);
 	} catch(...) 
 	{
-		param.set_kq_d_tq_gm(0.0);
+		param.set_kq_d_tq_gm(0.01);
 	} 	
 	
 	try 
