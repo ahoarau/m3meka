@@ -24,9 +24,14 @@ namespace m3
 	
 using namespace m3rt;
 using namespace std;
-
+//A.H
 
 #define MN_PER_KG 9.80665*1000.0
+void M3JointZLiftVirtual::Startup()
+{
+  M3Joint::Startup();
+  GetTransmission()->SetThetaDesJointDeg(19800);
+}
 void M3JointZLiftVirtual::StepCommand()
 {
 	mReal tq_g_mNm = -1.0*GetPayloadMass()*MN_PER_KG/Getcb_mN_per_mNm();

@@ -31,6 +31,7 @@ class M3JointZLiftVirtual : public M3JointZLift
 public:
   M3JointZLiftVirtual():M3JointZLift(){}
 protected:
+  void Startup();
   void StepCommand();
 };
 
