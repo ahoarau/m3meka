@@ -27,7 +27,7 @@ import PyKDL as kdl
 import m3.viz as m3v
 import rospy
 #import roslib; roslib.load_manifest('face_detector_mono')
-import roslib; roslib.load_manifest('m3_defs_ros')
+#import roslib; roslib.load_manifest('m3_defs_ros')
 import roslib; roslib.load_manifest('m3meka_msgs')
 #import roslib; roslib.load_manifest('mic_array')
 #from face_detector_mono.msg import RectArray
@@ -37,7 +37,7 @@ import subprocess
 import os
 import time
 from threading import Thread
-
+from sensor_msgs.msg import Joy
 #import time
 #import rospy
 #import roslib; roslib.load_manifest('face_detector_mono')
@@ -155,7 +155,7 @@ class M3FaceTrackThread(Thread):
 class M3OmnibaseJoystickThread(Thread):
     def __init__ (self,verbose=True):
 	Thread.__init__(self)
-	
+	self.joy  = subprocess.Popen(['rosrun', 'joy', 'joy_node'])
 	self.jx=0.0
 	self.jy=0.0
 	self.jyaw=0.0
@@ -167,7 +167,7 @@ class M3OmnibaseJoystickThread(Thread):
 	    print 'Starting M3OmnibaseJoystickThread...'
 	rospy.init_node('m3_omnibase_sixaxis', anonymous=True,disable_signals=True) #allow Ctrl-C to master process
 	
-	rospy.Subscriber("/omnibase_joy", M3OmnibaseJoy, self.callback)
+	rospy.Subscriber("/joy", Joy, self.callback)
 	
 	Thread.start(self)
     def stop(self):
@@ -179,8 +179,8 @@ class M3OmnibaseJoystickThread(Thread):
 
 	if self.verbose:
 	    print data
-	self.jx=data.x
-	self.jy=data.y
-	self.jyaw=data.yaw
-	self.jz = data.z
-	self.jbutton=data.button
+	self.jx=data.axes[1]
+	self.jy=data.axes[0]
+	self.jyaw=data.axes[2]
+	self.jz = data.buttons[10]-data.buttons[11]
+	self.jbutton=data.buttons[14]
