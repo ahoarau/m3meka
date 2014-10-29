@@ -22,12 +22,12 @@ add_custom_target(${LIBNAME}_python_protobuf_output ALL DEPENDS ${PySources}) # 
 find_package(PkgConfig REQUIRED)
 #find_package(YamlCpp  REQUIRED)
 pkg_check_modules(YAMLCPP REQUIRED yaml-cpp)
-if(NOT ${YAMLCPP_VERSION} VERSION_LESS "0.5")
+if(${YAMLCPP_VERSION} VERSION_LESS "0.5")
 set_property(
    DIRECTORY
-   PROPERTY COMPILE_DEFINITIONS YAMLCPP_05
+   PROPERTY COMPILE_DEFINITIONS YAMLCPP_03
    )
-endif(NOT ${YAMLCPP_VERSION} VERSION_LESS "0.5")
+endif(${YAMLCPP_VERSION} VERSION_LESS "0.5")
 link_directories(${YAMLCPP_LIBRARY_DIRS})
 
 if(RTAI)

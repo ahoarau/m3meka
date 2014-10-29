@@ -20,7 +20,7 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(YAMLCPP REQUIRED yaml-cpp)
 if(${YAMLCPP_VERSION} VERSION_GREATER "0.5")
 set_property(DIRECTORY
-                PROPERTY COMPILE_DEFINITIONS "YAMLCPP_05")
+                PROPERTY COMPILE_DEFINITIONS "YAMLCPP_03")
 endif(${YAMLCPP_VERSION} VERSION_GREATER "0.5")
 
 

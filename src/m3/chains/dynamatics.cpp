@@ -390,7 +390,7 @@ bool M3Dynamatics::ReadConfig(const char * filename)
 			cy.push_back(rtemp);
 			links[i]["cz"] >> rtemp;
 			cz.push_back(rtemp);
-#ifndef YAMLCPP_05
+#ifdef YAMLCPP_03
 			if(const YAML::Node *pName = links[i].FindValue("Ixx")) {
     				*pName >> rtemp;
 			} else {

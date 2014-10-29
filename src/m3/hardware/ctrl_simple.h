@@ -113,7 +113,7 @@ class M3CtrlSimple: public  m3rt::M3Component
 private:
 	void NodeToTrajParam(const YAML::Node& node, M3ParamTrajectory* traj)
 {
-#ifndef YAMLCPP_05
+#ifdef YAMLCPP_03
 	mReal tmp;
 	node["freq"] >> tmp; 		traj->set_freq(tmp);
 	node["amp"] >> tmp;			traj->set_amp(tmp);
@@ -126,7 +126,7 @@ private:
 }
 void NodeToPIDParam(const YAML::Node& node, M3ParamPID* pid)
 {
-#ifndef YAMLCPP_05
+#ifdef YAMLCPP_03
 
 	mReal val;
 	node["k_p"] >> val;			pid->set_k_p(val);

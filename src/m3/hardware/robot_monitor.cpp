@@ -168,7 +168,7 @@ bool M3RobotMonitor::ReadConfig(const char * filename)
 	//GetYamlDoc(filename, doc);
 	
 	bool has_volt = true;
-#ifndef YAMLCPP_05
+#ifdef YAMLCPP_03
 	try 
 	{
 	    YAML::Iterator it=doc["volt_components"].begin();
@@ -182,7 +182,7 @@ bool M3RobotMonitor::ReadConfig(const char * filename)
 	int i = 0;
 	if (has_volt)
 	{
-#ifndef YAMLCPP_05
+#ifdef YAMLCPP_03
 	  for(YAML::Iterator it=doc["volt_components"].begin();it!=doc["volt_components"].end();++it) 
 	  {		
 		  string key;
@@ -211,7 +211,7 @@ bool M3RobotMonitor::ReadConfig(const char * filename)
 	}
 	
 	bool has_temp = true;
-#ifndef YAMLCPP_05
+#ifdef YAMLCPP_03
 	try 
 	{
 	    YAML::Iterator it=doc["temp_components"].begin();
@@ -225,7 +225,7 @@ bool M3RobotMonitor::ReadConfig(const char * filename)
 	i = 0;
 	if (has_temp)
 	{
-#ifndef YAMLCPP_05
+#ifdef YAMLCPP_03
 	  for(YAML::Iterator it=doc["temp_components"].begin();it!=doc["temp_components"].end();++it) 
 	  {		
 		  string key;

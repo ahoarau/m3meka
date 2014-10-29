@@ -1083,7 +1083,7 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	//YAML::Node doc;
 	//GetYamlDoc(filename, doc);
 	assert(doc.size());
-#ifndef YAMLCPP_05
+#ifdef YAMLCPP_03
 	const YAML::Node * ra_node;
 	const YAML::Node * la_node;
 	const YAML::Node * t_node;
@@ -1137,7 +1137,7 @@ bool M3Humanoid::ReadConfig(const char * filename)
 	vector<mReal> h_trans;
 	/*vector<mReal> rh_trans;
 	vector<mReal> lh_trans;*/
-#ifndef YAMLCPP_05
+#ifdef YAMLCPP_03
 	if (ra_node)
 	{	
 		(*ra_node)["chain_component"] >> right_arm_name;		
