@@ -1871,6 +1871,19 @@ class M3Humanoid(M3Robot):
     
     def get_torque(self, chain):
         """
+        Gets torque values of all joints in N*m for a chain.
+        
+        :param chain: Desired chain.
+        :type chain: 'right_arm', 'left_arm', 'torso', 'head'
+        :returns: Torque values in N*m for selected chain.
+        :rtype:        array, shape (ndof)
+        
+        :raises: M3Exception if chain is not supported.
+        """
+        return nu.array(self.get_status(chain).torque,float)  
+
+    def get_torque_mNm(self, chain):
+        """
         Gets torque values of all joints in mN*m for a chain.
         
         :param chain: Desired chain.
@@ -1880,8 +1893,8 @@ class M3Humanoid(M3Robot):
         
         :raises: M3Exception if chain is not supported.
         """
-        return nu.array(self.get_status(chain).torque,float)        
-    
+        return nu.array(self.get_status(chain).torque*1000.0,float)
+
     def get_torquedot(self, chain):
         """
         Gets torque time derivative values of all joints in mN*m/sec for a chain.

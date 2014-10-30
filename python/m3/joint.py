@@ -92,8 +92,10 @@ class M3Joint(M3Component):
         return self.status.amp_temp
     def get_amp_temp_F(self): 
         return C2F(self.status.amp_temp)
-    def get_torque_mNm(self): 
+    def get_torque(self):
         return self.status.torque
+    def get_torque_mNm(self): 
+        return self.status.torque*1000.0
     def get_torquedot_mNm(self): 
         return self.status.torquedot
     def get_torque_gravity_mNm(self): 
