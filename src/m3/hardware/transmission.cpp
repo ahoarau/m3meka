@@ -177,7 +177,7 @@ mReal M3Transmission::GetThetaDotDesActuatorDeg()
 		case GEAR_TRANS:
 			return GetThetaDotDesJointDeg()*qj_to_qa[0];//joint->sensor->actuator
 		case DIFF_TRANS:
-			return GetThetaDotDesJointDeg()*qj_to_qa[0]+cpt->GetThetaDotDesJointDeg()*qj_to_qa[1];
+			return GetThetaDotDesJointDeg()*qj_to_qa[0]-cpt->GetThetaDotDesJointDeg()*qj_to_qa[1];
 			//return GetThetaDesJointDeg()*qj_to_qa[0]+cpt->GetThetaJointDeg()*qj_to_qa[1];
 		default: 
 			return 0.0;
