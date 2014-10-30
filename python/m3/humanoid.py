@@ -52,6 +52,7 @@ class ChainAttributes(M3Component):
         self.joint_names = []
         self.vias = []
         self.via_idx = 0
+        self.cmd_sent=False
         
     def read_config(self):
         assert(self.chain_name)
@@ -2600,7 +2601,10 @@ class M3Humanoid(M3Robot):
             v = [mab.JOINT_ARRAY_MODE_OFF] * self.get_num_dof(chain)
         else:
             v = [mab.JOINT_ARRAY_MODE_OFF] * len(ind)
-        self.set_mode(chain, v, ind,False) # A.H: set cmd_enabled to false for mumtiple clients
+        if getattr(self,chain).cmd_sent:
+            self.set_mode(chain, v, ind,True) # A.H: set cmd_enabled to false for mumtiple clients
+        else:
+            self.set_mode(chain, v, ind,False)
     
     def set_mode_pwm(self, chain, ind=None):
         """
@@ -2645,6 +2649,7 @@ class M3Humanoid(M3Robot):
         else:
             v = [mab.JOINT_ARRAY_MODE_PWM] * len(ind)
         self.set_mode(chain, v, ind)
+        getattr(self,chain).cmd_sent=True
         
     def set_mode_torque(self, chain, ind=None):
         """
@@ -2688,7 +2693,8 @@ class M3Humanoid(M3Robot):
             v = [mab.JOINT_ARRAY_MODE_TORQUE] * self.get_num_dof(chain)
         else:
             v = [mab.JOINT_ARRAY_MODE_TORQUE] * len(ind)
-        self.set_mode(chain, v, ind)        
+        self.set_mode(chain, v, ind)  
+        getattr(self,chain).cmd_sent=True
         
     def set_mode_torque_gc(self, chain, ind=None):
         """
@@ -2733,6 +2739,7 @@ class M3Humanoid(M3Robot):
         else:
             v = [mab.JOINT_ARRAY_MODE_TORQUE_GC] * len(ind)
         self.set_mode(chain, v, ind)
+        getattr(self,chain).cmd_sent=True
     
     def set_mode_torque_shm(self, chain, ind=None):
         """
@@ -2777,6 +2784,7 @@ class M3Humanoid(M3Robot):
         else:
             v = [mab.JOINT_ARRAY_MODE_TORQUE_SHM] * len(ind)
         self.set_mode(chain, v, ind)
+        getattr(self,chain).cmd_sent=True
         
     def set_mode_theta(self, chain, ind=None):
         """
@@ -2820,7 +2828,8 @@ class M3Humanoid(M3Robot):
             v = [mab.JOINT_ARRAY_MODE_THETA] * self.get_num_dof(chain)
         else:
             v = [mab.JOINT_ARRAY_MODE_THETA] * len(ind)
-        self.set_mode(chain, v, ind)        
+        self.set_mode(chain, v, ind)       
+        getattr(self,chain).cmd_sent=True
         
     def set_mode_theta_gc(self, chain, ind=None):
         """
@@ -2864,7 +2873,8 @@ class M3Humanoid(M3Robot):
             v = [mab.JOINT_ARRAY_MODE_THETA_GC] * self.get_num_dof(chain)
         else:
             v = [mab.JOINT_ARRAY_MODE_THETA_GC] * len(ind)
-        self.set_mode(chain, v, ind)        
+        self.set_mode(chain, v, ind)       
+        getattr(self,chain).cmd_sent=True
 
     def set_mode_thetadot(self, chain, ind=None):
         """
@@ -2909,6 +2919,8 @@ class M3Humanoid(M3Robot):
         else:
             v = [mab.JOINT_ARRAY_MODE_THETADOT] * len(ind)
         self.set_mode(chain, v, ind)        
+        getattr(self,chain).cmd_sent=True
+        
     def set_mode_thetadot_gc(self, chain, ind=None):
         """
         Sets joint controller mode for selected chain to joint velocity control with gravity compensation.  A 
@@ -2952,6 +2964,8 @@ class M3Humanoid(M3Robot):
         else:
             v = [mab.JOINT_ARRAY_MODE_THETADOT_GC] * len(ind)
         self.set_mode(chain, v, ind)        
+        getattr(self,chain).cmd_sent=True
+        
     def set_mode_theta_mj(self, chain, ind=None):
         """
         Sets joint controller mode for selected chain to joint angle control with minimum jerk filtering.  A 
@@ -2995,6 +3009,7 @@ class M3Humanoid(M3Robot):
         else:
             v = [mab.JOINT_ARRAY_MODE_THETA_MJ] * len(ind)
         self.set_mode(chain, v, ind)
+        getattr(self,chain).cmd_sent=True
         
     def set_mode_pose(self, chain, ind=None):        
         if ind is None:
@@ -3002,6 +3017,7 @@ class M3Humanoid(M3Robot):
         else:
             v = [mab.JOINT_ARRAY_MODE_POSE] * len(ind)
         self.set_mode(chain, v, ind)        
+        getattr(self,chain).cmd_sent=True
         
     def set_mode_theta_gc_mj(self, chain, ind=None):
         """
@@ -3046,6 +3062,7 @@ class M3Humanoid(M3Robot):
         else:
             v = [mab.JOINT_ARRAY_MODE_THETA_GC_MJ] * len(ind)
         self.set_mode(chain, v, ind)
+        getattr(self,chain).cmd_sent=True
         
     def set_mode_splined_traj_gc(self, chain, ind=None):
         """
@@ -3090,6 +3107,7 @@ class M3Humanoid(M3Robot):
         else:
             v = [mab.JOINT_ARRAY_MODE_SPLINED_TRAJ_GC] * len(ind)
         self.set_mode(chain, v, ind)
+        getattr(self,chain).cmd_sent=True
         
     def set_mode_splined_traj(self, chain, ind=None):
         """
@@ -3134,7 +3152,8 @@ class M3Humanoid(M3Robot):
             v = [mab.JOINT_ARRAY_MODE_SPLINED_TRAJ] * self.get_num_dof(chain)
         else:
             v = [mab.JOINT_ARRAY_MODE_SPLINED_TRAJ] * len(ind)
-        self.set_mode(chain, v, ind)        
+        self.set_mode(chain, v, ind)  
+        getattr(self,chain).cmd_sent=True
         
     def set_payload_com(self, chain, com):
         """
