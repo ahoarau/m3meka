@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Created on Thu Oct 30 20:55:08 2014
@@ -31,5 +32,4 @@ raw_input("Press Enter to start")
 proxy.step()
 raw_input("Press Enter to stop")
 proxy.stop()
-
 exit()
