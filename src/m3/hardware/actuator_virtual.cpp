@@ -110,7 +110,7 @@ void M3ActuatorVirtual::StepStatus()
 		if (t!=NULL)
 		{
 			this->StepFilterParam();
-			torque_df.Step(-this->joint->GetTorqueGravity(),status.torquedot());
+			torque_df.Step((-this->joint->GetTorqueGravity())/1000.0,status.torquedot());
 			status.set_torque(torque_df.GetX());
 			status.set_torquedot(torque_df.GetXDot());
 			// A.H test : torque and not torquedot (I don't care about torquedot)
