@@ -207,16 +207,15 @@ class M3Recorder:
             self.start_time = self.bot.get_timestamp_uS()*10e-7
         return self.bot.get_timestamp_uS()*10e-7 -self.start_time
         
-    def set_to_zero_gravity_mode(self):
+    def set_to_zero_gravity_mode(self,chain):
         """
             Set robot to floating mode
         """
-        if not isinstance(self.bot,m3h.M3Humanoid): return
         self.proxy.step()
-        self.bot.set_mode_theta_gc(self.chain)
-        self.bot.set_stiffness(self.chain, [0.0]*7)
-        self.bot.set_theta_deg(self.chain,self.bot.get_theta_deg(self.chain))
-        self.bot.set_slew_rate_proportion(self.chain,[1.0]*self.ndof)
+        self.bot.set_mode_theta_gc(chain)
+        self.bot.set_stiffness(chain, [0.0]*7)
+        self.bot.set_theta_deg(chain,self.bot.get_theta_deg(self.chain))
+        self.bot.set_slew_rate_proportion(chain,[0.0]*self.ndof)
         self.proxy.step()
 
     def shutdown_shared_memory(self):
@@ -233,9 +232,9 @@ class M3Recorder:
         print 'To be recorded : '
         for f,a in zip(self.functions_to_call,self.arguments):
             print f+'('+a+')'
+            if self.enable_zero_gravity:
+                self.set_to_zero_gravity_mode(chain=a)
 
-        if self.enable_zero_gravity:
-            self.set_to_zero_gravity_mode()
         if not self.record_now:
             print '-------------------------------'
             print 'Press any key to start'
