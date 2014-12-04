@@ -232,7 +232,7 @@ class M3Recorder:
         print 'To be recorded : '
         for f,a in zip(self.functions_to_call,self.arguments):
             print f+'('+a+')'
-            if self.enable_zero_gravity:
+            if a is not '' and self.enable_zero_gravity:
                 self.set_to_zero_gravity_mode(chain=a)
 
         if not self.record_now:
